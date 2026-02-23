@@ -1,0 +1,37 @@
+nav {
+    margin-bottom: 20px;
+}
+
+.navbar-brand {
+    padding: 0px;
+}
+
+.menunav {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.menunav li {
+    width: 100%;
+    padding: 10px;
+    color: #666666;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.menunav li:hover {
+    color: #000000;
+}
+
+.menunav .iconnav {
+    float: left;
+    margin-right: 14px;
+    margin-left: 10px;
+}
+
+.menunav .textnav {
+    float: left;
+}
