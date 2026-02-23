@@ -128,7 +128,7 @@
         <!-- Footer -->
         <footer class="text-center mt-5">
             <p>SISTEMA Version 1.0 © Galpónes 2025 - Norte de Santander</p>
-            <p>Desarrollado por: Carlos Javier Lopez - Cúcuta</p>
+            <p>Desarrollado por: Carlos Javier Lopez - Cúcuta Norte de Santander</p>
             <p>Dominio de pruebas para desarrollo he implementación</p>
         </footer>
 
