@@ -4,24 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Proyecto galpones de pollo</title>
-    <link  rel="icon"  type="image/jpeg" href="pollo2.jpeg">
+    <link rel="icon" type="image/jpeg" href="pollo2.jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstr -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <style>
         body {
-            background: #f5f7fa;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
             font-family: "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
         }
 
         /* Encabezado */
         .header-box {
             background: white;
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 15px;
+            padding: 25px;
             margin-top: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .header-box img {
@@ -31,41 +32,68 @@
         .header-title {
             font-weight: 700;
             font-size: 24px;
-            color: #333;
+            color: #2c3e50;
         }
 
         /* Imagen principal */
         .main-img {
-            border-radius: 15px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease;
+        }
+
+        .main-img:hover {
+            transform: scale(1.03);
         }
 
         /* Tarjeta de login */
         .login-card {
             background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.20);
+            transition: transform 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
         }
 
         .login-card h3 {
             font-weight: 600;
             margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            border-radius: 10px;
         }
 
         button.btn-warning {
             width: 100%;
             font-weight: bold;
             border-radius: 10px;
+            background-color: #f6c23e;
+            border: none;
+            transition: 0.3s;
+        }
+
+        button.btn-warning:hover {
+            background-color: #dda20a;
         }
 
         footer {
             margin-top: 40px;
-            padding: 15px;
-            background: #ffffff;
+            padding: 20px;
+            background: white;
             color: #333;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        footer p {
+            margin: 5px 0;
+            font-size: 14px;
         }
     </style>
 </head>

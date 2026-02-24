@@ -44,209 +44,172 @@ if ($rol_user == 1 || $rol_user == 2) {
     ?>
 </head>
 
-<body>
-    <div class="container">
-        <?php
-        include 'menu.php';
-        ?>
-        <!-- BEGIN PAGE HEAD-->
+<body style="background: linear-gradient(135deg,#4e73df,#1cc88a); min-height:100vh;">
 
-        <!-- END PAGE HEAD-->
-        <!-- BEGIN PAGE BREADCRUMB -->
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="index.php">Inicio:</a>
-                <i class="fa fa-circle"></i>
-            </li>
-            <li class="text-primary">
-                <span class="active">Proyecto Galpon:</span>
-                <i class="fa fa-circle"></i>
-            </li>
-            <li class="text-primary">
-                <span class="active">Panel principal:</span>
-                <i class="fa fa-circle"></i>
-            </li>
-        </ul>
-        <!-- END PAGE BREADCRUMB -->
-        <!-- BEGIN PAGE BASE CONTENT -->
-        <h3 class="text-right">Bienvenido: <?php echo $user_nombre; ?></h3>
-        <?php
-        if ($rol_user == 1 || $rol_user == 2) {
-        ?>
-            <style>
-                .galpon-card {
-                    border-radius: 15px;
-                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                    transition: transform .2s;
-                    padding: 20px;
-                    text-align: center;
-                    background: #ffffff;
-                    margin-bottom: 25px;
-                }
+<div class="container mt-4">
 
-                .galpon-card:hover {
-                    transform: scale(1.05);
-                }
+<?php include 'menu.php'; ?>
 
-                .galpon-title {
-                    font-size: 22px;
-                    font-weight: bold;
-                    color: #007bff;
-                }
+<ul class="page-breadcrumb breadcrumb bg-white p-3 rounded shadow-sm">
+    <li><a href="index.php">Inicio</a> <i class="fa fa-circle"></i></li>
+    <li class="text-primary">Proyecto Galpón <i class="fa fa-circle"></i></li>
+    <li class="text-primary">Panel principal</li>
+</ul>
 
-                .galpon-sub {
-                    font-size: 16px;
-                    color: #555;
-                }
+<h4 class="text-right text-white mb-4">
+    Bienvenido: <strong><?php echo $user_nombre; ?></strong>
+</h4>
 
-                .almacen-box {
-                    margin-top: 15px;
-                    padding: 12px;
-                    border-radius: 10px;
-                    background: #f1f7ff;
-                    font-weight: bold;
-                    color: #007bff;
-                }
+<?php if ($rol_user == 1 || $rol_user == 2): ?>
 
-                .almacen-box:hover {
-                    background: #d9eaff;
-                }
-            </style>
+<style>
+.galpon-card{
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+    transition:.3s;
+    padding:25px;
+    text-align:center;
+    background:#ffffff;
+    margin-bottom:30px;
+}
+.galpon-card:hover{
+    transform:translateY(-8px);
+}
+.galpon-title{
+    font-size:20px;
+    font-weight:700;
+    color:#007bff;
+}
+.galpon-sub{
+    font-size:15px;
+    color:#555;
+    margin-top:5px;
+}
+.almacen-box{
+    margin-top:15px;
+    padding:10px;
+    border-radius:10px;
+    background:#f1f7ff;
+    font-weight:bold;
+    color:#007bff;
+    transition:.3s;
+}
+.almacen-box:hover{
+    background:#d9eaff;
+}
+.section-title{
+    text-align:center;
+    margin:40px 0 30px 0;
+    font-weight:700;
+    color:white;
+}
+</style>
 
-            <div class="row">
-                <h1 class="text-center">GALPÓNES: AVÍCOLA</h1>
-                <br><br>
+<h2 class="section-title">GALPONES AVÍCOLA</h2>
 
-                <!-- GALPON 1 -->
-                <div class="col-sm-4">
-                    <a href="galpon1.php" style="text-decoration:none;">
-                        <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola Norte</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b><?php echo $cant_galpon1; ?></b></div>
+<div class="row">
 
-                            <a href="almacen.php" style="text-decoration:none;">
-                                <div class="almacen-box">Almacenamiento</div>
-                            </a>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- GALPON 2 -->
-                <div class="col-sm-4">
-                    <a href="galpon2.php" style="text-decoration:none;">
-                        <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola Sur</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b><?php echo $cant_galpon2; ?></b></div>
-
-                            <a href="almacen.php" style="text-decoration:none;">
-                                <div class="almacen-box">Almacenamiento</div>
-                            </a>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- GALPON 3 -->
-                <div class="col-sm-4">
-                    <a href="#" style="text-decoration:none;">
-                        <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola Central</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
-
-                            <a href="#" style="text-decoration:none;">
-                                <div class="almacen-box">Almacenamiento</div>
-                            </a>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- GALPON 4 -->
-                <div class="col-sm-4">
-                    <a href="#" style="text-decoration:none;">
-                        <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola La Colmena</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
-
-                            <a href="#" style="text-decoration:none;">
-                                <div class="almacen-box">Almacenamiento</div>
-                            </a>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- GALPON 5 -->
-                <div class="col-sm-4">
-                    <a href="#" style="text-decoration:none;">
-                        <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola El Corral</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
-
-                            <a href="#" style="text-decoration:none;">
-                                <div class="almacen-box">Almacenamiento</div>
-                            </a>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- GALPON 6 -->
-                <div class="col-sm-4">
-                    <a href="#" style="text-decoration:none;">
-                        <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola La Pradera</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
-
-                            <a href="#" style="text-decoration:none;">
-                                <div class="almacen-box">Almacenamiento</div>
-                            </a>
-                        </div>
-                    </a>
-                </div>
-                <div class="row">
-                    <h1 class="text-center" style="margin-top:40px;">Usuarios</h1>
-                    <br><br>
-                          <!-- Munuel 6 -->
-                    <div class="col-sm-4">
-                        <a href="#" style="text-decoration:none;">
-                            <div class="galpon-card">
-                                <div class="galpon-title"><a type="button" href='..//fpdf-manual/manual.php' target="_blank">Manual de usuario</a></div>
-                                <div class="galpon-sub"><a type="button" href='..//fpdf-manual/manual.php' target="_blank">Manual para él cuido y crianza de la cosecha<b></a></b></div>
-                                <a type="button" href='..//fpdf-manual/manual.php' target="_blank">
-                                <img src="../imagenes/logo-pdf.png" style="text-decoration:none;">
-                                    <div class="almacen-box">Ver</div>
-                                </a>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-sm-4">
-                        <a href="usuarios.php" style="text-decoration:none;">
-                            <div class="galpon-card">
-                                <div class="galpon-title">Usuarios</div>
-
-                                <div class="galpon-sub">
-                                    <?php if ($rol_user == 1 || $rol_user == 2): ?>
-                                        Cantidad: <b><?php echo $cant_usuarios; ?></b>
-                                    <?php endif; ?>
-
-                                    <?php if ($rol_user == 3 || $rol_user == 4): ?>
-                                        <b class="text-primary">Ver →</b>
-                                    <?php endif; ?>
-                                </div>
-
-                                <a href="usuarios.php" style="text-decoration:none;">
-                                    <div class="almacen-box">Entrar</div>
-                                </a>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+    <!-- Galpón 1 -->
+    <div class="col-md-4">
+        <div class="galpon-card">
+            <div class="galpon-title">Galpón Avícola Norte</div>
+            <div class="galpon-sub">
+                Cantidad de cosechas: <b><?php echo $cant_galpon1; ?></b>
             </div>
-        <?php
-        }
-        ?>
+            <a href="galpon1.php">
+                <div class="almacen-box">Entrar</div>
+            </a>
+        </div>
     </div>
+
+    <!-- Galpón 2 -->
+    <div class="col-md-4">
+        <div class="galpon-card">
+            <div class="galpon-title">Galpón Avícola Sur</div>
+            <div class="galpon-sub">
+                Cantidad de cosechas: <b><?php echo $cant_galpon2; ?></b>
+            </div>
+            <a href="galpon2.php">
+                <div class="almacen-box">Entrar</div>
+            </a>
+        </div>
     </div>
-    <?php
-    include 'librerias-js.php';
-    ?>
+
+    <!-- Galpón 3 -->
+    <div class="col-md-4">
+        <div class="galpon-card">
+            <div class="galpon-title">Galpón Avícola Central</div>
+            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
+            <div class="almacen-box">Próximamente</div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <!-- Galpón 4 -->
+    <div class="col-md-4">
+        <div class="galpon-card">
+            <div class="galpon-title">Galpón Avícola La Colmena</div>
+            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
+            <div class="almacen-box">Próximamente</div>
+        </div>
+    </div>
+
+    <!-- Galpón 5 -->
+    <div class="col-md-4">
+        <div class="galpon-card">
+            <div class="galpon-title">Galpón Avícola El Corral</div>
+            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
+            <div class="almacen-box">Próximamente</div>
+        </div>
+    </div>
+
+    <!-- Galpón 6 -->
+    <div class="col-md-4">
+        <div class="galpon-card">
+            <div class="galpon-title">Galpón Avícola La Pradera</div>
+            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
+            <div class="almacen-box">Próximamente</div>
+        </div>
+    </div>
+
+</div>
+
+<h2 class="section-title"></h2>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="galpon-card">
+            <div class="galpon-title">Manual de Usuario</div>
+            <div class="galpon-sub">Manual para el cuido y crianza</div>
+            <a href="../fpdf-manual/manual.php" target="_blank">
+                <div class="almacen-box">Ver PDF</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="galpon-card">
+            <div class="galpon-title">Usuarios</div>
+            <div class="galpon-sub">
+                Cantidad: <b><?php echo $cant_usuarios; ?></b>
+            </div>
+            <a href="usuarios.php">
+                <div class="almacen-box">Entrar</div>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<?php endif; ?>
+
+</div>
+
+<?php include 'librerias-js.php'; ?>
 </body>
 
 </html>
