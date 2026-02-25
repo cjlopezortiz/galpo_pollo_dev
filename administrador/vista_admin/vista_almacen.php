@@ -102,14 +102,15 @@ if ($rol_user != 1 && $rol_user != 2) {
                     <th>
                         <div class="text-center">Liquidación<br />cosecha</div>
                     </th>
-                    <!-- <th>
-                        <div class="text-center">Gastos<br />varios</div>
-                    </th> -->
+
                     <th>
                         <div class="text-center">PDF</div>
                     </th>
                     <th>
                         <div class="text-center">Editar</div>
+                    </th>
+                    <th>
+                        <div class="text-center">Sacar<br />Cálculo / Kg.</div>
                     </th>
                 </thead>
                 <tbody>
@@ -230,7 +231,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                                                 font-size:12px;
                                                 font-weight:bold;
                                                 box-shadow:0px 1px 4px rgba(0,0,0,0.2); ">
-                                                GALPÓN   Galpón Avícola Sur
+                                                GALPÓN Galpón Avícola Sur
                                             </span>
                                             <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
                                                 <?php echo $data['codigo_orions_g2']; /* ya no es <a> */ ?>
@@ -268,6 +269,8 @@ if ($rol_user != 1 && $rol_user != 2) {
                             </td>
                             <!-- MODAL DE GASTOS -->
                             <!-- MODAL DE GASTOS - DISEÑO MODERNO -->
+
+
                             <div class="modal fade" id="modalPrecio<?php echo $data['codigo_orions_almacen']; ?>" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered modal-lg">
                                     <div class="modal-content" style="border-radius:18px; box-shadow:0 4px 20px rgba(0,0,0,0.25);">
@@ -482,13 +485,13 @@ if ($rol_user != 1 && $rol_user != 2) {
                                                 }
                                             ?>
                                                 <div style="
-                        background:<?php echo $bg_color; ?>;
-                        border-left:5px solid <?php echo $border_color; ?>;
-                        padding:15px; 
-                        border-radius:12px; 
-                        margin-bottom:15px;
-                        box-shadow:0 2px 8px rgba(0,0,0,0.1);
-                    ">
+                                                        background:<?php echo $bg_color; ?>;
+                                                        border-left:5px solid <?php echo $border_color; ?>;
+                                                        padding:15px; 
+                                                        border-radius:12px; 
+                                                        margin-bottom:15px;
+                                                        box-shadow:0 2px 8px rgba(0,0,0,0.1);
+                                                    ">
                                                     <h6 style="font-weight:bold; color:<?php echo $border_color; ?>;"><?php echo $icon; ?> <?php echo $titulo; ?></h6>
                                                     <p style="margin:0;"><b>Precio:</b> $<?php echo number_format($precio_unitario, 0, ',', '.'); ?></p>
                                                     <p style="margin:0;"><b>Cantidad:</b> <?php echo $cantidad; ?></p>
@@ -594,9 +597,29 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     </button>
                                 </div>
                             </td>
+                            <!-- Calculo -->
+                            <!-- BOTÓN CALCULAR PESO -->
+                            <td class="text-center">
+                                <button type="button"
+                                    class="btn btn-info btn-sm"
+                                    onclick="abrirModalCalculo('<?php echo $data['codigo_orions_almacen']; ?>')">
+                                    Calcular Peso Neto
+                                </button>
+                            </td>
 
                         </tr>
+
                     <?php } ?>
+                    <script>
+                        function abrirModalCalculo(codigo) {
+
+                            $("#contenedorModal").load("calculo.php?codigo=" + codigo, function() {
+                                $("#modalCalculo").modal("show");
+                            });
+
+                        }
+                    </script>
+                    <div id="contenedorModal"></div>
                 </tbody>
 
             </table>
@@ -606,6 +629,7 @@ if ($rol_user != 1 && $rol_user != 2) {
             <br />
         </div> -->
     </div>
+
     <script>
         $(document).ready(function() {
             $('#example').DataTable();

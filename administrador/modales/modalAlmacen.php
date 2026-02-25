@@ -535,7 +535,7 @@
 							<!-- AGUA LUZ -->
 							<div class="col-md-6">
 								<label>Luz galpón</label>
-								<input type="number" id="luzu" name="luzu" class="form-control input-sm" required>
+								<input type="number" name="luzu" 	value="1" class="form-control input-sm" readonly>
 							</div>
 
 							<div class="col-md-6">
@@ -547,7 +547,10 @@
 							<!-- ARRIENDO -->
 							<div class="col-md-6">
 								<label>Arriendo galpón</label>
-								<input type="number" id="arriendou" name="arriendou" class="form-control input-sm" required>
+								<input type="number" name="arriendou"
+									value="1"
+									class="form-control input-sm"
+									readonly>
 							</div>
 
 							<div class="col-md-6">
@@ -561,10 +564,9 @@
 								<label>Cantidad Gastos Varios</label>
 								<input
 									type="number"
-									id="gastos_variosu"
 									name="gastos_variosu"
-									class="form-control"
 									value="1"
+									class="form-control input-sm"
 									readonly>
 							</div>
 							<div class="col-md-6">
