@@ -120,12 +120,12 @@ $filas = 30;
                 neto = 0;
             }
 
-            row.querySelector(".neto").value = neto.toFixed(0);
+            row.querySelector(".neto").value = neto.toFixed(1);
             totalGeneral += neto;
 
         });
 
-        document.getElementById("totalGeneral").innerText = totalGeneral.toFixed(0);
+        document.getElementById("totalGeneral").innerText = totalGeneral.toFixed(1);
     }
 
     function guardarDatos() {
