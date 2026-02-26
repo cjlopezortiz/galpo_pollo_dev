@@ -5,7 +5,7 @@ if (!$codigo) {
     exit("Código no válido");
 }
 
-$filas = 30;
+$filas = 100;
 ?>
 
 <div class="modal fade" id="modalCalculo" tabindex="-1">
