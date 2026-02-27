@@ -107,11 +107,12 @@ if ($rol_user != 1 && $rol_user != 2) {
                         <div class="text-center">PDF</div>
                     </th>
                     <th>
-                        <div class="text-center">Editar</div>
-                    </th>
-                    <th>
                         <div class="text-center">Sacar<br />Cálculo / Kg.</div>
                     </th>
+                    <th>
+                        <div class="text-center">Editar</div>
+                    </th>
+
                 </thead>
                 <tbody>
                     <?php
@@ -438,12 +439,12 @@ if ($rol_user != 1 && $rol_user != 2) {
                                                 $precio_final += $total_agua;
                                                 $items[] = ['Agua Potable', $agua_potable, $precio_agua, $total_agua, '#e3f5ff', '#0093d5', '💧'];
                                             }
-                                            if (!empty($luz) && !empty($precio_luz)) {
+                                            if ($luz !== null && $precio_luz !== null) {
                                                 $total_luz = $luz * $precio_luz;
                                                 $precio_final += $total_luz;
                                                 $items[] = ['Electricidad (Luz)', $luz, $precio_luz, $total_luz, '#fefce8', '#ffcc00', '💡'];
                                             }
-                                            if (!empty($arriendo) && !empty($precio_arriendo)) {
+                                            if ($arriendo !== null && $precio_arriendo !== null) {
                                                 $total_arriendo = $arriendo * $precio_arriendo;
                                                 $precio_final += $total_arriendo;
                                                 $items[] = ['Arriendo', $arriendo, $precio_arriendo, $total_arriendo, '#f0e6ff', '#8e44ad', '🏠'];
@@ -584,7 +585,15 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     </div>
                                 </div>
                             </td>
-
+                            <!-- Calculo -->
+                            <!-- BOTÓN CALCULAR PESO -->
+                            <td class="text-center">
+                                <button type="button"
+                                    class="btn btn-info btn-sm"
+                                    onclick="abrirModalCalculo('<?php echo $data['codigo_orions_almacen']; ?>')">
+                                    Calcular Peso Neto
+                                </button>
+                            </td>
 
                             <!-- BOTÓN EDITAR -->
                             <td>
@@ -597,15 +606,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     </button>
                                 </div>
                             </td>
-                            <!-- Calculo -->
-                            <!-- BOTÓN CALCULAR PESO -->
-                            <td class="text-center">
-                                <button type="button"
-                                    class="btn btn-info btn-sm"
-                                    onclick="abrirModalCalculo('<?php echo $data['codigo_orions_almacen']; ?>')">
-                                    Calcular Peso Neto
-                                </button>
-                            </td>
+
 
                         </tr>
 

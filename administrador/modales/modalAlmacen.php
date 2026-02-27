@@ -523,7 +523,7 @@
 							<!-- AGUA POTABLE -->
 							<div class="col-md-6">
 								<label>Cantidad Agua Potable</label>
-								<input type="number" id="agua_potableu" name="agua_potableu" class="form-control input-sm" required>
+								<input type="number" id="agua_potableu" value="1" name="agua_potableu" class="form-control input-sm" required>
 							</div>
 
 							<div class="col-md-6">
@@ -535,7 +535,7 @@
 							<!-- AGUA LUZ -->
 							<div class="col-md-6">
 								<label>Luz galpón</label>
-								<input type="number" name="luzu" 	value="1" class="form-control input-sm" readonly>
+								<input type="number" id="luzu" name="luzu" value="1" class="form-control input-sm" required>
 							</div>
 
 							<div class="col-md-6">
@@ -547,10 +547,7 @@
 							<!-- ARRIENDO -->
 							<div class="col-md-6">
 								<label>Arriendo galpón</label>
-								<input type="number" name="arriendou"
-									value="1"
-									class="form-control input-sm"
-									readonly>
+								<input type="number" id="arriendou" name="arriendou" value="1" class="form-control input-sm" required>
 							</div>
 
 							<div class="col-md-6">
@@ -562,38 +559,33 @@
 							<!-- GASTOS VARIOS -->
 							<div class="col-md-6">
 								<label>Cantidad Gastos Varios</label>
-								<input
-									type="number"
-									name="gastos_variosu"
-									value="1"
-									class="form-control input-sm"
-									readonly>
+								<input type="number" id="gastos_variosu" name="gastos_variosu" value="1" class="form-control input-sm" required>
 							</div>
 							<div class="col-md-6">
-								<label>Precio Gast varios</label>
-								<input type="number" id="precio_gastos_variosu" name="precio_gastos_variosu" rows="4" class="form-control" onfocus="mostrarAvisoGastos()"
-									onblur="ocultarAvisoGastos()">
-								<!-- Aviso (oculto por defecto y alineado) -->
-								<div
-									id="avisoGastos"
-									class="alert alert-warning mt-2 py-2 px-3"
-									style="display:none; width:100%;">
-									<small>
-										⚠️ <strong>Nota:</strong> Solo se permiten valores positivos para sumar gastos.
-									</small>
-								</div>
-								<script>
-									function mostrarAvisoGastos() {
-										document.getElementById('avisoGastos').style.display = 'block';
-									}
+								<label>
+									Precio Gastos Varios
+									<i class="fa fa-exclamation-circle text-danger"
+										data-toggle="tooltip"
+										data-placement="right"
+										title="⚠ Solo se suman valores diferentes. El mismo precio no se agregará nuevamente.">
+									</i>
+								</label>
 
-									function ocultarAvisoGastos() {
-										document.getElementById('avisoGastos').style.display = 'none';
-									}
-								</script>
+								<input type="number"
+									id="precio_gastos_variosu"
+									name="precio_gastos_variosu"
+									class="form-control input-sm"
+									required
+									data-toggle="tooltip"
+									data-placement="right"
+									title="⚠ Solo se suman valores diferentes. El mismo precio no se agregará nuevamente.">
 							</div>
-
 							<div class="w-100"><br></div>
+							<script>
+								$(document).ready(function() {
+									$('[data-toggle="tooltip"]').tooltip();
+								});
+							</script>
 							<!-- OBSERVACIONES -->
 							<!-- <div class="col-md-12">
 								<label>Observación cosecha</label>

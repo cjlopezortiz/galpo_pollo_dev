@@ -166,7 +166,7 @@ class PDF_HF extends exFPDF
         // ----------- SUBTÍTULO (DEBAJO DEL TÍTULO) -------------
         $this->SetFont('Arial', 'I', 10);
         $this->SetTextColor(80, 80, 80);
-        $this->Cell(0, 6, utf8_decode('Sistema de Gestión Avícola ML'), 0, 1, 'C');
+        $this->Cell(0, 6, utf8_decode('Sistema de Gestión Avícola'), 0, 1, 'C');
     }
 
 
@@ -331,7 +331,9 @@ $t_liquidacion->printRow();
 
 // Datos de Venta
 $cantidad_total = $gast['cantidad_total'] ?? 0;
-$precio_kilo = $gast['precio_kilo'] ?? 0;
+$precio_kilo    = $gast['precio_kilo'] ?? 0;
+
+// ✅ CALCULAR TOTAL DE VENTA
 $total_final_venta = $cantidad_total * $precio_kilo;
 
 // Validar si hay liquidación de venta
@@ -340,10 +342,8 @@ $hay_venta = ($cantidad_total > 0 && $precio_kilo > 0);
 if ($hay_venta) {
     $ganancia_final = $total_final_venta - $precio_final;
 } else {
-    $ganancia_final = 0; // o $total_final_venta
+    $ganancia_final = 0;
 }
-
-
 // FILA CANTIDAD KILOS VENDIDOS
 $t_liquidacion->easyCell(utf8_decode('Cantidad Total Kilos Vendidos:'), 'font-style:B; bgcolor:#F9F9F9; paddingY:3'); // <--- UTF8_DECODE
 $t_liquidacion->easyCell(number_format($total_final_venta), 'align:C; paddingY:3');

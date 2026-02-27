@@ -178,7 +178,25 @@ if (isset($_GET['accion'])) {
 		$precio_arriendo = $_POST['precio_arriendo'];
 		$gastos_varios = $_POST['gastos_varios'];
 		$precio_gastos_varios = $_POST['precio_gastos_varios'];
+		$precio_gastos_varios = floatval($precio_gastos_varios);
 
+		// Consultar valor actual en BD
+		$sqlCheck = "SELECT precio_gastos_varios 
+             FROM almacen 
+             WHERE codigo = :codigo";
+
+		$stmtCheck = $conexion->prepare($sqlCheck);
+		$stmtCheck->bindParam(":codigo", $codigo);
+		$stmtCheck->execute();
+		$row = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+		$valor_actual = floatval($row['precio_gastos_varios']);
+
+		// VALIDACIÓN AQUÍ 👇
+		if ($precio_gastos_varios == $valor_actual) {
+			// Si es el mismo valor, no lo sumamos
+			$precio_gastos_varios = 0;
+		}
 		$sql = "UPDATE almacen SET
 		codigo_orions = :codigo_orions,
 		descripcion_material = :descripcion_material,

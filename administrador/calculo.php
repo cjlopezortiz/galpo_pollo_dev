@@ -29,32 +29,27 @@ $filas = 100;
                         </tr>
                     </thead>
                     <tbody>
-
                         <?php for ($i = 1; $i <= $filas; $i++) { ?>
                             <tr>
-                                <td><?php echo $i; ?></td>
+                                <td><?= $i ?></td>
 
                                 <td>
                                     <input type="number" step="0.01"
-                                        class="form-control bruto"
-                                        data-fila="<?php echo $i; ?>">
+                                        class="form-control bruto">
                                 </td>
 
                                 <td>
                                     <input type="number" step="0.01"
-                                        class="form-control canasta"
-                                        data-fila="<?php echo $i; ?>">
+                                        class="form-control canasta">
                                 </td>
 
                                 <td>
                                     <input type="text"
                                         readonly
-                                        class="form-control bg-light font-weight-bold text-success neto"
-                                        id="neto<?php echo $i; ?>">
+                                        class="form-control bg-light font-weight-bold text-success neto">
                                 </td>
                             </tr>
                         <?php } ?>
-                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                     </tbody>
                 </table>
 
@@ -65,6 +60,7 @@ $filas = 100;
                         <button class="btn btn-danger btn-sm" onclick="borrarDatos()">
                             Borrar Todos los Datos
                         </button>
+
                         <button class="btn btn-success btn-sm" onclick="guardarManual()">
                             Guardar Datos
                         </button>
@@ -77,136 +73,132 @@ $filas = 100;
                         </h4>
                     </div>
                 </div>
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title">Calculadora Peso Neto</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                </div>
-            </div>
 
+            </div>
         </div>
     </div>
 </div>
 
-<script>
-    let codigoAlmacen = "<?php echo $codigo; ?>";
-    let storageKey = "calculo_peso_" + codigoAlmacen;
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    // Cuando el modal se abre
-    $('#modalCalculo').on('shown.bs.modal', function() {
-        cargarDatos();
+<script>
+let codigoAlmacen = "<?= $codigo ?>";
+
+// Cuando el modal se abre
+$('#modalCalculo').on('shown.bs.modal', function() {
+    cargarDatos();
+});
+
+// Evento automático al escribir
+document.addEventListener("input", function(e) {
+    if (e.target.classList.contains("bruto") ||
+        e.target.classList.contains("canasta")) {
+        calcularTodo();
+    }
+});
+
+function calcularTodo() {
+
+    let totalGeneral = 0;
+
+    document.querySelectorAll("#modalCalculo tbody tr").forEach(function(row) {
+
+        let bruto = parseFloat(row.querySelector(".bruto").value) || 0;
+        let canasta = parseFloat(row.querySelector(".canasta").value) || 0;
+
+        let neto = bruto - canasta;
+        if (neto < 0) neto = 0;
+
+        row.querySelector(".neto").value = neto.toFixed(1);
+        totalGeneral += neto;
     });
 
-    // Delegación de eventos (por si el modal se carga dinámicamente)
-    document.addEventListener("input", function(e) {
-        if (e.target.classList.contains("bruto") ||
-            e.target.classList.contains("canasta")) {
-            calcularTodo();
-            guardarDatos();
+    document.getElementById("totalGeneral").innerText = totalGeneral.toFixed(1);
+}
+
+// GUARDAR EN BASE DE DATOS
+function guardarManual() {
+
+    let datos = [];
+
+    document.querySelectorAll("#modalCalculo tbody tr").forEach(function(row) {
+
+        let bruto = row.querySelector(".bruto").value;
+        let canasta = row.querySelector(".canasta").value;
+
+        if (bruto || canasta) {
+            datos.push({ bruto, canasta });
         }
     });
 
-    function calcularTodo() {
+    fetch("/galpo_pollo_dev/administrador/guardar_peso.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "codigo=" + codigoAlmacen +
+              "&datos=" + encodeURIComponent(JSON.stringify(datos))
+    })
+    .then(response => response.text())
+    .then(data => {
 
-        let totalGeneral = 0;
+        if (data.trim() === "ok") {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Guardado en Base de Datos!',
+                confirmButtonColor: '#28a745'
+            });
+        } else {
+            Swal.fire("Error al guardar");
+        }
 
-        document.querySelectorAll("#modalCalculo tbody tr").forEach(function(row) {
+    });
+}
 
-            let bruto = parseFloat(row.querySelector(".bruto").value) || 0;
-            let canasta = parseFloat(row.querySelector(".canasta").value) || 0;
+// ELIMINAR
+function borrarDatos() {
 
-            let neto = bruto - canasta;
+    Swal.fire({
+        title: '¿Eliminar todos los datos?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        confirmButtonText: 'Sí, eliminar'
+    }).then((result) => {
 
-            if (neto < 0) {
-                neto = 0;
-            }
+        if (result.isConfirmed) {
 
-            row.querySelector(".neto").value = neto.toFixed(1);
-            totalGeneral += neto;
+            fetch("/galpo_pollo_dev/administrador/eliminar_peso.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "codigo=" + codigoAlmacen
+            })
+            .then(response => response.text())
+            .then(data => {
 
-        });
+                if (data.trim() === "ok") {
 
-        document.getElementById("totalGeneral").innerText = totalGeneral.toFixed(1);
-    }
+                    document.querySelectorAll("#modalCalculo .bruto, #modalCalculo .canasta, #modalCalculo .neto")
+                        .forEach(input => input.value = "");
 
-    function guardarDatos() {
+                    document.getElementById("totalGeneral").innerText = "0.00";
 
-        let datos = [];
+                    Swal.fire("Eliminado correctamente");
+                }
 
-        document.querySelectorAll("#modalCalculo tbody tr").forEach(function(row) {
-
-            datos.push({
-                bruto: row.querySelector(".bruto").value,
-                canasta: row.querySelector(".canasta").value
             });
 
-        });
+        }
 
-        localStorage.setItem(storageKey, JSON.stringify(datos));
-    }
+    });
+}
 
+// CARGAR DATOS
+function cargarDatos() {
 
-    // BOTÓN GUARDAR MANUAL
-    function guardarManual() {
+    fetch("/galpo_pollo_dev/administrador/cargar_peso.php?codigo=" + codigoAlmacen)
+    .then(response => response.json())
+    .then(datos => {
 
-        guardarDatos();
-
-        Swal.fire({
-            icon: 'success',
-            title: '¡Datos Guardados!',
-            text: 'El cálculo fue guardado correctamente.',
-            confirmButtonColor: '#28a745',
-            timer: 2000,
-            showConfirmButton: false
-        });
-
-    }
-
-
-    // BORRAR CON ALERT BONITO
-    function borrarDatos() {
-
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "Se borrarán todos los datos ingresados",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#dc3545',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, borrar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-
-            if (result.isConfirmed) {
-
-                localStorage.removeItem(storageKey);
-
-                document.querySelectorAll("#modalCalculo .bruto, #modalCalculo .canasta, #modalCalculo .neto")
-                    .forEach(function(input) {
-                        input.value = "";
-                    });
-
-                document.getElementById("totalGeneral").innerText = "0.00";
-
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Eliminado!',
-                    text: 'Todos los datos fueron borrados.',
-                    confirmButtonColor: '#28a745',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            }
-
-        });
-    }
-
-    function cargarDatos() {
-
-        let datosGuardados = localStorage.getItem(storageKey);
-
-        if (!datosGuardados) return;
-
-        let datos = JSON.parse(datosGuardados);
+        if (!datos.length) return;
 
         document.querySelectorAll("#modalCalculo tbody tr").forEach(function(row, index) {
 
@@ -218,20 +210,6 @@ $filas = 100;
         });
 
         calcularTodo();
-    }
-
-    function borrarDatos() {
-
-        if (confirm("¿Seguro que deseas borrar todos los datos?")) {
-
-            localStorage.removeItem(storageKey);
-
-            document.querySelectorAll("#modalCalculo .bruto, #modalCalculo .canasta, #modalCalculo .neto")
-                .forEach(function(input) {
-                    input.value = "";
-                });
-
-            document.getElementById("totalGeneral").innerText = "0.00";
-        }
-    }
+    });
+}
 </script>
