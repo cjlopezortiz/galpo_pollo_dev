@@ -49,20 +49,36 @@ if (isset($_GET['accion'])) {
 
 		if ($reg->execute()) {
 
-			// --- INSERT DEL ALMACÉN ---
-			$sql = "INSERT INTO almacen (codigo, codigo_orions) VALUES (?, ?)";
-			$reg = $conexion->prepare($sql);
+			/* ===============================
+	   INSERT EN ALMACEN
+	================================ */
+			$sqlAlmacen = "INSERT INTO almacen (codigo, codigo_orions) VALUES (?, ?)";
+			$stmtAlmacen = $conexion->prepare($sqlAlmacen);
 
-			$reg->bindParam(1, $codigo);
-			$reg->bindParam(2, $codigo_orions);
+			$stmtAlmacen->bindParam(1, $codigo);
+			$stmtAlmacen->bindParam(2, $codigo_orions);
 
-			if ($reg->execute()) {
-				echo 1; // TODO BIEN
-			} else {
-				echo "ERROR ALMACEN: " . implode(" | ", $reg->errorInfo());
+
+			if (!$stmtAlmacen->execute()) {
+				echo "ERROR ALMACEN: " . implode(" | ", $stmtAlmacen->errorInfo());
+				exit;
 			}
-		} else {
-			echo "ERROR GALPON: " . implode(" | ", $reg->errorInfo());
+
+			/* ===============================
+	   INSERT EN PESO_NETO_DETALLE
+	================================ */
+			$sqlDetalle = "INSERT INTO peso_neto_detalle (codigo, codigo_orions) VALUES (?, ?)";
+			$stmtDetalle = $conexion->prepare($sqlDetalle);
+
+			$stmtDetalle->bindParam(1, $codigo);
+			$stmtDetalle->bindParam(2, $codigo_orions);
+
+			if (!$stmtDetalle->execute()) {
+				echo "ERROR DETALLE: " . implode(" | ", $stmtDetalle->errorInfo());
+				exit;
+			}
+
+			echo 1;
 		}
 	} else if ($accion == 'modificar') {
 		$codigo = $_POST['codigo'];

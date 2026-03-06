@@ -2,6 +2,9 @@
 include_once '../modelo/datos-almacen.php';
 include_once '../modelo/datos-galpon2.php';
 include_once '../modelo/datos-galpon1.php';
+require_once '../modelo/datos-procesar.php';
+
+
 include_once '../fpdf/fpdf.php';
 include 'exfpdf.php';
 include 'easyTable.php';
@@ -10,11 +13,19 @@ include 'easyTable.php';
 $mis_almacen = new misAlmacenes();
 $mis_galpon2 = new misGalpon2();
 $mis_galpon1 = new misGalpon1();
+$obj         = new misProcesos();
+
 
 $codigo = $_GET['codigo'] ?? null;
 $res = $mis_almacen->viewAlmacenes($codigo);
 $gast = $res[0] ?? []; // Datos del almacén
 
+$codigoUnico = $gast['codigo_orions_almacen'];
+$total_data = $obj->totalNetoPorCodigo($codigoUnico);
+
+$total_neto = $total_data['total_neto'];
+$precio_pollo = $total_data['precio_pollo'];
+$total_final = $total_neto * $precio_pollo;
 // ======================================================
 // 1. RECOLECCIÓN DE DATOS DE GASTOS Y CÁLCULO DEL TOTAL
 // ======================================================
@@ -176,34 +187,34 @@ class PDF_HF extends exFPDF
         // Fondo del footer
         $this->SetFillColor(230, 240, 255);
         $this->Rect(0, 262, 220, 25, 'F');
-    
+
         // Línea superior decorativa
         $this->SetDrawColor(190, 200, 225);
         $this->SetLineWidth(0.5);
         $this->Line(10, 262, 205, 262);
-    
+
         // Logos del footer
         $this->Image('../imagenes/pollo.jpg', 12, 266, 15, 15);
         $this->Image('../imagenes/pollo.jpg', 188, 266, 15, 15);
-    
+
         // -------------------------------------------------
         //       OBSERVACIONES CENTRADAS (descripcion_material)
         // -------------------------------------------------
-     
-    
-            // Título centrado
-            $this->SetXY(30, 239);
-            $this->SetFont('Arial', 'B', 9);
-            $this->SetTextColor(30, 60, 130);
-            $this->Cell(160, 50, utf8_decode("Observaciones Cosecha:"), 0, 1, 'C');
-    
-            // Texto centrado dentro de la caja
-            $this->SetXY(30, 244);
-            $this->SetFont('Arial', '', 8);
-            $this->SetTextColor(60, 60, 60);
-            $this->MultiCell(160, 50, utf8_decode($this->descripcion), 0, 'C');
-        
-    
+
+
+        // Título centrado
+        $this->SetXY(30, 239);
+        $this->SetFont('Arial', 'B', 9);
+        $this->SetTextColor(30, 60, 130);
+        $this->Cell(160, 50, utf8_decode("Observaciones Cosecha:"), 0, 1, 'C');
+
+        // Texto centrado dentro de la caja
+        $this->SetXY(30, 244);
+        $this->SetFont('Arial', '', 8);
+        $this->SetTextColor(60, 60, 60);
+        $this->MultiCell(160, 50, utf8_decode($this->descripcion), 0, 'C');
+
+
         // -------------------------------------------------
         //       TEXTO LEGAL Y PAGINACIÓN
         // -------------------------------------------------
@@ -211,12 +222,11 @@ class PDF_HF extends exFPDF
         $this->SetFont('Arial', '', 8);
         $this->SetTextColor(30, 60, 130);
         $this->Cell(0, -5, utf8_decode('© ' . date('Y') . ' Granjas Avícolas - Reporte interno'), 0, 0, 'L');
-    
+
         $this->SetFont('Arial', 'B', 9);
         $this->SetTextColor(50, 80, 130);
         $this->Cell(0, -5, utf8_decode('Página ') . $this->PageNo(), 0, 0, 'R');
     }
-    
 }
 
 $pdf = new PDF_HF('P', 'mm', 'Letter');
@@ -318,59 +328,74 @@ $t_costos->easyCell('$ ' . number_format($precio_final), 'colspan:2; align:R; fo
 $t_costos->printRow();
 
 $t_costos->endTable(5);
-
 /* ==========================================================
-    TABLA #2 — LIQUIDACIÓN VENTA Y FAYIDOS (Diseño en una columna simple)
+    TABLA #2 — LIQUIDACIÓN VENTA Y FAYIDOS
 ========================================================== */
 $pdf->Ln(5);
 
 $t_liquidacion = new easyTable($pdf, '%{50,50}', 'border:1; paddingY:3;');
 
-$t_liquidacion->easyCell(utf8_decode('RESUMEN DE VENTA Y PÉRDIDAS'), 'colspan:2; align:C; font-style:B; bgcolor:#C6E0B4; paddingY:4'); // <--- UTF8_DECODE
+$t_liquidacion->easyCell(utf8_decode('RESUMEN DE VENTA Y PÉRDIDAS'), 'colspan:2; align:C; font-style:B; bgcolor:#C6E0B4; paddingY:4');
 $t_liquidacion->printRow();
 
-// Datos de Venta
-$cantidad_total = $gast['cantidad_total'] ?? 0;
-$precio_kilo    = $gast['precio_kilo'] ?? 0;
+// ==============================
+// DATOS DE LA VENTA
+// ==============================
 
-// ✅ CALCULAR TOTAL DE VENTA
-$total_final_venta = $cantidad_total * $precio_kilo;
+$cantidad_kilos = $total_neto; 
+$precio_kilo    = $precio_pollo; 
+$total_venta    = $total_final; 
 
-// Validar si hay liquidación de venta
-$hay_venta = ($cantidad_total > 0 && $precio_kilo > 0);
+// ==============================
+// GANANCIA FINAL
+// ==============================
 
-if ($hay_venta) {
-    $ganancia_final = $total_final_venta - $precio_final;
-} else {
-    $ganancia_final = 0;
-}
+$ganancia_final = $total_venta - $precio_final;
+
+
 // FILA CANTIDAD KILOS VENDIDOS
-$t_liquidacion->easyCell(utf8_decode('Cantidad Total Kilos Vendidos:'), 'font-style:B; bgcolor:#F9F9F9; paddingY:3'); // <--- UTF8_DECODE
-$t_liquidacion->easyCell(number_format($total_final_venta), 'align:C; paddingY:3');
+$t_liquidacion->easyCell(utf8_decode('Cantidad Total Kilos Vendidos:'), 'font-style:B; bgcolor:#F9F9F9; paddingY:3');
+$t_liquidacion->easyCell(number_format($cantidad_kilos,1), 'align:C; paddingY:3');
 $t_liquidacion->printRow();
+
 
 // FILA PRECIO KILO
-$t_liquidacion->easyCell(utf8_decode('Precio por Kilo de Venta:'), 'font-style:B; bgcolor:#F9F9F9; paddingY:3'); // <--- UTF8_DECODE
+$t_liquidacion->easyCell(utf8_decode('Precio por Kilo de Venta:'), 'font-style:B; bgcolor:#F9F9F9; paddingY:3');
 $t_liquidacion->easyCell('$ ' . number_format($precio_kilo), 'align:C; paddingY:3');
 $t_liquidacion->printRow();
 
+
 // FILA TOTAL VENTA
-$t_liquidacion->easyCell(utf8_decode('TOTAL LIQUIDACIÓN VENTA:'), 'font-style:B; bgcolor:#D9E1F2; paddingY:4'); // <--- UTF8_DECODE
-$t_liquidacion->easyCell('$ ' . number_format($total_final_venta), 'align:R; font-style:B; bgcolor:#D9E1F2; paddingY:4');
+$t_liquidacion->easyCell(utf8_decode('TOTAL LIQUIDACIÓN VENTA:'), 'font-style:B; bgcolor:#D9E1F2; paddingY:4');
+$t_liquidacion->easyCell('$ ' . number_format($total_venta), 'align:R; font-style:B; bgcolor:#D9E1F2; paddingY:4');
 $t_liquidacion->printRow();
 
-// Fila separadora
-$t_liquidacion->easyCell(utf8_decode(''), 'colspan:2; paddingY:1');
+
+// FILA SEPARADORA
+$t_liquidacion->easyCell('', 'colspan:2; paddingY:1');
 $t_liquidacion->printRow();
 
-// FILA FAYIDOS (Pérdidas)
-$t_liquidacion->easyCell(utf8_decode('CANTIDAD DE POLLOS MUERTOS COSECHA (PÉRDIDA):'), 'font-style:B; bgcolor:#FFEBEB; paddingY:3; color:#DC3545'); // <--- UTF8_DECODE
-$t_liquidacion->easyCell(number_format($fayido), 'align:C; paddingY:3; bgcolor:#FFEBEB; color:#DC3545');
+
+// FILA FAYIDOS
+$t_liquidacion->easyCell(
+    utf8_decode('CANTIDAD DE POLLOS MUERTOS COSECHA (PÉRDIDA):'),
+    'font-style:B; bgcolor:#FFEBEB; paddingY:3; color:#DC3545'
+);
+
+$t_liquidacion->easyCell(
+    number_format($fayido),
+    'align:C; paddingY:3; bgcolor:#FFEBEB; color:#DC3545'
+);
+
 $t_liquidacion->printRow();
 
-$t_liquidacion->endTable(8);
+$t_liquidacion->endTable();
 
-// MINI TABLA DE GANANCIA FINAL
+
+// ==============================
+// TABLA GANANCIA FINAL
+// ==============================
+
 $pdf->Ln(3);
 
 $t_ganancia = new easyTable($pdf, '%{100}', 'border:1; paddingY:6; bgcolor:#E2F0D9;');

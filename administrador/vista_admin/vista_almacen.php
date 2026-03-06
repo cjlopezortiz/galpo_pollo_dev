@@ -3,6 +3,7 @@ require_once '../../modelo/val-admin.php';
 include_once '../../modelo/datos-almacen.php';
 include_once '../../modelo/datos-galpon2.php';
 include_once '../../modelo/datos-galpon1.php';
+include_once '../../modelo/datos-procesar.php';
 
 // Validamos el usuario
 if ($rol_user != 1 && $rol_user != 2) {
@@ -15,6 +16,8 @@ if ($rol_user != 1 && $rol_user != 2) {
     $mis_almacen = new misAlmacenes();
     $mis_galpon2 = new misGalpon2();
     $mis_galpon1 = new misGalpon1();
+    $obj         = new misProcesos();
+
     // Coonsulta todos al almacen
     $res2 = $mis_galpon2->viewGalpones2();
     $res1 = $mis_galpon1->viewGalpones1();
@@ -22,7 +25,10 @@ if ($rol_user != 1 && $rol_user != 2) {
     $codigo = $res[0]['codigo_orions_almacen'] ?? null;
     $res = $mis_almacen->viewAlmacenes($codigo);
 
-    //var_dump($res);
+    $codigoUnico = $res[0]['codigo_orions_almacen'] ?? null;
+    $total = $obj->totalNetoPorCodigo($codigoUnico);
+    //   var_dump($total);
+    //   die();
 }
 ?>
 <div class="col-sm-12">
@@ -550,24 +556,40 @@ if ($rol_user != 1 && $rol_user != 2) {
                                 </div>
                             </div>
                             <!-- CARD DE CANTIDAD + TOTAL -->
+                            <?php
+                            require_once __DIR__ . '/../../modelo/datos-procesar.php';
+                            $obj         = new misProcesos();
+
+                            $codigoUnico = $data['codigo_orions_almacen'];
+                            $total_data = $obj->totalNetoPorCodigo($codigoUnico);
+
+                            $total_neto = $total_data['total_neto'];
+                            $precio_pollo = $total_data['precio_pollo'];
+                            $total_final = $total_neto * $precio_pollo;
+                            ?>
                             <td>
                                 <div class="text-center"
-                                    style="border: 1px solid #d0d7e1; border-radius: 10px; padding: 10px; background:#f0f6ff;">
+                                    style="border:1px solid #d0d7e1; border-radius:10px; padding:10px; background:#f0f6ff;">
+
                                     <div style="font-size:17px; font-weight:bold;">
-                                        <?php echo $data['cantidad_total']; ?> kg
+                                        <?php echo number_format($total_neto, 1, ',', '.'); ?> kg
                                     </div>
+
                                     <div style="font-size:14px;">
-                                        Precio: $<?php echo number_format($data['precio_kilo'], 0, ',', '.'); ?>
+                                        Precio: $<?php echo number_format($precio_pollo, 0, ',', '.'); ?>
                                     </div>
+
                                     <div style="font-size:16px; font-weight:bold; margin-top:6px;">
-                                        Total: $<?php echo number_format($data['cantidad_total'] * $data['precio_kilo'], 0, ',', '.'); ?>
+                                        Total: $<?php echo number_format($total_final, 0, ',', '.'); ?>
                                     </div>
+
                                 </div>
                             </td>
                             <!-- DESCRIPCIÓN -->
                             <!-- <td>
                                 <div class="text-center">
-                                    <?php echo !empty($data['descripcion_material']) ? $data['descripcion_material'] : "N/A"; ?>
+                                    <?php // echo !empty($data['descripcion_material']) ? $data['descripcion_material'] : "N/A"; 
+                                    ?>
                                 </div>
                             </td> -->
 
@@ -588,14 +610,15 @@ if ($rol_user != 1 && $rol_user != 2) {
                             <!-- Calculo -->
                             <!-- BOTÓN CALCULAR PESO -->
                             <td class="text-center">
-                                <button type="button"
-                                    class="btn btn-info btn-sm"
-                                    onclick="abrirModalCalculo('<?php echo $data['codigo_orions_almacen']; ?>')">
+                                <a href="procesar.php?codigo_orions=<?php echo $data['codigo_orions_almacen']; ?>"
+                                    target="_blank"
+                                    class="btn btn-info btn-sm">
                                     Calcular Peso Neto
-                                </button>
+                                </a>
                             </td>
 
                             <!-- BOTÓN EDITAR -->
+
                             <td>
                                 <div class="text-center">
                                     <button class="btn btn-primary"
@@ -611,16 +634,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                         </tr>
 
                     <?php } ?>
-                    <script>
-                        function abrirModalCalculo(codigo) {
 
-                            $("#contenedorModal").load("calculo.php?codigo=" + codigo, function() {
-                                $("#modalCalculo").modal("show");
-                            });
-
-                        }
-                    </script>
-                    <div id="contenedorModal"></div>
                 </tbody>
 
             </table>

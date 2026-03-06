@@ -300,6 +300,7 @@
 				<div class="row">
 					<div class="modal-body">
 						<div class="row">
+
 							<style>
 								.modal-body label {
 									white-space: nowrap;
@@ -322,22 +323,7 @@
 								<label>Código cosecha</label>
 								<input type="number" id="codigo_orionsu" name="codigo_orionsu" class="form-control input-sm" readonly required>
 							</div>
-
 							<div class="w-100"><br></div>
-
-							<!-- KG -->
-							<div class="col-md-6">
-								<label>Cantidad total Kg</label>
-								<input type="number" id="cantidad_totalu" name="cantidad_totalu" class="form-control input-sm" required>
-							</div>
-
-							<div class="col-md-6">
-								<label>Precio por Kg</label>
-								<input type="number" id="precio_kilou" name="precio_kilou" class="form-control input-sm" required>
-							</div>
-
-							<div class="w-100"><br></div>
-
 							<!-- CLORO -->
 							<div class="col-md-6">
 								<label>Cantidad Cloro</label>
