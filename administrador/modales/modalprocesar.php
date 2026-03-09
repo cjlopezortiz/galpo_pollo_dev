@@ -1,22 +1,3 @@
-<?php
-require_once __DIR__ . '/../../modelo/datos-almacen.php';
-require_once __DIR__ . '/../../modelo/datos-procesar.php';
-$mis_almacen = new misAlmacenes();
-$obj         = new misProcesos();
-
-// El código se recibe por GET (Asegúrate de que la URL lo envíe)
-$codigo = $_GET['codigo'] ?? null;
-$res = $mis_almacen->viewAlmacenes($codigo);
-
-// Obtenemos el código único del almacén
-$codigoUnico = $res[0]['codigo_orions_almacen'] ?? null;
-
-// Consultamos el total neto usando ese código
-$total_data = $obj->totalNetoPorCodigo($codigoUnico);
-$valor_total_neto = $total_data['total_neto'] ?? 0;
-// var_dump($valor_total_neto);
-//die();
-?>
 <div class="modal fade" id="modalEdicionProcesar" tabindex="-1">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">

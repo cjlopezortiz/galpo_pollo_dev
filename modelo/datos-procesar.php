@@ -85,4 +85,5 @@ class misProcesos
             ':total'    => $datos['total_general']
         ]);
     }
+    
 }

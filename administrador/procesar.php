@@ -18,7 +18,7 @@
 		<div id="contenedorProcesar"></div>
 	</div>
 
-	<?php include './modales/modalProcesar.php'; ?>
+	<?php include './modales/modaprocesar.php'; ?>
 	<script src="../controlador/funciones-procesar.js"></script>
 	<?php include 'librerias-js.php'; ?>
 
