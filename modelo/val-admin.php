@@ -10,7 +10,6 @@ if ($_SESSION) {
     $user_email = $_SESSION['email'];
     $rol_user = $_SESSION['rol_id'];
     $estado_user = $_SESSION['estado'];
-    // $estado_reporte_id_user = $_SESSION['estado_reporte_id'];
     $user_codigo = $_SESSION['codigo'];
     $user_usuario = $_SESSION['usuario'];
     $user_contrasena = $_SESSION['contrasena'];
