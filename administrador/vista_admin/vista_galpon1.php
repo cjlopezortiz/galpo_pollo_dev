@@ -13,16 +13,15 @@ if (is_array($res)) {
     // Si es un arreglo de registros
     elseif (isset($res[0]['rol_id'])) {
         $rol_id = $res[0]['rol_id'];
-    }
-    else {
+    } else {
         $rol_id = null;
     }
-   //var_dump($rol_id);
+    //var_dump($rol_id);
 } elseif ($res instanceof mysqli_result) {
     $fila = mysqli_fetch_assoc($res);
     if ($fila && isset($fila['rol_id'])) {
         $rol_id = $fila['rol_id'];
-       // var_dump($rol_id);
+        // var_dump($rol_id);
     } else {
         echo "No se encontró el campo rol_id";
     }
@@ -61,49 +60,8 @@ if ($rol_user != 1 && $rol_user != 2) {
 <div class="col-sm-12">
     <!-- Inicio titulos de la pagina-->
     <div class="page-head">
-        <style>
-            /* Contenedor principal */
-            .page-head-modern {
-                background: linear-gradient(135deg, #0000ff, #ffffff);
-                padding: 25px 30px;
-                border-radius: 12px;
-                color: #fff;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                margin-bottom: 20px;
-            }
+      <link rel="stylesheet" href=".././css/stylos.css">
 
-            /* Título */
-            .page-head-modern h1 {
-                font-size: 32px;
-                font-weight: 700;
-                margin: 0;
-            }
-
-            /* Subtítulo */
-            .page-head-modern small {
-                font-size: 16px;
-                opacity: 0.9;
-            }
-
-            /* Breadcrumb */
-            .breadcrumb-modern {
-                background: #ffffff;
-                padding: 12px 18px;
-                border-radius: 10px;
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                margin-bottom: 10px;
-            }
-
-            .breadcrumb-modern li a {
-                color: #0d6efd;
-                font-weight: 500;
-                text-decoration: none;
-            }
-
-            .breadcrumb-modern li a:hover {
-                text-decoration: underline;
-            }
-        </style>
         <div class="page-head-modern">
             <h1>
                 Galpón Avícola Norte
@@ -204,7 +162,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                             <td>
                                 <div class="text-center"><?php echo $data['codigo']; ?></div>
                             </td>
-                            
+
                             <td style="cursor:pointer;">
                                 <div class="text-center" style="pointer-events:none;">
                                     <?php echo !empty($data['codigo_orions']) ? $data['codigo_orions'] : 'N/A'; ?>

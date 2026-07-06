@@ -49,49 +49,7 @@ if ($rol_user != 1 && $rol_user != 2) {
 <div class="col-sm-12">
     <!-- Inicio titulos de la pagina-->
     <div class="page-head">
-        <style>
-            /* Contenedor principal */
-            .page-head-modern {
-                background: linear-gradient(135deg, #0000ff, #ffffff);
-                padding: 25px 30px;
-                border-radius: 12px;
-                color: #fff;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                margin-bottom: 20px;
-            }
-
-            /* Título */
-            .page-head-modern h1 {
-                font-size: 32px;
-                font-weight: 700;
-                margin: 0;
-            }
-
-            /* Subtítulo */
-            .page-head-modern small {
-                font-size: 16px;
-                opacity: 0.9;
-            }
-
-            /* Breadcrumb */
-            .breadcrumb-modern {
-                background: #ffffff;
-                padding: 12px 18px;
-                border-radius: 10px;
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                margin-bottom: 10px;
-            }
-
-            .breadcrumb-modern li a {
-                color: #0d6efd;
-                font-weight: 500;
-                text-decoration: none;
-            }
-
-            .breadcrumb-modern li a:hover {
-                text-decoration: underline;
-            }
-        </style>
+           <link rel="stylesheet" href=".././css/stylos_usuario.css">
         <div class="page-head-modern">
             <!-- BEGIN PAGE TITLE -->
             <div class="page-title">

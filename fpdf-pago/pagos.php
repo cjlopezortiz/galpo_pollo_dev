@@ -4,7 +4,6 @@ include_once '../modelo/datos-galpon2.php';
 include_once '../modelo/datos-galpon1.php';
 require_once '../modelo/datos-procesar.php';
 
-
 include_once '../fpdf/fpdf.php';
 include 'exfpdf.php';
 include 'easyTable.php';
@@ -15,17 +14,17 @@ $mis_galpon2 = new misGalpon2();
 $mis_galpon1 = new misGalpon1();
 $obj         = new misProcesos();
 
-
 $codigo = $_GET['codigo'] ?? null;
 $res = $mis_almacen->viewAlmacenes($codigo);
 $gast = $res[0] ?? []; // Datos del almacén
 
-$codigoUnico = $gast['codigo_orions_almacen'];
+$codigoUnico = $gast['codigo_orions_almacen'] ?? '';
 $total_data = $obj->totalNetoPorCodigo($codigoUnico);
 
-$total_neto = $total_data['total_neto'];
-$precio_pollo = $total_data['precio_pollo'];
-$total_final = $total_neto * $precio_pollo;
+$total_neto = $total_data['total_neto'] ?? 0;
+$precio_pollo_liqui = $total_data['precio_pollo'] ?? 0;
+$total_final = $total_neto * $precio_pollo_liqui;
+
 // ======================================================
 // 1. RECOLECCIÓN DE DATOS DE GASTOS Y CÁLCULO DEL TOTAL
 // ======================================================
@@ -34,7 +33,7 @@ $gastos_detalles = [];
 
 // Inicialización de datos generales
 $cantidad_pollo     = $gast['cantidad_pollo_g1'] ?? $gast['cantidad_pollo_g2'] ?? 0;
-$cantidad_total     = $gast['cantidad_total'] ?? $gast['cantidad_total'] ?? 0;
+$cantidad_total     = $gast['cantidad_total'] ?? 0;
 $precio_pollo       = $gast['precio_pollo_g1'] ?? $gast['precio_pollo_g2'] ?? 0;
 $cantidad_al        = $gast['cantidad_g1'] ?? $gast['cantidad_g2'] ?? 0;
 $precio_al          = $gast['precio_alimento_g1'] ?? $gast['precio_alimento_g2'] ?? 0;
@@ -44,12 +43,9 @@ $precio_ini         = $gast['precio_inicio_g1'] ?? $gast['precio_inicio_g2'] ?? 
 $preinicio_ali      = $gast['alimento_preinicio_g1'] ?? $gast['alimento_preinicio_g2'] ?? 0;
 $precio_pre         = $gast['precio_preinicio_g1'] ?? $gast['precio_preinicio_g2'] ?? 0;
 
-// Lista de todos los campos de gastos, incluyendo los faltantes
 $campos_gastos = [
-    // [etiqueta, campo_cantidad, campo_precio]
-    ['Pollo', 'cantidad_pollo_g1', 'precio_pollo_g1'],
+    ['Cantidad Pollos', 'cantidad_pollo_g1', 'precio_pollo_g1'],
     ['Alimento Engorde', 'cantidad_g1', 'precio_alimento_g1'],
-    // NUEVOS CAMPOS (Inicio y Preinicio)
     ['Alimento Inicio', 'alimento_inicio_g1', 'precio_inicio_g1'],
     ['Alimento Crecimiento', 'alimento_preinicio_g1', 'precio_preinicio_g1'],
     ['Cloro', 'cloro', 'precio_cloro'],
@@ -69,19 +65,18 @@ $campos_gastos = [
     ['Electricidad (Luz)', 'luz', 'precio_luz'],
     ['Arriendo', 'arriendo', 'precio_arriendo'],
     ['Yodo', 'yodo', 'precio_yodo'],
-    ['Gastos Varios', 'gastos_varios', 'precio_gastos_varios']
+    ['Gastos Varios', 'gastos_varios', 'precio_gastos_varios'],
+    ['Pollos muertos', 'fayido_g1', 'precio_pollo_g1']
 ];
 
 foreach ($campos_gastos as $campo) {
     $etiqueta = $campo[0];
-    // Se usa el nombre del campo_cantidad_g1 si existe, si no, se usa el de g2 (o null/0)
     $cant_key = str_replace('g1', 'g2', $campo[1]);
     $cantidad = $gast[$campo[1]] ?? $gast[$cant_key] ?? 0;
 
     $precio_key = str_replace('g1', 'g2', $campo[2]);
     $precio_unitario = $gast[$campo[2]] ?? $gast[$precio_key] ?? 0;
 
-    // Ajuste especial para 'Gastos Varios' si solo se registra el precio total.
     if ($etiqueta === 'Gastos Varios' && $cantidad == 0 && $precio_unitario > 0) {
         $cantidad = 1;
     }
@@ -98,321 +93,190 @@ foreach ($campos_gastos as $campo) {
         ];
     }
 }
-// Ajuste especial para Pollo y Alimento que tienen un campo de cantidad único
-$total_pollo = ($cantidad_pollo * $precio_pollo);
-$total_al = ($cantidad_al * $precio_al);
-$total_ini = ($inicio_ali * $precio_ini);
-$total_pre = ($preinicio_ali * $precio_pre);
-
 
 // ======================================================
-// 2. DEFINICIÓN DEL PDF 
+// 2. DEFINICIÓN DEL PDF REESTRUTURADO y MODERNO
 // ======================================================
 class PDF_HF extends exFPDF
 {
     public $fecha_inicio;
     public $fecha_fin;
     public $descripcion;
-    function FancyBackground()
-    {
-        $this->SetFillColor(230, 245, 255);
-        $this->Rect(0, 0, 220, 280, 'F');
-        $logo = '';
-        if (file_exists($logo)) {
-            if (method_exists($this, 'SetAlpha')) {
-                $this->SetAlpha(0.08);
-            }
-            $this->Image($logo, 20, 35, 160, 160);
-            if (method_exists($this, 'SetAlpha')) {
-                $this->SetAlpha(1);
-            }
-        }
-    }
 
     function Header()
     {
+        // Encabezado con Estilo Corporativo Elegante (Azul Profundo)
+        $this->SetFillColor(24, 43, 73); 
+        $this->Rect(0, 0, 220, 38, 'F');
 
+        // Detalles estéticos en el encabezado
+        $this->SetFillColor(212, 175, 55); // Línea dorada sutil de acento
+        $this->Rect(0, 36, 220, 2, 'F');
 
-        // Fondo suave degradado superior
-        $this->SetFillColor(235, 245, 255);
-        $this->Rect(0, 0, 220, 35, 'F');
+        // Logos Integrados Limpios
+        if (file_exists('../imagenes/pollo2.jpeg')) {
+            $this->Image('../imagenes/pollo2.jpeg', 12, 6, 24, 24);
+        }
+        if (file_exists('../imagenes/pollo9.jpeg')) {
+            $this->Image('../imagenes/pollo9.jpeg', 180, 6, 24, 24);
+        }
 
-        // Línea decorativa inferior
-        $this->SetDrawColor(70, 130, 180);
-        $this->SetLineWidth(0.8);
-        $this->Line(10, 35, 210, 35);
+        // Título Principal
+        $this->SetY(8);
+        $this->SetFont('Helvetica', 'B', 15);
+        $this->SetTextColor(255, 255, 255);
+        $this->Cell(0, 8, utf8_decode('REPORTE DE COSTOS DE PRODUCCIÓN AVÍCOLA'), 0, 1, 'C');
 
-        // ----------- LOGOS -------------
-        // Logo izquierdo
-        $this->Image('../imagenes/pollo2.jpeg', 12, 6, 22, 22);
-        // Logo derecho
-        $this->Image('../imagenes/pollo9.jpeg', 178, 6, 22, 22);
+        $this->SetFont('Helvetica', 'I', 9);
+        $this->SetTextColor(200, 210, 230);
+        $this->Cell(0, 4, utf8_decode('Sistema Informativo de Gestión de Galpones'), 0, 1, 'C');
 
+        // Contenedor de Fechas Estilo "Badge" Moderno
+        $this->SetY(24);
+        $this->SetFont('Helvetica', 'B', 9);
+        $this->SetTextColor(255, 255, 255);
+        $texto_fechas = "Período de Cosecha: " . ($this->fecha_inicio ? $this->fecha_inicio : 'N/A') . "  al  " . ($this->fecha_fin ? $this->fecha_fin : 'N/A');
+        $this->Cell(0, 6, utf8_decode($texto_fechas), 0, 1, 'C');
 
-        // ----------- TÍTULO PRINCIPAL -------------
-        $this->SetY(6);
-        $this->SetFont('Arial', 'B', 16);
-        $this->SetTextColor(30, 60, 130);
-        $this->Cell(0, 10, utf8_decode('REPORTE DE COSTOS DE PRODUCCIÓN AVÍCOLA'), 0, 1, 'C');
-
-
-        // ----------- FECHAS -------------
-        $this->SetFont('Arial', '', 10);
-        $this->SetTextColor(80, 80, 80);
-
-        // Caja suave de fondo para fechas
-        $this->SetFillColor(255, 255, 255);
-        $this->SetXY(60, 18);
-        $this->Rect(60, 18, 95, 13, 'F');
-
-
-
-        $this->SetXY(60, 19);
-        $this->Cell(95, 5, 'Inicio de cosecha: ' . $this->fecha_inicio, 0, 1, 'C');
-        $this->SetX(60);
-        $this->Cell(95, 5, 'Fin de cosecha: ' . $this->fecha_fin, 0, 1, 'C');
-
-        // Espacio hacia el contenido
-        $this->Ln(8);
-        // ----------- SUBTÍTULO (DEBAJO DEL TÍTULO) -------------
-        $this->SetFont('Arial', 'I', 10);
-        $this->SetTextColor(80, 80, 80);
-        $this->Cell(0, 6, utf8_decode('Sistema de Gestión Avícola'), 0, 1, 'C');
+        $this->Ln(15);
     }
-
-
 
     function Footer()
     {
-        // Fondo del footer
-        $this->SetFillColor(230, 240, 255);
-        $this->Rect(0, 262, 220, 25, 'F');
+        // Posicionamiento dinámico del Footer
+        $this->SetY(-22);
+        
+        // Fondo Gris Suave Limpio
+        $this->SetFillColor(245, 247, 250);
+        $this->Rect(0, 260, 220, 20, 'F');
 
-        // Línea superior decorativa
-        $this->SetDrawColor(190, 200, 225);
-        $this->SetLineWidth(0.5);
-        $this->Line(10, 262, 205, 262);
+        // Línea divisoria superior
+        $this->SetDrawColor(210, 215, 225);
+        $this->SetLineWidth(0.4);
+        $this->Line(0, 260, 220, 260);
 
-        // Logos del footer
-        $this->Image('../imagenes/pollo.jpg', 12, 266, 15, 15);
-        $this->Image('../imagenes/pollo.jpg', 188, 266, 15, 15);
+        // Texto Legal e Interno
+        $this->SetFont('Helvetica', '', 8);
+        $this->SetTextColor(110, 120, 140);
+        $this->SetX(12);
+        $this->Cell(0, 10, utf8_decode('© ' . date('Y') . ' Granjas Avícolas · Reporte Técnico Automatizado'), 0, 0, 'L');
 
-        // -------------------------------------------------
-        //       OBSERVACIONES CENTRADAS (descripcion_material)
-        // -------------------------------------------------
-
-
-        // Título centrado
-        $this->SetXY(30, 239);
-        $this->SetFont('Arial', 'B', 9);
-        $this->SetTextColor(30, 60, 130);
-        $this->Cell(160, 50, utf8_decode("Observaciones Cosecha:"), 0, 1, 'C');
-
-        // Texto centrado dentro de la caja
-        $this->SetXY(30, 244);
-        $this->SetFont('Arial', '', 8);
-        $this->SetTextColor(60, 60, 60);
-        $this->MultiCell(160, 50, utf8_decode($this->descripcion), 0, 'C');
-
-
-        // -------------------------------------------------
-        //       TEXTO LEGAL Y PAGINACIÓN
-        // -------------------------------------------------
-        $this->SetY(-13);
-        $this->SetFont('Arial', '', 8);
-        $this->SetTextColor(30, 60, 130);
-        $this->Cell(0, -5, utf8_decode('© ' . date('Y') . ' Granjas Avícolas - Reporte interno'), 0, 0, 'L');
-
-        $this->SetFont('Arial', 'B', 9);
-        $this->SetTextColor(50, 80, 130);
-        $this->Cell(0, -5, utf8_decode('Página ') . $this->PageNo(), 0, 0, 'R');
+        // Paginación Moderna
+        $this->SetFont('Helvetica', 'B', 9);
+        $this->SetTextColor(24, 43, 73);
+        $this->SetX(-25);
+        $this->Cell(0, 10, $this->PageNo(), 0, 0, 'L');
     }
 }
 
+// Configuración de Página (Carta / Letter estándar)
 $pdf = new PDF_HF('P', 'mm', 'Letter');
 $pdf->fecha_inicio = $gast['fecha_inicio_g1'] ?? $gast['fecha_inicio_g2'] ?? '';
 $pdf->fecha_fin    = $gast['fecha_fin_g1'] ?? $gast['fecha_fin_g2'] ?? '';
-$pdf->descripcion    = $gast['descripcion_g1'] ?? $gast['descripcion_g2'] ?? '';
-$pdf->SetMargins(5, 30, 5);
-$pdf->SetAutoPageBreak(true, 25);
+$pdf->descripcion  = $gast['descripcion_g1'] ?? $gast['descripcion_g2'] ?? 'Sin observaciones registradas.';
+
+$pdf->SetMargins(12, 42, 12);
+$pdf->SetAutoPageBreak(true, 40); // Espacio prudente para evitar colisiones con el footer
 $pdf->AddPage();
-$pdf->SetFont('helvetica', '', 8);
 
-/* ================================
-    TABLA #1 — DETALLE DE COSTOS (Dos columnas de campos)
-================================ */
-$pdf->SetY(45);
+/* ==========================================================
+    TABLA #1 — DETALLE DE COSTOS (Estructura Limpia de 2 Columnas)
+========================================================== */
+$t_costos = new easyTable($pdf, '%{28, 22, 28, 22}', 'border:1; border-color:#E2E8F0; paddingY:2.5; font-size:8.5;');
 
-$t_costos = new easyTable($pdf, '%{25, 25, 25, 25}', 'border:1; paddingY:2; min-h:6;');
-
-// CABECERA 
-$t_costos->easyCell(utf8_decode('DETALLE DE COSTOS (TODOS LOS GASTOS)'), 'colspan:4; align:C; font-style:B; bgcolor:#C6E0B4; paddingY:3'); // <--- UTF8_DECODE
+// Cabecera Principal de la Tabla
+$t_costos->easyCell(utf8_decode('DESGLOSE DETALLADO DE COSTOS DE INSUMOS'), 'colspan:4; align:C; font-style:B; font-size:10; bgcolor:#182B49; font-color:#FFFFFF; paddingY:3.5');
 $t_costos->printRow();
 
 $total_items = count($gastos_detalles);
 $half_point = ceil($total_items / 2);
-$item_index = 0;
 
 for ($i = 0; $i < $half_point; $i++) {
-    // Fila para Cantidad
     $item1 = $gastos_detalles[$i] ?? null;
     $item2 = $gastos_detalles[$i + $half_point] ?? null;
 
-    // Etiqueta Columna 1
-    $t_costos->easyCell(utf8_decode($item1['etiqueta'] . ' (Cant.):'), 'font-style:B; bgcolor:#F9F9F9'); // <--- UTF8_DECODE
-    // Valor Columna 1
-    $t_costos->easyCell(number_format($item1['cantidad']), 'align:C');
+    // --- BLOQUE IZQUIERDO ---
+    $t_costos->easyCell(utf8_decode($item1['etiqueta']), 'font-style:B; bgcolor:#F8FAFC; color:#334155');
+    $detalles_1 = "Cant: " . number_format($item1['cantidad']) . "\nPrec : $ " . number_format($item1['precio']) . "\nTotal: $ " . number_format($item1['total']);
+    $t_costos->easyCell(utf8_decode($detalles_1), 'align:L; font-style:I; color:#475569');
 
-    // Etiqueta Columna 2
+    // --- BLOQUE DERECHO ---
     if ($item2) {
-        $t_costos->easyCell(utf8_decode($item2['etiqueta'] . ' (Cant.):'), 'font-style:B; bgcolor:#F9F9F9'); // <--- UTF8_DECODE
+        $t_costos->easyCell(utf8_decode($item2['etiqueta']), 'font-style:B; bgcolor:#F8FAFC; color:#334155');
+        $detalles_2 = "Cant: " . number_format($item2['cantidad']) . "\nPrec : $ " . number_format($item2['precio']) . "\nTotal: $ " . number_format($item2['total']);
+        $t_costos->easyCell(utf8_decode($detalles_2), 'align:L; font-style:I; color:#475569');
     } else {
-        $t_costos->easyCell('', 'bgcolor:#F9F9F9');
-    }
-    // Valor Columna 2
-    if ($item2) {
-        $t_costos->easyCell(number_format($item2['cantidad']), 'align:C');
-    } else {
+        $t_costos->easyCell('', 'bgcolor:#FAFAFA');
         $t_costos->easyCell('');
     }
-    $t_costos->printRow();
-
-    // Fila para Precio Unitario
-    // Etiqueta Columna 1
-    $t_costos->easyCell(utf8_decode($item1['etiqueta'] . ' (Precio Unit.):'), 'font-style:B; bgcolor:#F0F0F0'); // <--- UTF8_DECODE
-    // Valor Columna 1
-    $t_costos->easyCell('$ ' . number_format($item1['precio']), 'align:C');
-
-    // Etiqueta Columna 2
-    if ($item2) {
-        $t_costos->easyCell(utf8_decode($item2['etiqueta'] . ' (Precio Unit.):'), 'font-style:B; bgcolor:#F0F0F0'); // <--- UTF8_DECODE
-    } else {
-        $t_costos->easyCell('', 'bgcolor:#F0F0F0');
-    }
-    // Valor Columna 2
-    if ($item2) {
-        $t_costos->easyCell('$ ' . number_format($item2['precio']), 'align:C');
-    } else {
-        $t_costos->easyCell('');
-    }
-    $t_costos->printRow();
-
-    // Fila para Total Parcial
-    // Etiqueta Columna 1
-    $t_costos->easyCell(utf8_decode($item1['etiqueta'] . ' (Total):'), 'font-style:B; bgcolor:#EFEFEF'); // <--- UTF8_DECODE
-    // Valor Columna 1
-    $t_costos->easyCell('$ ' . number_format($item1['total']), 'align:C; font-style:B');
-
-    // Etiqueta Columna 2
-    if ($item2) {
-        $t_costos->easyCell(utf8_decode($item2['etiqueta'] . ' (Total):'), 'font-style:B; bgcolor:#EFEFEF'); // <--- UTF8_DECODE
-    } else {
-        $t_costos->easyCell('', 'bgcolor:#EFEFEF');
-    }
-    // Valor Columna 2
-    if ($item2) {
-        $t_costos->easyCell('$ ' . number_format($item2['total']), 'align:C; font-style:B');
-    } else {
-        $t_costos->easyCell('');
-    }
-    $t_costos->printRow();
-
-    // Separador de elementos
-    $t_costos->easyCell('', 'colspan:4; bgcolor:#FFFFFF; paddingY:0.5');
     $t_costos->printRow();
 }
 
-// Total General de Costos
-$t_costos->easyCell(utf8_decode('TOTAL GENERAL DE COSTOS:'), 'colspan:2; align:L; font-style:B; bgcolor:#D9E1F2; paddingY:4; font-size:10'); // <--- UTF8_DECODE
-$t_costos->easyCell('$ ' . number_format($precio_final), 'colspan:2; align:R; font-style:B; bgcolor:#D9E1F2; paddingY:4; font-size:10');
+// Fila de Cierre: Total Insumos
+$t_costos->easyCell(utf8_decode('TOTAL INVERSIÓN OPERATIVA ACUMULADA'), 'colspan:2; align:L; font-style:B; font-size:9.5; bgcolor:#F1F5F9; color:#1E293B; paddingY:4');
+$t_costos->easyCell('$ ' . number_format($precio_final), 'colspan:2; align:C; font-style:B; font-size:10.5; bgcolor:#F1F5F9; color:#0F172A; paddingY:4');
 $t_costos->printRow();
 
-$t_costos->endTable(5);
+$t_costos->endTable(8);
+
 /* ==========================================================
-    TABLA #2 — LIQUIDACIÓN VENTA Y FAYIDOS
+    TABLA #2 — LIQUIDACIÓN VENTA Y PÉRDIDAS
 ========================================================== */
-$pdf->Ln(5);
+$t_liquidacion = new easyTable($pdf, '%{65, 35}', 'border:1; border-color:#E2E8F0; paddingY:3.5; font-size:9;');
 
-$t_liquidacion = new easyTable($pdf, '%{50,50}', 'border:1; paddingY:3;');
-
-$t_liquidacion->easyCell(utf8_decode('RESUMEN DE VENTA Y PÉRDIDAS'), 'colspan:2; align:C; font-style:B; bgcolor:#C6E0B4; paddingY:4');
+$t_liquidacion->easyCell(utf8_decode('RESUMEN DE LIQUIDACIÓN COMERCIAL'), 'colspan:2; align:C; font-style:B; font-size:10; bgcolor:#182B49; font-color:#FFFFFF; paddingY:3.5');
 $t_liquidacion->printRow();
-
-// ==============================
-// DATOS DE LA VENTA
-// ==============================
 
 $cantidad_kilos = $total_neto; 
-$precio_kilo    = $precio_pollo; 
+$precio_kilo    = $precio_pollo_liqui; 
 $total_venta    = $total_final; 
-
-// ==============================
-// GANANCIA FINAL
-// ==============================
-
 $ganancia_final = $total_venta - $precio_final;
 
-
-// FILA CANTIDAD KILOS VENDIDOS
-$t_liquidacion->easyCell(utf8_decode('Cantidad Total Kilos Vendidos:'), 'font-style:B; bgcolor:#F9F9F9; paddingY:3');
-$t_liquidacion->easyCell(number_format($cantidad_kilos,1), 'align:C; paddingY:3');
+// Filas de Datos de Venta
+$t_liquidacion->easyCell(utf8_decode('Volumen Neto Comercializado (Kilogramos):'), 'font-style:M; color:#334155; bgcolor:#F8FAFC');
+$t_liquidacion->easyCell(number_format($cantidad_kilos, 0) . ' Kg', 'align:C; font-style:B; color:#0F172A');
 $t_liquidacion->printRow();
 
-
-// FILA PRECIO KILO
-$t_liquidacion->easyCell(utf8_decode('Precio por Kilo de Venta:'), 'font-style:B; bgcolor:#F9F9F9; paddingY:3');
-$t_liquidacion->easyCell('$ ' . number_format($precio_kilo), 'align:C; paddingY:3');
+$t_liquidacion->easyCell(utf8_decode('Valor de Liquidación por Kilo:'), 'font-style:M; color:#334155; bgcolor:#F8FAFC');
+$t_liquidacion->easyCell('$ ' . number_format($precio_kilo), 'align:C; font-style:B; color:#0F172A');
 $t_liquidacion->printRow();
 
-
-// FILA TOTAL VENTA
-$t_liquidacion->easyCell(utf8_decode('TOTAL LIQUIDACIÓN VENTA:'), 'font-style:B; bgcolor:#D9E1F2; paddingY:4');
-$t_liquidacion->easyCell('$ ' . number_format($total_venta), 'align:R; font-style:B; bgcolor:#D9E1F2; paddingY:4');
+$t_liquidacion->easyCell(utf8_decode('Ingreso bruto total por liquidación'), 'font-style:M; bgcolor:#E2E8F0; color:#1E293B; paddingY:4');
+$t_liquidacion->easyCell('$ ' . number_format($total_venta), 'align:C; font-style:B; bgcolor:#E2E8F0; color:#0F172A; paddingY:4');
 $t_liquidacion->printRow();
 
-
-// FILA SEPARADORA
-$t_liquidacion->easyCell('', 'colspan:2; paddingY:1');
+// Indicador de Pérdidas (Fayidos) con Alerta Visual Roja Sutil
+$t_liquidacion->easyCell(utf8_decode('Bajas registradas en Cosecha (Aves Muertas):'), 'font-style:M; bgcolor:#FEF2F2; color:#991B1B');
+$t_liquidacion->easyCell(number_format($fayido) . ' Aves', 'align:C; font-style:B; bgcolor:#FEF2F2; color:#991B1B');
 $t_liquidacion->printRow();
 
+$t_liquidacion->endTable(8);
 
-// FILA FAYIDOS
-$t_liquidacion->easyCell(
-    utf8_decode('CANTIDAD DE POLLOS MUERTOS COSECHA (PÉRDIDA):'),
-    'font-style:B; bgcolor:#FFEBEB; paddingY:3; color:#DC3545'
-);
+/* ==========================================================
+    BLOQUE DESTACADO: UTILIDAD NETO / GANANCIA FINAL
+========================================================== */
+$estilo_color_ganancia = ($ganancia_final >= 0) ? 'color:#166534; bgcolor:#F0FDF4; border-color:#BBF7D0;' : 'color:#991B1B; bgcolor:#FEF2F2; border-color:#FCA5A5;';
+$titulo_rentabilidad = ($ganancia_final >= 0) ? 'RENTABILIDAD NETA POSITIVA' : 'BALANCE OPERATIVO NEGATIVO';
 
-$t_liquidacion->easyCell(
-    number_format($fayido),
-    'align:C; paddingY:3; bgcolor:#FFEBEB; color:#DC3545'
-);
-
-$t_liquidacion->printRow();
-
-$t_liquidacion->endTable();
-
-
-// ==============================
-// TABLA GANANCIA FINAL
-// ==============================
-
-$pdf->Ln(3);
-
-$t_ganancia = new easyTable($pdf, '%{100}', 'border:1; paddingY:6; bgcolor:#E2F0D9;');
-
-$t_ganancia->easyCell(
-    utf8_decode('GANANCIA FINAL'),
-    'align:C; font-style:B; font-size:11; bgcolor:#A9D08E; paddingY:4'
-);
+$t_ganancia = new easyTable($pdf, '%{100}', 'border:1; ' . $estilo_color_ganancia . ' paddingY:4;');
+$t_ganancia->easyCell(utf8_decode($titulo_rentabilidad), 'align:C; font-style:B; font-size:10;');
 $t_ganancia->printRow();
-
-$t_ganancia->easyCell(
-    '$ ' . number_format($ganancia_final),
-    'align:C; font-style:B; font-size:14; color:#155724; paddingY:6'
-);
-
+$t_ganancia->easyCell('$ ' . number_format($ganancia_final), 'align:C; font-style:B; font-size:15; paddingY:5');
 $t_ganancia->printRow();
-$t_ganancia->endTable(10);
+$t_ganancia->endTable(8);
 
+/* ==========================================================
+    SECCIÓN DINÁMICA DE OBSERVACIONES (Se adapta al tamaño del texto)
+========================================================== */
+$pdf->Ln(2);
+$pdf->SetFont('Helvetica', 'B', 10);
+$pdf->SetTextColor(24, 43, 73);
+$pdf->Cell(0, 6, utf8_decode("Observaciones y Notas de Cosecha:"), 0, 1, 'L');
+
+$pdf->SetFont('Helvetica', 'I', 9);
+$pdf->SetTextColor(71, 85, 105);
+// El uso de MultiCell aquí previene de forma nativa desbordamientos si el texto es muy largo
+$pdf->MultiCell(0, 5, utf8_decode($pdf->descripcion), 0, 'L');
 
 $pdf->Output();
+?>

@@ -1,0 +1,197 @@
+            /* ==========================
+            FONDO GENERAL
+            ========================== */
+            body {
+                background: linear-gradient(135deg,
+                        #e8f5e9 0%,
+                        #c8e6c9 50%,
+                        #a5d6a7 100%);
+                min-height: 100vh;
+                position: relative;
+            }
+
+            /* ==========================
+            MARCA DE AGUA
+            ========================== */
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+
+                /* CAMBIA LA RUTA SI ES NECESARIO */
+                background: url('../imagenes/avatar-3637425_1280.png') center center no-repeat;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: 650px;
+
+                opacity: 0.15;
+
+                z-index: 0;
+                pointer-events: none;
+            }
+
+            /* Todo el contenido encima */
+            .col-sm-12,
+            .page-head-modern,
+            .breadcrumb-modern,
+            .table-responsive {
+                position: relative;
+                z-index: 1;
+            }
+
+            /* ==========================
+            ENCABEZADO
+            ========================== */
+            .page-head-modern {
+                background: linear-gradient(135deg,
+                        #0d47a1,
+                        #1976d2,
+                        #42a5f5);
+                padding: 25px 30px;
+                border-radius: 15px;
+                color: #fff;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+                margin-bottom: 20px;
+            }
+
+            .page-head-modern h1 {
+                font-size: 42px;
+                font-weight: 700;
+                margin: 0;
+            }
+
+            .page-head-modern small {
+                font-size: 18px;
+                color: rgba(255, 255, 255, .9);
+            }
+
+            /* ==========================
+            BREADCRUMB
+            ========================== */
+            .breadcrumb-modern {
+                background: rgba(255, 255, 255, .90);
+                border-radius: 12px;
+                padding: 15px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, .08);
+                backdrop-filter: blur(6px);
+            }
+
+            .breadcrumb-modern li a {
+                color: #1565c0;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+            .breadcrumb-modern li a:hover {
+                text-decoration: underline;
+            }
+
+            /* ==========================
+            CONTENEDOR TABLA
+            ========================== */
+            .table-responsive {
+                background: rgba(255, 255, 255, .92);
+                padding: 15px;
+                border-radius: 18px;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, .12);
+            }
+
+            /* ==========================
+            TABLA
+            ========================== */
+            #example {
+                border-radius: 12px;
+                overflow: hidden;
+            }
+
+            #example thead {
+                background: linear-gradient(135deg,
+                        #1565c0,
+                        #42a5f5);
+                color: #fff;
+            }
+
+            #example thead th {
+                text-align: center;
+                vertical-align: middle;
+                font-size: 15px;
+            }
+
+            #example tbody td {
+                vertical-align: middle;
+            }
+
+            #example tbody tr {
+                transition: all .3s ease;
+            }
+
+            #example tbody tr:hover {
+                background: #e3f2fd !important;
+                transform: scale(1.002);
+            }
+
+            /* ==========================
+                PRECIOS
+                ========================== */
+            .precio-total,
+            div[style*="color:green"] {
+                color: #008000 !important;
+                font-weight: bold !important;
+                font-size: 12px !important;
+            }
+
+            /* ==========================
+            BOTONES
+            ========================== */
+            .btn-success {
+                border: none;
+                border-radius: 10px;
+                padding: 10px 20px;
+                font-weight: bold;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, .15);
+            }
+
+            .btn-primary {
+                border-radius: 8px;
+            }
+
+            /* ==========================
+                DATA TABLE
+                ========================== */
+            .dataTables_wrapper {
+                padding-top: 10px;
+            }
+
+            .dataTables_filter input {
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                padding: 6px 10px;
+            }
+
+            .dataTables_length select {
+                border-radius: 8px;
+            }
+
+            /* ==========================
+            ANIMACIÓN
+            ========================== */
+            .page-head-modern,
+            .breadcrumb-modern,
+            .table-responsive {
+                animation: fadeIn .8s ease-in-out;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }

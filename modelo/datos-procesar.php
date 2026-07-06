@@ -34,27 +34,26 @@ class misProcesos
         return $datosOrdenados;
     }
 
-   public function totalNetoPorCodigo($codigo) 
-{
-    require_once 'conexion.php';
-    $conexion = new Conexion();
+    public function totalNetoPorCodigo($codigo)
+    {
+        require_once 'conexion.php';
+        $conexion = new Conexion();
 
-    $sql = "
-        SELECT 
-            IFNULL(precio_pollo, 0) as precio_pollo, 
-            IFNULL(SUM(bruto - canastas), 0) as total_neto
-        FROM peso_neto_detalle
-        WHERE codigo_orions = :codigo
-        LIMIT 1
-    ";
+        $sql = "
+                 SELECT
+                IFNULL(MAX(precio_pollo), 0) AS precio_pollo,
+                IFNULL(SUM(bruto - canastas), 0) AS total_neto
+                FROM peso_neto_detalle
+                WHERE codigo_orions = :codigo;
+                ";
 
-    $stmt = $conexion->prepare($sql);
-    $stmt->execute([':codigo' => $codigo]);
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([':codigo' => $codigo]);
 
-    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    return $resultado ? $resultado : ['precio_pollo' => 0, 'total_neto' => 0];
-}
+        return $resultado ? $resultado : ['precio_pollo' => 0, 'total_neto' => 0];
+    }
 
     // AQUÍ DEBES PEGAR EL NUEVO CÓDIGO
     public function registrarOActualizar($datos)
@@ -85,5 +84,4 @@ class misProcesos
             ':total'    => $datos['total_general']
         ]);
     }
-    
 }

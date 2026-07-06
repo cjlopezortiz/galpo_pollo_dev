@@ -27,7 +27,7 @@ if (isset($_GET['accion'])) {
 		$sql = "INSERT INTO galpon_2 (codigo, codigo_orions, cantidad_pollo, precio_pollo, color, fayido, tipo_alimento, cantidad, precio_alimento, fecha_inicio, fecha_fin, descripcion, alimento_inicio, precio_inicio, alimento_preinicio, precio_preinicio) 
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		$reg = $conexion->prepare($sql);
-		$reg->bindParam(1, $maxGalpon1);
+		$reg->bindParam(1, $maxGalpon2);
 		$reg->bindParam(2, $codigo_orions);
 		$reg->bindParam(3, $cantidad_pollo);
 		$reg->bindParam(4, $precio_pollo);
@@ -47,12 +47,22 @@ if (isset($_GET['accion'])) {
 		if ($reg->execute()) {
 
 			/* ===============================
+	   OBTENER SIGUIENTE CODIGO ALMACEN
+	================================ */
+			$sqlMaxAlmacen = "SELECT IFNULL(MAX(codigo),0)+1 AS codigo FROM almacen";
+			$stmtMaxAlmacen = $conexion->prepare($sqlMaxAlmacen);
+			$stmtMaxAlmacen->execute();
+			$rowAlmacen = $stmtMaxAlmacen->fetch(PDO::FETCH_ASSOC);
+
+			$codigoAlmacen = $rowAlmacen['codigo'];
+
+			/* ===============================
 	   INSERT EN ALMACEN
 	================================ */
 			$sqlAlmacen = "INSERT INTO almacen (codigo, codigo_orions) VALUES (?, ?)";
 			$stmtAlmacen = $conexion->prepare($sqlAlmacen);
 
-			$stmtAlmacen->bindParam(1, $codigo);
+			$stmtAlmacen->bindParam(1, $codigoAlmacen);
 			$stmtAlmacen->bindParam(2, $codigo_orions);
 
 			if (!$stmtAlmacen->execute()) {
@@ -61,12 +71,22 @@ if (isset($_GET['accion'])) {
 			}
 
 			/* ===============================
+	   OBTENER SIGUIENTE CODIGO DETALLE
+	================================ */
+			$sqlMaxDetalle = "SELECT IFNULL(MAX(codigo),0)+1 AS codigo FROM peso_neto_detalle";
+			$stmtMaxDetalle = $conexion->prepare($sqlMaxDetalle);
+			$stmtMaxDetalle->execute();
+			$rowDetalle = $stmtMaxDetalle->fetch(PDO::FETCH_ASSOC);
+
+			$codigoDetalle = $rowDetalle['codigo'];
+
+			/* ===============================
 	   INSERT EN PESO_NETO_DETALLE
 	================================ */
 			$sqlDetalle = "INSERT INTO peso_neto_detalle (codigo, codigo_orions) VALUES (?, ?)";
 			$stmtDetalle = $conexion->prepare($sqlDetalle);
 
-			$stmtDetalle->bindParam(1, $codigo);
+			$stmtDetalle->bindParam(1, $codigoDetalle);
 			$stmtDetalle->bindParam(2, $codigo_orions);
 
 			if (!$stmtDetalle->execute()) {
