@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+     <link rel="stylesheet" href="./css/stylos.css">
     <title>Proyecto galpones de pollo</title>
     <link rel="icon" type="image/jpeg" href="pollo2.jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1">

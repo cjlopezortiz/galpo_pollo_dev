@@ -41,21 +41,46 @@ if ($rol_user != 1 && $rol_user != 2) {
 
     $res2 = $mis_galpon2->viewGalpones2();
     $res1 = $mis_galpon1->viewGalpones1();
-    $codigo = $res[0]['codigo_orions_almacen'] ?? null;
+    
+    // CORRECCIÓN 1: Capturamos el código del buscador por URL si existe y es válido
+    $codigo_filtro = isset($_GET['codigo_orions']) && $_GET['codigo_orions'] !== '0' && $_GET['codigo_orions'] !== '' ? $_GET['codigo_orions'] : null;
+    
+    // Si el usuario buscó algo, usamos eso. Si no, usamos el código por defecto de sus datos de usuario
+    $codigo = $codigo_filtro ?? ($res[0]['codigo_orions_almacen'] ?? null);
+    
+    // Se ejecuta la consulta con el código filtrado/seleccionado
     $res = $mis_almacen->viewAlmacenes($codigo);
 
     $codigoUnico = $res[0]['codigo_orions_almacen'] ?? null;
     $total = $obj->totalNetoPorCodigo($codigoUnico);
+    // Variable limpia para mostrar en el texto del encabezado
+    $texto_codigo_pantalla = $codigo ?? 'Todos';
 }
-
-$codigo_filtro = isset($_GET['codigo_orions']) ? $_GET['codigo_orions'] : '0';
 ?>
 
 <!-- ENCABEZADO -->
 <div class="page-title text-center" style="margin-bottom: 30px;">
-         <link rel="stylesheet" href=".././css/stylos.css">
+    <link rel="stylesheet" href=".././css/stylos.css">
     <h1 style="font-weight: 700; color: #333;"><i class="fa fa-calculator" style="color: #312699;"></i> Ver todos los gastos de la cosecha</h1>
-    <p style="font-size: 16px; color: #666;">Código de la cosecha: <strong style="color: #312699; font-size: 18px;"><?php echo $codigo_filtro; ?></strong></p>
+    <p style="font-size: 16px; color: #666;">Código de la cosecha activo: <strong style="color: #312699; font-size: 18px;"><?php echo $texto_codigo_pantalla; ?></strong></p>
+    
+    <!-- MEJORA: Formulario para el buscador manual por URL (Filtro PHP) -->
+    <div style="margin: 20px 0;">
+        <form method="GET" action="" class="form-inline" style="display: inline-block;">
+            <div class="input-group">
+                <input type="text" name="codigo_orions" class="form-control" placeholder="Filtrar por Código Almacén..." value="<?php echo $codigo_filtro; ?>" readonly style="border-radius: 20px 0 0 20px; border: 2px solid #312699; padding: 6px 15px;">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" style="background-color: #312699; border: 2px solid #312699; border-radius: 0 20px 20px 0; font-weight: bold; padding: 6px 20px;">
+                        <i class="fa fa-search"></i> Filtrar Base de Datos
+                    </button>
+                </span>
+            </div>
+            <?php if ($codigo_filtro): ?>
+                <a href="?" class="btn btn-sm btn-link" style="color: #dc3545; margin-left: 10px;">Limpiar Filtro</a>
+            <?php endif; ?>
+        </form>
+    </div>
+
     <div style="margin-top: 15px;">
         <a href="almacen.php" class="btn btn-default" style="border-radius: 20px; border: 2px solid #312699; font-weight: bold; color: #312699; padding: 6px 20px; transition: all 0.3s;">
             <i class="fa fa-arrow-left"></i> Volver al Almacén
@@ -65,8 +90,9 @@ $codigo_filtro = isset($_GET['codigo_orions']) ? $_GET['codigo_orions'] : '0';
 
 <!-- TABLA DE COSECHAS -->
 <div class="container">
-    <div class="table-responsive" style="box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; background: white;">
-        <table id="modalPrecio" class="table table-hover table-striped vertical-align" style="margin-bottom: 0;">
+    <div class="table-responsive" style="box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; background: white; padding: 15px;">
+        <!-- CORRECCIÓN 2: Se cambia id="modalPrecio" por id="example" y se unifican las clases HTML duplicadas -->
+        <table id="example" class="table table-striped table-bordered table-hover vertical-align" style="margin-bottom: 0; width: 100%;">
             <thead style="background-color: #312699; color: white;">
                 <tr>
                     <th class="text-center" style="padding: 12px;">Código Registro</th>
@@ -76,39 +102,46 @@ $codigo_filtro = isset($_GET['codigo_orions']) ? $_GET['codigo_orions'] : '0';
             </thead>
             <tbody>
                 <?php
-                foreach ($res as $data) {
-                    $cant_galpon2 = $mis_galpon2->countAlmacenMateriales($data['codigo_orions_almacen']);
-                    $cant_galpon1 = $mis_galpon1->countGalponir1($data['codigo_orions_almacen']);
+                if (!empty($res) && (is_array($res) || $res instanceof Traversable)) {
+                    foreach ($res as $data) {
+                        $cant_galpon2 = $mis_galpon2->countAlmacenMateriales($data['codigo_orions_almacen']);
+                        $cant_galpon1 = $mis_galpon1->countGalponir1($data['codigo_orions_almacen']);
 
-                    $url_destino = "#";
-                    if ($cant_galpon2 > 0) {
-                        $url_destino = "galpon2.php";
-                    } elseif ($cant_galpon1 > 0) {
-                        $url_destino = "galpon1.php";
+                        $url_destino = "#";
+                        if ($cant_galpon2 > 0) {
+                            $url_destino = "galpon2.php";
+                        } elseif ($cant_galpon1 > 0) {
+                            $url_destino = "galpon1.php";
+                        }
+                    ?>
+                        <tr>
+                            <td class="text-center" style="vertical-align: middle; font-weight: bold;"><?php echo $data['codigo']; ?></td>
+                            <td class="text-center" style="vertical-align: middle;"><?php echo $data['codigo_orions_almacen']; ?></td>
+                            <td class="text-center" style="vertical-align: middle;">
+                                <!-- BOTÓN QUE ACTIVA EL MODAL -->
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalPrecio<?php echo $data['codigo_orions_almacen']; ?>" style="border-radius: 15px; font-weight: bold; padding: 5px 15px;">
+                                    <i class="fa fa-eye"></i> Ver Gastos Detallados
+                                </button>
+                            </td>
+                        </tr>
+                    <?php 
                     }
+                } 
                 ?>
-                    <tr>
-                        <td class="text-center" style="vertical-align: middle; font-weight: bold;"><?php echo $data['codigo']; ?></td>
-                        <td class="text-center" style="vertical-align: middle;"><?php echo $data['codigo_orions_almacen']; ?></td>
-                        <td class="text-center" style="vertical-align: middle;">
-                            <!-- BOTÓN QUE ACTIVA EL MODAL -->
-                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalPrecio<?php echo $data['codigo_orions_almacen']; ?>" style="border-radius: 15px; font-weight: bold; padding: 5px 15px;">
-                                <i class="fa fa-eye"></i> Ver Gastos Detallados
-                            </button>
-                        </td>
-                    </tr>
-                <?php } ?>
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- CONTENEDOR DE MODALES (Fuera de la tabla para evitar conflictos HTML) -->
-<?php foreach ($res as $data) { ?>
+<!-- CONTENEDOR DE MODALES -->
+<?php 
+if (!empty($res) && (is_array($res) || $res instanceof Traversable)) {
+    foreach ($res as $data) { 
+?>
     <div class="modal fade" id="modalPrecio<?php echo $data['codigo_orions_almacen']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content" style="border-radius:18px; box-shadow:0 10px 30px rgba(0,0,0,0.3); border: none;">
-                
+
                 <div class="modal-header" style="background: linear-gradient(90deg, #312699, #4a3fcc); border-radius:18px 18px 0 0; padding: 15px 20px;">
                     <h5 class="modal-title text-white" style="font-weight: bold; font-size: 18px;">
                         💰 Detalle de Costos (Almacén: <?php echo $data['codigo_orions_almacen']; ?>)
@@ -121,7 +154,7 @@ $codigo_filtro = isset($_GET['codigo_orions']) ? $_GET['codigo_orions'] : '0';
                 <div class="modal-body" style="font-size:15px; background-color: #f8f9fa; padding: 25px;">
                     <?php
                     $precio_final = 0;
-                    
+
                     $cantidad_pollo     = $data['cantidad_pollo_g1'] ?? ($data['cantidad_pollo_g2'] ?? null);
                     $precio_pollo       = $data['precio_pollo_g1'] ?? ($data['precio_pollo_g2'] ?? null);
                     $cantidad_al        = $data['cantidad_g1'] ?? ($data['cantidad_g2'] ?? null);
@@ -231,7 +264,6 @@ $codigo_filtro = isset($_GET['codigo_orions']) ? $_GET['codigo_orions'] : '0';
                         $precio_final += $total_tamo;
                         $items[] = ['Tamo', $tamo, $precio_tamo, $total_tamo, '#fdf6e9', '#996515', '🌾'];
                     }
-                
                     if (!empty($cal) && !empty($precio_cal)) {
                         $total_cal = $cal * $precio_cal;
                         $precio_final += $total_cal;
@@ -283,7 +315,6 @@ $codigo_filtro = isset($_GET['codigo_orions']) ? $_GET['codigo_orions'] : '0';
                         $precio_final += $total_gastos_varios;
                         $items[] = ['Gastos Varios', $cantidad_gastos, $precio_gastos_varios, $total_gastos_varios, '#f0eef0', '#5a6268', '🛍️'];
                     }
-                    
                     if (!empty($fayido) && !empty($precio_pollo)) {
                         $total_fayido = $fayido * $precio_pollo;
                         $precio_final += $total_fayido;
@@ -322,7 +353,6 @@ $codigo_filtro = isset($_GET['codigo_orions']) ? $_GET['codigo_orions'] : '0';
                     if (!empty($fayido) && !empty($precio_pollo)) {
                         $precio_unitario_fayido = $precio_pollo;
                         $totalperdida = $fayido * $precio_pollo;
-
                     ?>
                         <div class="row">
                             <div class="col-12 mt-2">
@@ -338,21 +368,36 @@ $codigo_filtro = isset($_GET['codigo_orions']) ? $_GET['codigo_orions'] : '0';
                     <?php } ?>
 
                     <hr style="border-top: 2px dashed #ddd;">
-                    
+
                     <!-- TOTAL FINAL -->
                     <div style="text-align:center; font-size:24px; font-weight:bold; color:#fff; padding:15px; border-radius:10px; background: linear-gradient(90deg, #28a745, #218838); box-shadow:0 4px 10px rgba(40,167,69,0.3);">
                         TOTAL FINAL: $<?php echo number_format($precio_final, 0, ',', '.'); ?>
                     </div>
                 </div>
-                
+
                 <div class="modal-footer" style="background-color: #efefef; border-radius: 0 0 18px 18px;">
                     <button class="btn btn-secondary" data-dismiss="modal" style="border-radius: 10px; font-weight: bold; padding: 6px 20px;">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
-<?php } ?>
+<?php 
+    }
+} 
+?>
 
 <!-- Campos ocultos de control -->
 <input type="hidden" id="granTotalNetoVista" value="<?php echo isset($granTotalNeto) ? $granTotalNeto : ''; ?>">
-<input type="hidden" id="codigoActualVista" value="<?php echo $codigo_filtro; ?>">
+<input type="hidden" id="codigoActualVista" value="<?php echo $codigo_filtro ?? '0'; ?>">
+
+<!-- INICIALIZADOR DATATABLES -->
+<script>
+    $(document).ready(function() {
+        // CORRECCIÓN FINAL: Cambiado '#example' para que vincule correctamente con la tabla HTML corregida
+        $('#example').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json" // Opcional: Traduce el buscador a español si cuentas con conexión
+            }
+        });
+    });
+</script>

@@ -9,11 +9,11 @@
       </div>
       <div class="modal-body">
         <input type="hidden" id="codigou"> <input type="hidden" id="fila_u"> <input type="hidden" id="codigo_orions_u"> <label>Peso Bruto (Kg)</label>
-        <input type="number" id="brutou" class="form-control input-calculo" step="0.1">
+        <input type="number" id="brutou" class="form-control input-calculo">
         <br>
 
         <label>Canastas (Kg)</label>
-        <input type="number" id="canastasu" class="form-control input-calculo" step="0.1">
+        <input type="number" id="canastasu" class="form-control input-calculo">
         <br>
         <label>Valor (Kg)</label>
         <input type="number" id="precio_pollou" class="form-control input-calculo">

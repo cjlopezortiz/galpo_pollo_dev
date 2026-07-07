@@ -13,6 +13,32 @@ $mis_documentos = new misDocumentos();
 $mis_galpon2 = new misGalpon2();
 $mis_galpon1 = new misGalpon1();
 $mis_roles = new misRoles();
+$res = $mis_usuarios->viewUsuarios();
+if (is_array($res)) {
+    // Si es un arreglo con la clave rol_id
+    if (isset($res['rol_id'])) {
+        $rol_id = $res['rol_id'];
+    }
+    // Si es un arreglo de registros
+    elseif (isset($res[0]['rol_id'])) {
+        $rol_id = $res[0]['rol_id'];
+    } else {
+        $rol_id = null;
+    }
+    //var_dump($rol_id);
+} elseif ($res instanceof mysqli_result) {
+    $fila = mysqli_fetch_assoc($res);
+    if ($fila && isset($fila['rol_id'])) {
+        $rol_id = $fila['rol_id'];
+        // var_dump($rol_id);
+    } else {
+        echo "No se encontró el campo rol_id";
+    }
+} else {
+    echo "viewUsuarios() no está retornando datos válidos.";
+}
+$rol_user = $rol_id;
+$user_nombre = $_SESSION['nombre'];
 ?>
 <?php
 if ($rol_user == 1 || $rol_user == 2) {
@@ -30,12 +56,20 @@ if ($rol_user == 1 || $rol_user == 2) {
     $cant_documento = $mis_documentos->countDocumento();
     $rol = $mis_roles->viewRoles();
 }
+if ($rol_user == 1) {
+    $pagina = "Administrador";
+} elseif ($rol_user == 2) {
+    $pagina = "Asignador";
+} else {
+    $pagina = "";
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href=".././css/stylos.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pagina ?></title>
@@ -60,13 +94,14 @@ if ($rol_user == 1 || $rol_user == 2) {
                     data-toggle="tooltip"
                     title="Abrir Manual en PDF">
                     Manual de usuario
-                      <img src="../imagenes/logo-pdf.png"
+                    <img src="../imagenes/logo-pdf.png"
                         alt="PDF"
                         style="width:25px; height:25px; margin-right:5px;">
                 </a>
             </li>
         </ul>
-        <h4 class="text-right text-white mb-4">
+        <h4 class="text-right text-white mb-4" style="color: #ffffff;">
+
             Bienvenido: <strong><?php echo $user_nombre; ?></strong>
         </h4>
         <?php
@@ -123,7 +158,9 @@ if ($rol_user == 1 || $rol_user == 2) {
 
             <div class="row">
 
-                <h1 class="text-center">GALPÓNES: AVÍCOLA</h1>
+                <div class="bg-white p-3 border rounded text-center mb-4">
+                    <h1 class="m-0 text-dark" style="font-weight: bold;">GALPÓNES: AVÍCOLA</h1>
+                </div>
                 <br><br>
 
                 <!-- GALPON 1 -->

@@ -74,13 +74,13 @@ $granTotalValor = 0;
                         <strong><?php echo $i; ?></strong>
                     </td>
                     <td>
-                        <input type="text" class="form-control input-sm text-center" value="<?php echo number_format($bruto, 1); ?>" readonly>
+                        <input type="text" class="form-control input-sm text-center" value="<?php echo number_format($bruto, 0); ?>" readonly>
                     </td>
                     <td>
-                        <input type="text" class="form-control input-sm text-center" value="<?php echo number_format($canastas, 1); ?>" readonly>
+                        <input type="text" class="form-control input-sm text-center" value="<?php echo number_format($canastas, 0); ?>" readonly>
                     </td>
                     <td style="background-color: #e9f7f6;">
-                        <input type="text" class="form-control input-sm text-center" value="<?php echo number_format($totalFila, 1); ?>" readonly style="font-weight:bold; color: #000;">
+                        <input type="text" class="form-control input-sm text-center" value="<?php echo number_format($totalFila, 0); ?>" readonly style="font-weight:bold; color: #000;">
                     </td>
                     <td style="background:#f0fff0;">
                         <input type="text" class="form-control input-sm text-center" value="<?php echo number_format($valorFila, 0); ?>"
@@ -98,10 +98,10 @@ $granTotalValor = 0;
         <tfoot style="background-color: #f1f4f7; font-size: 1.2em;">
             <tr>
                 <th class="text-right" colspan="2">TOTALES:</th>
-                <th class="text-center"><?php echo number_format($granTotalBruto, 1); ?> Kg</th>
-                <th class="text-center text-danger"><?php echo number_format($granTotalCanastas, 1); ?> Kg</th>
+                <th class="text-center"><?php echo number_format($granTotalBruto, 0); ?> Kg</th>
+                <th class="text-center text-danger"><?php echo number_format($granTotalCanastas, 0); ?> Kg</th>
                 <th class="text-center" style="background-color: #26a69a; color: white;">
-                    <?php echo number_format($granTotalNeto, 1); ?> Kg
+                    <?php echo number_format($granTotalNeto, 0); ?> Kg
                 </th>
                 <th class="text-center" style="background:#4CAF50; color:white;">
                     $ <?php echo number_format($granTotalValor, 0); ?>

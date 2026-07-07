@@ -49,8 +49,8 @@ if ($rol_user != 1 && $rol_user != 2) {
 <div class="col-sm-12">
     <!-- Inicio titulos de la pagina-->
     <div class="page-head">
-           <link rel="stylesheet" href=".././css/stylos_usuario.css">
         <div class="page-head-modern">
+          
             <!-- BEGIN PAGE TITLE -->
             <div class="page-title">
                 <h1>Usuarios
