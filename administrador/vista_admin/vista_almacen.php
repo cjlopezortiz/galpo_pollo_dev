@@ -174,7 +174,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                                 <div class="text-center"><?php echo $data['codigo']; ?></div>
                             </td>
                             <!-- CÓDIGO ORIONS + GALPÓN -->
-                            <td class="text-center" style="padding:10px;">
+                            <td class="text-center" style="padding:10px;" title="IR AL GALPON">
                                 <?php
                                 if (!empty($data['codigo_orions_g1'])) {
                                     $url = "galpon1.php?codigo_orions=" . $data['codigo_orions_g1'];
@@ -184,7 +184,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     $url = "#";
                                 }
                                 ?>
-                                <a href="<?php echo $url; ?>" style="display:block; width:100%; height:100%; text-decoration:none; color:inherit;">
+                                <a href="<?php echo $url; ?>" title="Ir al galpon" style="display:block; width:100%; height:100%; text-decoration:none; color:inherit;">
                                     <div>
                                         <?php if (!empty($data['codigo_orions_g1'])) { ?>
                                             <span style="
@@ -249,7 +249,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                             </td>
                             <!-- BOTÓN VER GASTOS -->
                             <td class="text-center">
-                                <a href="ver_gastos.php?codigo_orions=<?php echo $data['codigo_orions_almacen']; ?>"
+                                <a href="ver_gastos.php?codigo_orions=<?php echo $data['codigo_orions_almacen']; ?>" title="VER TODOS LOS GASTOS DE LA COSECHA"
                                     target="_blank"
                                     class="btn btn-info btn-sm">
                                     Ver todos los gastos
@@ -468,7 +468,7 @@ if ($rol_user != 1 && $rol_user != 2) {
 
                             ?>
                             <td>
-                                <div class="text-center"
+                                <div class="text-center" title="DATOS DE LIQUIDACIÓN"
                                     style="border:1px solid #d0d7e1; border-radius:10px; padding:10px; background:#f0f6ff;">
 
                                     <div style="font-size:16px; font-weight:bold; margin-top:6px;">
@@ -488,7 +488,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     </div>
 
                                     <div style="font-size:16px; font-weight:bold; margin-top:6px;">
-                                        Ganancia final menos gastos: $<?php echo number_format($ganancia_final, 0, ',', '.'); ?>
+                                        Total venta menos gastos: $<?php echo number_format($ganancia_final, 0, ',', '.'); ?>
                                     </div>
 
                                     <div style="font-size:16px; font-weight:bold; margin-top:6px;">
@@ -496,14 +496,14 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     </div>
 
                                     <div style="font-size:16px; font-weight:bold; margin-top:6px;">
-                                        Ganancia final (menos 3%): $<?php echo number_format($ganancia_final - ($ganancia_final * 0.03), 0, ',', '.'); ?>
+                                        Ganancia Total (menos 3%): $<?php echo number_format($ganancia_final - ($ganancia_final * 0.03), 0, ',', '.'); ?>
                                     </div>
 
 
 
                                 </div>
                             </td>
-                            <td style="cursor:pointer;"
+                            <td style="cursor:pointer;" title="VER EL REPORTE DE LA COSECHA"
                                 onclick="window.open('../fpdf-pago/pagos.php?codigo_orions_almacen=<?php echo $data['codigo_orions_almacen']; ?>', '_blank');">
                                 <div class="text-center" style="text-decoration:none;">
                                     <div class="galpon-card" style="pointer-events:none;"> <!-- permite que el td reciba el clic -->
@@ -519,7 +519,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                             </td>
                             <!-- Calculo -->
                             <!-- BOTÓN CALCULAR PESO -->
-                            <td class="text-center">
+                            <td class="text-center" title="CALCULAR PESO NETO DE LA COSECHA">
                                 <a href="procesar.php?codigo_orions=<?php echo $data['codigo_orions_almacen']; ?>"
                                     target="_blank"
                                     class="btn btn-info btn-sm">

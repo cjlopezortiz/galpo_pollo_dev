@@ -44,29 +44,29 @@ $preinicio_ali      = $gast['alimento_preinicio_g1'] ?? $gast['alimento_preinici
 $precio_pre         = $gast['precio_preinicio_g1'] ?? $gast['precio_preinicio_g2'] ?? 0;
 
 $campos_gastos = [
-    ['Cantidad Pollos', 'cantidad_pollo_g1', 'precio_pollo_g1'],
-    ['Alimento Engorde', 'cantidad_g1', 'precio_alimento_g1'],
-    ['Alimento Inicio', 'alimento_inicio_g1', 'precio_inicio_g1'],
-    ['Alimento Crecimiento', 'alimento_preinicio_g1', 'precio_preinicio_g1'],
-    ['Cloro', 'cloro', 'precio_cloro'],
-    ['Vinagre', 'vinagre', 'precio_vinagre'],
-    ['Ácido Acético', 'hacido_hacetico', 'precio_hacido'],
-    ['Vitaminas', 'vitaminas', 'precio_vitamina'],
-    ['Anores', 'anores', 'precio_anores'],
-    ['Vacunas', 'vacunas', 'precio_vacunas'],
-    ['Respiros', 'respiros', 'precio_respiros'],
-    ['Tamo', 'tamo', 'precio_tamo'],
-    ['Cal', 'cal', 'precio_cal'],
-    ['Antibiótico', 'antibiotico', 'precio_antibiotico'],
-    ['Otros (ABC)', 'abc', 'precio_abc'],
-    ['Bicarbonato', 'vicarbonato', 'precio_vicarbonato'],
-    ['Melasa', 'melasa', 'precio_melasa'],
-    ['Agua Potable', 'agua_potable', 'precio_agua'],
-    ['Electricidad (Luz)', 'luz', 'precio_luz'],
-    ['Arriendo', 'arriendo', 'precio_arriendo'],
-    ['Yodo', 'yodo', 'precio_yodo'],
-    ['Gastos Varios', 'gastos_varios', 'precio_gastos_varios'],
-    ['Pollos muertos', 'fayido_g1', 'precio_pollo_g1']
+    ['CANTIDAD POLLOS', 'cantidad_pollo_g1', 'precio_pollo_g1'],
+    ['ALIMENTO ENGORDE', 'cantidad_g1', 'precio_alimento_g1'],
+    ['ALIMENTO INICIO', 'alimento_inicio_g1', 'precio_inicio_g1'],
+    ['ALIMENTO CRECIMIENTO', 'alimento_preinicio_g1', 'precio_preinicio_g1'],
+    ['CLORO', 'cloro', 'precio_cloro'],
+    ['VINAGRE', 'vinagre', 'precio_vinagre'],
+    ['ÁCIDO ACÉTICO', 'hacido_hacetico', 'precio_hacido'],
+    ['VITAMINAS', 'vitaminas', 'precio_vitamina'],
+    ['ANORES', 'anores', 'precio_anores'],
+    ['VACUNAS', 'vacunas', 'precio_vacunas'],
+    ['RESPIROS', 'respiros', 'precio_respiros'],
+    ['TAMO', 'tamo', 'precio_tamo'],
+    ['CAL', 'cal', 'precio_cal'],
+    ['ANTIBIÓTICO', 'antibiotico', 'precio_antibiotico'],
+    ['OTROS (ABC)', 'abc', 'precio_abc'],
+    ['BICARBONATO', 'vicarbonato', 'precio_vicarbonato'],
+    ['MELASA', 'melasa', 'precio_melasa'],
+    ['AGUA POTABLE', 'agua_potable', 'precio_agua'],
+    ['ELECTRICIDAD (LUZ)', 'luz', 'precio_luz'],
+    ['ARRIENDO', 'arriendo', 'precio_arriendo'],
+    ['YODO', 'yodo', 'precio_yodo'],
+    ['GASTOS VARIOS', 'gastos_varios', 'precio_gastos_varios'],
+    ['POLLOS MUERTOS', 'fayido_g1', 'precio_pollo_g1']
 ];
 
 foreach ($campos_gastos as $campo) {
@@ -159,7 +159,7 @@ class PDF_HF extends exFPDF
         $this->SetFont('Helvetica', '', 8);
         $this->SetTextColor(110, 120, 140);
         $this->SetX(12);
-        $this->Cell(0, 10, utf8_decode('© ' . date('Y') . ' Granjas Avícolas · Reporte Técnico Automatizado'), 0, 0, 'L');
+        $this->Cell(0, 10, utf8_decode('© ' . date('Y - m - d') . ' Granjas Avícolas · Reporte Técnico Automatizado'), 0, 0, 'L');
 
         // Paginación Moderna
         $this->SetFont('Helvetica', 'B', 9);
@@ -217,6 +217,11 @@ $t_costos->easyCell(utf8_decode('TOTAL INVERSIÓN OPERATIVA ACUMULADA'), 'colspa
 $t_costos->easyCell('$ ' . number_format($precio_final), 'colspan:2; align:C; font-style:B; font-size:10.5; bgcolor:#F1F5F9; color:#0F172A; paddingY:4');
 $t_costos->printRow();
 
+// Indicador de Pérdidas (Fayidos) con Alerta Visual Roja Sutil
+$t_costos->easyCell(utf8_decode('BAJAS REGISTRADAS EN COSECHA (AVES MUERTAS)'), 'colspan:2; align:L; font-style:B; font-size:9.5; bgcolor:#F1F5F9; color:#1E293B; paddingY:4');
+$t_costos->easyCell(number_format($fayido) . ' Aves', 'colspan:2; align:C; font-style:B; font-size:10.5; bgcolor:#FFE4C4; color:#FFE4C4; paddingY:4');
+$t_costos->printRow();
+
 $t_costos->endTable(8);
 
 /* ==========================================================
@@ -227,30 +232,47 @@ $t_liquidacion = new easyTable($pdf, '%{65, 35}', 'border:1; border-color:#E2E8F
 $t_liquidacion->easyCell(utf8_decode('RESUMEN DE LIQUIDACIÓN COMERCIAL'), 'colspan:2; align:C; font-style:B; font-size:10; bgcolor:#182B49; font-color:#FFFFFF; paddingY:3.5');
 $t_liquidacion->printRow();
 
+
+
 $cantidad_kilos = $total_neto; 
 $precio_kilo    = $precio_pollo_liqui; 
 $total_venta    = $total_final; 
 $ganancia_final = $total_venta - $precio_final;
+$sueldo_empleado = 0.03  * $ganancia_final;
 
 // Filas de Datos de Venta
-$t_liquidacion->easyCell(utf8_decode('Volumen Neto Comercializado (Kilogramos):'), 'font-style:M; color:#334155; bgcolor:#F8FAFC');
+$t_liquidacion->easyCell(utf8_decode('VOLUMEN NETO COMERCIALIZADO (KILOGRAMOS)'), 'font-style:M; color:#334155; bgcolor:#F8FAFC');
 $t_liquidacion->easyCell(number_format($cantidad_kilos, 0) . ' Kg', 'align:C; font-style:B; color:#0F172A');
 $t_liquidacion->printRow();
 
-$t_liquidacion->easyCell(utf8_decode('Valor de Liquidación por Kilo:'), 'font-style:M; color:#334155; bgcolor:#F8FAFC');
+$t_liquidacion->easyCell(utf8_decode('VALOR DE LIQUIDACIÓN POR KILO'), 'font-style:M; color:#334155; bgcolor:#F8FAFC');
 $t_liquidacion->easyCell('$ ' . number_format($precio_kilo), 'align:C; font-style:B; color:#0F172A');
 $t_liquidacion->printRow();
 
-$t_liquidacion->easyCell(utf8_decode('Ingreso bruto total por liquidación'), 'font-style:M; bgcolor:#E2E8F0; color:#1E293B; paddingY:4');
-$t_liquidacion->easyCell('$ ' . number_format($total_venta), 'align:C; font-style:B; bgcolor:#E2E8F0; color:#0F172A; paddingY:4');
+$t_liquidacion->easyCell(utf8_decode('INGRESO BRUTO TOTAL POR LIQUIDACIÓN'), 'font-style:M; bgcolor:#F0F8FF; color:#1E293B');
+$t_liquidacion->easyCell('$ ' . number_format($total_venta), 'align:C; font-style:B; bgcolor:#F0F8FF; color:#0F172A; paddingY:4');
 $t_liquidacion->printRow();
 
-// Indicador de Pérdidas (Fayidos) con Alerta Visual Roja Sutil
-$t_liquidacion->easyCell(utf8_decode('Bajas registradas en Cosecha (Aves Muertas):'), 'font-style:M; bgcolor:#FEF2F2; color:#991B1B');
-$t_liquidacion->easyCell(number_format($fayido) . ' Aves', 'align:C; font-style:B; bgcolor:#FEF2F2; color:#991B1B');
+$t_liquidacion->easyCell(utf8_decode('GANANCIA FINAL MENOS GASTOS'), 'font-style:M; bgcolor:#F0FFFF; color:#1E293B; paddingY:4');
+$t_liquidacion->easyCell('$ ' . number_format($ganancia_final), 'align:C; font-style:B; bgcolor:#F0FFFF; color:#0F172A; paddingY:4');
 $t_liquidacion->printRow();
+
+
 
 $t_liquidacion->endTable(8);
+
+/* ==========================================================
+    BLOQUE DESTACADO: UTILIDAD NETO / GANANCIA FINAL
+========================================================== */
+$estilo_color_ganancia = ($ganancia_final >= 0) ? 'color:#166534; bgcolor:#F5F5DC; border-color:#BBF7D0;' : 'color:#00FFFF; bgcolor:#00FFFF; border-color:#00FFFF;';
+$titulo_rentabilidad = ($ganancia_final >= 0) ? 'SUELDO EMPLEDO (3%)' : 'PAGO TOTAL';
+
+$t_ganancia = new easyTable($pdf, '%{100}', 'border:1; ' . $estilo_color_ganancia . ' paddingY:4;');
+$t_ganancia->easyCell(utf8_decode($titulo_rentabilidad), 'align:C; font-style:B; font-size:10;');
+$t_ganancia->printRow();
+$t_ganancia->easyCell('$ ' . number_format($sueldo_empleado), 'align:C; font-style:B; font-size:15; paddingY:5');
+$t_ganancia->printRow();
+$t_ganancia->endTable(8);
 
 /* ==========================================================
     BLOQUE DESTACADO: UTILIDAD NETO / GANANCIA FINAL
@@ -261,7 +283,7 @@ $titulo_rentabilidad = ($ganancia_final >= 0) ? 'RENTABILIDAD NETA POSITIVA' : '
 $t_ganancia = new easyTable($pdf, '%{100}', 'border:1; ' . $estilo_color_ganancia . ' paddingY:4;');
 $t_ganancia->easyCell(utf8_decode($titulo_rentabilidad), 'align:C; font-style:B; font-size:10;');
 $t_ganancia->printRow();
-$t_ganancia->easyCell('$ ' . number_format($ganancia_final), 'align:C; font-style:B; font-size:15; paddingY:5');
+$t_ganancia->easyCell('$ ' . number_format($ganancia_final - $ganancia_final * 0.03, 0, ',', '.'), 'align:C; font-style:B; font-size:15; paddingY:5');
 $t_ganancia->printRow();
 $t_ganancia->endTable(8);
 
@@ -271,7 +293,7 @@ $t_ganancia->endTable(8);
 $pdf->Ln(2);
 $pdf->SetFont('Helvetica', 'B', 10);
 $pdf->SetTextColor(24, 43, 73);
-$pdf->Cell(0, 6, utf8_decode("Observaciones y Notas de Cosecha:"), 0, 1, 'L');
+$pdf->Cell(0, 6, utf8_decode("OBSERVACIONES Y NOTAS DE COSECHA:"), 0, 1, 'L');
 
 $pdf->SetFont('Helvetica', 'I', 9);
 $pdf->SetTextColor(71, 85, 105);

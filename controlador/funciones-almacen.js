@@ -298,6 +298,8 @@ function modificarAlmacen() {
             } else {
                 alertify.success("Los datos del almacen se han modificado con éxito");
                 cargarTablaAlmacen();
+                
+                
             }
         }
     });

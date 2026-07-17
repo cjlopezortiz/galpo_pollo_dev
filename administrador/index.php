@@ -159,7 +159,7 @@ if ($rol_user == 1) {
             <div class="row">
 
                 <div class="bg-white p-3 border rounded text-center mb-4">
-                    <h1 class="m-0 text-dark" style="font-weight: bold;">GALPÓNES: AVÍCOLA</h1>
+                    <h1 class="m-0 text-dark" style="font-weight: bold;">LÍNEA: GALPÓNES AVÍCOLA MARICELA LÓPEZ</h1>
                 </div>
                 <br><br>
 
