@@ -338,7 +338,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                                 </td>
                                 <td>
                                     <div class="text-center">
-                                        <button class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modalEdicionControAlimento" onclick="agregarformControAlimento('<?php echo $datos; ?>')"></button>
+                                        <button class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modalEdicionControlAlimento" onclick="agregarFormControlAlimento('<?php echo $datos; ?>')"></button>
                                     </div>
                                 </td>
                             </tr>

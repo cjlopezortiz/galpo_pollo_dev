@@ -15,7 +15,7 @@
 				<div class="text-center" id="errorcodigo_orions"></div>
 				<br />
 				<label>Fecha Inicio</label>
-				<input type="datetime-local" id="fecha_inicio" class="form-control input-sm" required>
+				<input type="datetime-local" id="fecha_inicio" class="form-control input-sm"  class="form-control input-sm" required=""onclick="this.showPicker()">
 				<div class="text-center" id="errorfecha_inicio"></div>
 				<br />
 				<label>Cantidad Pollos</label>
@@ -63,7 +63,7 @@
 				<div class="text-center" id="errorfayido"></div>
 				<br />
 				<label>Fecha Fin</label>
-				<input type="datetime-local" id="fecha_fin" class="form-control input-sm" required>
+				<input type="datetime-local" id="fecha_fin" class="form-control input-sm"  class="form-control input-sm" required=""onclick="this.showPicker()">
 				<div class="text-center" id="errorfecha_fin"></div>
 				<br />
 				<label>Observaciones</label>
@@ -99,8 +99,8 @@
 				<label>Codigo de la Cosecha</label>
 				<input type="number" id="codigo_orionsu" name="codigo_orionsu" class="form-control input-sm" readonly required>
 				<br />
-				<label>Fecha Inicio</label>
-				<input type="datetime-local" id="fecha_iniciou" name="fecha_iniciou" class="form-control input-sm" required="">
+				<label for="fecha_iniciou">Fecha Inicio</label>
+				<input type="datetime-local" id="fecha_iniciou" name="fecha_iniciou" class="form-control input-sm" required=""onclick="this.showPicker()" />
 				<br />
 				<label>Edad</label>
 				<input type="number" id="edadu" name="edadu" class="form-control input-sm" required="">
@@ -148,7 +148,7 @@
 				<input type="float" id="peso_salidasu" name="peso_salidasu" class="form-control input-sm" required="">
 				<br />
 				<label>Fecha Fin</label>
-				<input type="datetime-local" id="fecha_finu" name="fecha_finu" class="form-control input-sm" required="">
+				<input type="datetime-local" id="fecha_finu" name="fecha_finu" class="form-control input-sm"  class="form-control input-sm" required=""onclick="this.showPicker()">
 				<br />
 				<label>Observaciones</label>
 				<textarea id="descripcionu" name="descripcionu" rows="4" cols="34"></textarea>

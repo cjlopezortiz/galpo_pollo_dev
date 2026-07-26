@@ -79,7 +79,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                 <span class="active">Almacén de Insumos Avícolas - medicamentos y materiales de manejo necesarios para la crianza:</span>
             </li>
         </ul>
-                   <!-- BREADCRUMB 2 -->
+        <!-- BREADCRUMB 2 -->
         <ul class="breadcrumb breadcrumb-modern">
             <li>
                 <a href="control_alimento.php">Control de Alimentos</a>
@@ -106,10 +106,13 @@ if ($rol_user != 1 && $rol_user != 2) {
                     </th>
 
                     <th>
-                        <div class="text-center">PDF</div>
+                        <div class="text-center">Reporte<br />Cosecha</div>
                     </th>
                     <th>
                         <div class="text-center">Sacar<br />Cálculo / Kg.</div>
+                    </th>
+                    <th>
+                        <div class="text-center">Observaciones</div>
                     </th>
                     <th>
                         <div class="text-center">Editar</div>
@@ -564,9 +567,10 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     CALCULAR PESO NETO
                                 </a>
                             </td>
-
+                            <td>
+                                <div class="text-center"><?php echo !empty($data['descripcion_material']) ? $data['descripcion_material'] : 'N/A'; ?></div>
+                            </td>
                             <!-- BOTÓN EDITAR -->
-
                             <td>
                                 <div class="text-center">
                                     <button class="btn btn-primary"

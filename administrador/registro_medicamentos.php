@@ -56,9 +56,9 @@ if (is_array($res)) {
 
 	<!-- FIN DEL CONTENIDO -->
 	<?php
-	include './modales/modalUsuario.php';
+	include './modales/modalMedicamento.php';
 	?>
-	<script src="../controlador/funciones-registroMedicamentos.js"></script>
+	<script src="../controlador/funciones-registro-medicamentos.js"></script>
 	<?php
 	include 'librerias-js.php';
 	?>
@@ -73,9 +73,9 @@ if (is_array($res)) {
 			// $('#agregarNuevoUsuario').click(function () {
 			// 	agregardatosUsuario();
 			// });
-			initRegistroMedicamentos();
+			//initRegistroMedicamentos();
 			$('#actualizaDatosRegistroMedicamentos').click(function() {
-				modificarRegistroMedicamentos();
+				modificarMedicamento();
 			});
 
 			$('#eliminarDatosRegistroMedicamentos').click(function() {

@@ -61,9 +61,9 @@ else{
 
 	<!-- FIN DEL CONTENIDO -->
 	<?php
-	include './modales/modalUsuario.php';
+	include './modales/modalControlAlimento.php';
 	?>
-	<script src="../controlador/funciones-controlAlimento.js"></script>
+	<script src="../controlador/funciones-control-alimento.js"></script>
 	<?php
 	include 'librerias-js.php';
 	?>
@@ -78,7 +78,7 @@ else{
 			// $('#agregarNuevoUsuario').click(function () {
 			// 	agregardatosUsuario();
 			// });
-			initControlAlimento();
+			//initControlAlimento();
 			$('#actualizaDatosControlAlimento').click(function() {
 				modificarControlAlimento();
 			});
