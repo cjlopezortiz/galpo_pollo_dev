@@ -42,7 +42,12 @@ $inicio_ali         = $gast['alimento_inicio_g1'] ?? $gast['alimento_inicio_g2']
 $precio_ini         = $gast['precio_inicio_g1'] ?? $gast['precio_inicio_g2'] ?? 0;
 $preinicio_ali      = $gast['alimento_preinicio_g1'] ?? $gast['alimento_preinicio_g2'] ?? 0;
 $precio_pre         = $gast['precio_preinicio_g1'] ?? $gast['precio_preinicio_g2'] ?? 0;
+$edades             = $gast['edad_g1'] ?? $gast['edad_g2'] ?? 0;
+$dossalidas         = $gast['salidas_g1'] ?? $gast['salidas_g2'] ?? 0;
+$pesosalidas        = $gast['peso_salidas_g1'] ?? $gast['peso_salidas_g2'] ?? 0;
+$mortandadita       = $gast['mortanda_dia_g1'] ?? $gast['mortanda_dia_g2'] ?? 0;
 
+$todamortanda = $fayido  + $mortandadita;
 $campos_gastos = [
     ['CANTIDAD POLLOS', 'cantidad_pollo_g1', 'precio_pollo_g1'],
     ['ALIMENTO ENGORDE', 'cantidad_g1', 'precio_alimento_g1'],
@@ -68,7 +73,6 @@ $campos_gastos = [
     ['GASTOS VARIOS', 'gastos_varios', 'precio_gastos_varios'],
     ['POLLOS MUERTOS', 'fayido_g1', 'precio_pollo_g1']
 ];
-
 foreach ($campos_gastos as $campo) {
     $etiqueta = $campo[0];
     $cant_key = str_replace('g1', 'g2', $campo[1]);
@@ -106,7 +110,7 @@ class PDF_HF extends exFPDF
     function Header()
     {
         // Encabezado con Estilo Corporativo Elegante (Azul Profundo)
-        $this->SetFillColor(24, 43, 73); 
+        $this->SetFillColor(24, 43, 73);
         $this->Rect(0, 0, 220, 38, 'F');
 
         // Detalles estéticos en el encabezado
@@ -145,7 +149,7 @@ class PDF_HF extends exFPDF
     {
         // Posicionamiento dinámico del Footer
         $this->SetY(-22);
-        
+
         // Fondo Gris Suave Limpio
         $this->SetFillColor(245, 247, 250);
         $this->Rect(0, 260, 220, 20, 'F');
@@ -219,7 +223,7 @@ $t_costos->printRow();
 
 // Indicador de Pérdidas (Fayidos) con Alerta Visual Roja Sutil
 $t_costos->easyCell(utf8_decode('BAJAS REGISTRADAS EN COSECHA (AVES MUERTAS)'), 'colspan:2; align:L; font-style:B; font-size:9.5; bgcolor:#F1F5F9; color:#1E293B; paddingY:4');
-$t_costos->easyCell(number_format($fayido) . ' Aves', 'colspan:2; align:C; font-style:B; font-size:10.5; bgcolor:#FFE4C4; color:#FFE4C4; paddingY:4');
+$t_costos->easyCell(number_format($todamortanda) . ' Aves', 'colspan:2; align:C; font-style:B; font-size:10.5; bgcolor:#FFE4C4; color:#FFE4C4; paddingY:4');
 $t_costos->printRow();
 
 $t_costos->endTable(8);
@@ -234,9 +238,9 @@ $t_liquidacion->printRow();
 
 
 
-$cantidad_kilos = $total_neto; 
-$precio_kilo    = $precio_pollo_liqui; 
-$total_venta    = $total_final; 
+$cantidad_kilos = $total_neto;
+$precio_kilo    = $precio_pollo_liqui;
+$total_venta    = $total_final;
 $ganancia_final = $total_venta - $precio_final;
 $sueldo_empleado = 0.03  * $ganancia_final;
 
@@ -301,4 +305,3 @@ $pdf->SetTextColor(71, 85, 105);
 $pdf->MultiCell(0, 5, utf8_decode($pdf->descripcion), 0, 'L');
 
 $pdf->Output();
-?>

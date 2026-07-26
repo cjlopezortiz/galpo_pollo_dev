@@ -53,7 +53,7 @@ if ($rol_user != 1 && $rol_user != 2) {
           
             <!-- BEGIN PAGE TITLE -->
             <div class="page-title">
-                <h1>Usuarios
+                <h1>USUARIOS
                     <small></small>
                 </h1>
             </div>

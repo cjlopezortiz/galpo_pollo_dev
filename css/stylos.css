@@ -21,15 +21,12 @@
                 width: 100%;
                 height: 100%;
 
-                /* CAMBIA LA RUTA SI ES NECESARIO */
-                background: url('../imagenes/pollo2.jpeg') center center no-repeat;
-                background-repeat: no-repeat;
-                background-position: center center;
+                /* Imagen centrada de fondo */
+                background: url('../imagenes/minipollo.jpg') center center no-repeat;
                 background-size: 650px;
 
                 opacity: 0.15;
-
-                z-index: 0;
+                z-index: -1; /* Cambiado a -1 para asegurar que esté al fondo de todo */
                 pointer-events: none;
             }
 
@@ -300,4 +297,47 @@
 					.campo {
 						margin-bottom: 15px;
 					}
+                    /* 1. Aseguramos que la tarjeta sea el contenedor de referencia */
+                    .galpon-card {
+                        position: relative;
+                        /* Clave para que la marca de agua no se salga */
+                        overflow: hidden;
+                        /* Por si la imagen es muy grande, que no desborde la tarjeta */
+                        background-color: #ffffff;
+                        /* Tu fondo base */
+                        z-index: 1;
+
+                        /* Tu diseño actual (ejemplo) */
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    }
+
+                    /* 2. Creamos la marca de agua con un pseudo-elemento */
+                    .galpon-card::before {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+
+                        /* Ruta de tu imagen y propiedades de fondo */
+                        background-image: url('../imagenes/pollo2.jpeg');
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        /* Centrada en la tarjeta */
+                        background-size: 60%;
+                        /* Ajusta este % según qué tan grande quieras la marca */
+
+                        /* Control de opacidad para el efecto marca de agua */
+                        opacity: 0.15;
+                        /* Menor número = más transparente */
+
+                        /* Aseguramos que quede detrás del texto pero sobre el fondo */
+                        z-index: -1;
+
+                        /* Evita que la marca de agua interfiera con los clics en el texto */
+                        pointer-events: none;
+                    }
                     

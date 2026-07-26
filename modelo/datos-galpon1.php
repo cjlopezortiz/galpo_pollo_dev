@@ -23,7 +23,11 @@ class misGalpon1
                             alimento_inicio,
                             precio_inicio,
                             alimento_preinicio,
-                            precio_preinicio
+                            precio_preinicio,
+                            edad,
+                            salidas,
+                            peso_salidas,
+                            mortanda_dia
                             FROM galpon_1
                             WHERE codigo = :codigo";
         $modules = $conexion->prepare($consulta);
@@ -61,7 +65,11 @@ class misGalpon1
                             alimento_inicio,
                             precio_inicio,
                             alimento_preinicio,
-                            precio_preinicio
+                            precio_preinicio,
+                            edad,
+                            salidas,
+                            peso_salidas,
+                            mortanda_dia
                             FROM galpon_1
                             WHERE codigo = :codigo";
         $modules = $conexion->prepare($consulta);
@@ -101,7 +109,11 @@ class misGalpon1
                             alimento_inicio,
                             precio_inicio,
                             alimento_preinicio,
-                            precio_preinicio
+                            precio_preinicio,
+                            edad,
+                            salidas,
+                            peso_salidas,
+                            mortanda_dia
                          FROM galpon_1
                          WHERE codigo_orions = :codigo_orions
                          ORDER BY codigo ASC";
@@ -126,7 +138,11 @@ class misGalpon1
                             alimento_inicio,
                             precio_inicio,
                             alimento_preinicio,
-                            precio_preinicio
+                            precio_preinicio,
+                            edad,
+                            salidas,
+                            peso_salidas,
+                            mortanda_dia
                          FROM galpon_1
                          ORDER BY codigo ASC";
     

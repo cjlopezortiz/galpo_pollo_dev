@@ -149,6 +149,10 @@ class misAlmacenes
                           g.precio_inicio AS precio_inicio_g1,
                           g.alimento_preinicio AS alimento_preinicio_g1,
                           g.precio_preinicio AS precio_preinicio_g1,
+                          g.edad AS edad_g1,
+                          g.salidas AS salidas_g1,
+                          g.peso_salidas AS peso_salidas_g1,
+                          g.mortanda_dia AS mortanda_dia_g1,
       
                           g2.codigo_orions AS codigo_orions_g2,
                           g2.tipo_alimento AS tipo_alimento_g2,
@@ -163,7 +167,11 @@ class misAlmacenes
                           g2.alimento_inicio AS alimento_inicio_g2,
                           g2.precio_inicio AS precio_inicio_g2,
                           g2.alimento_preinicio AS alimento_preinicio_g2,
-                          g2.precio_preinicio AS precio_preinicio_g2
+                          g2.precio_preinicio AS precio_preinicio_g2,
+                          g2.edad AS edad_g2,
+                          g2.salidas AS salidas_g2,
+                          g2.peso_salidas AS peso_salidas_g2,
+                          g2.mortanda_dia AS mortanda_dia_g2
 
       
                       FROM almacen AS a

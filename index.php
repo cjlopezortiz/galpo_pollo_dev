@@ -12,7 +12,7 @@
 
     <style>
         body {
-            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            background: linear-gradient(135deg, #fff, #fff);
             font-family: "Segoe UI", Arial, sans-serif;
             min-height: 100vh;
         }
@@ -39,7 +39,7 @@
         /* Imagen principal */
         .main-img {
             border-radius: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 8px 25px rgba(241, 239, 239, 0.25);
             transition: transform 0.3s ease;
         }
 

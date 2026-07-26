@@ -65,7 +65,7 @@ if ($rol_user != 1 && $rol_user != 2) {
         <link rel="stylesheet" href=".././css/stylos.css">
         <div class="page-head">
             <div class="page-head-modern">
-                <h1>Almacén de Galpones
+                <h1>ALMACÉN DE GALPONES
                     <small>Almacén de Insumos Avícolas medicamentos y materiales de manejo necesarios para la crianza:</small>
                 </h1>
             </div>
@@ -77,6 +77,15 @@ if ($rol_user != 1 && $rol_user != 2) {
             </li>
             <li>
                 <span class="active">Almacén de Insumos Avícolas - medicamentos y materiales de manejo necesarios para la crianza:</span>
+            </li>
+        </ul>
+                   <!-- BREADCRUMB 2 -->
+        <ul class="breadcrumb breadcrumb-modern">
+            <li>
+                <a href="control_alimento.php">Control de Alimentos</a>
+            </li>
+            <li>
+                <a href="registro_medicamentos.php">REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS</a>
             </li>
         </ul>
         <br />
@@ -188,60 +197,89 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     <div>
                                         <?php if (!empty($data['codigo_orions_g1'])) { ?>
                                             <span style="
-                                                display:inline-block;
-                                                background:#28a745;
-                                                color:white;
-                                                padding:4px 12px;
-                                                border-radius:20px;
-                                                font-size:12px;
-                                                font-weight:bold;
-                                                box-shadow:0px 1px 4px rgba(0,0,0,0.2);">
-                                                GALPÓN 1Galpón Avícola Norte
+                                                    display:inline-block;
+                                                    background:#28a745;
+                                                    color:white;
+                                                    padding:4px 12px;
+                                                    border-radius:20px;
+                                                    font-size:12px;
+                                                    font-weight:bold;
+                                                    box-shadow:0px 1px 4px rgba(0,0,0,0.2);">
+                                                GALPÓN AVÍCOLA NORTE MACHOS
                                             </span>
                                             <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
-                                                <?php echo $data['codigo_orions_g1']; /* ya no es <a> */ ?>
+                                                <?php echo $data['codigo_orions_g1']; ?>
                                             </div>
                                             <div style="
-                                                margin-top:7px;
-                                                background:#f0f6ff;
-                                                border:1px solid #d0d7e1;
-                                                border-radius:10px;
-                                                padding:8px 10px;
-                                                font-size:12px;
-                                                color:#333;
-                                                box-shadow:0 2px 5px rgba(0,0,0,0.1);
-                                                line-height:16px;">
-                                                <div><b>Fecha Inicio:</b> <?php echo $data['fecha_inicio_g1']; ?></div>
-                                                <div><b>Fecha Fin:</b> <?php echo $data['fecha_fin_g1']; ?></div>
+                                                            margin-top:7px;
+                                                            background:#f0f6ff;
+                                                            border:1px solid #d0d7e1;
+                                                            border-radius:10px;
+                                                            padding:8px 10px;
+                                                            font-size:12px;
+                                                            color:#333;
+                                                            box-shadow:0 2px 5px rgba(0,0,0,0.1);
+                                                            line-height:18px;">
+
+                                                <?php
+                                                // Separar Fecha y Hora para Galpón 1
+                                                $inicio_g1 = date_create($data['fecha_inicio_g1']);
+                                                $fin_g1 = date_create($data['fecha_fin_g1']);
+                                                ?>
+
+                                                <div style="margin-bottom: 6px;">
+                                                    <b>Fecha Inicio:</b> <?php echo date_format($inicio_g1, 'Y-m-d'); ?><br>
+                                                    <b>Hora Inicio:</b> <?php echo date_format($inicio_g1, 'H:i:s'); ?>
+                                                </div>
+                                                <hr style="border: 0; border-top: 1px solid #d0d7e1; margin: 6px 0;">
+                                                <div>
+                                                    <b>Fecha Fin:</b> <?php echo date_format($fin_g1, 'Y-m-d'); ?><br>
+                                                    <b>Hora Fin:</b> <?php echo date_format($fin_g1, 'H:i:s'); ?>
+                                                </div>
                                             </div>
                                         <?php } ?>
+
                                         <?php if (!empty($data['codigo_orions_g2'])) { ?>
                                             <span style="
-                                                display:inline-block;
-                                                background:#007bff;
-                                                color:white;
-                                                padding:4px 12px;
-                                                border-radius:20px;
-                                                font-size:12px;
-                                                font-weight:bold;
-                                                box-shadow:0px 1px 4px rgba(0,0,0,0.2); ">
-                                                GALPÓN Galpón Avícola Sur
+                                                            display:inline-block;
+                                                            background:#007bff;
+                                                            color:white;
+                                                            padding:4px 12px;
+                                                            border-radius:20px;
+                                                            font-size:12px;
+                                                            font-weight:bold;
+                                                            box-shadow:0px 1px 4px rgba(0,0,0,0.2); ">
+                                                GALPÓN AVÍCOLA SUR HEMBRAS
                                             </span>
                                             <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
-                                                <?php echo $data['codigo_orions_g2']; /* ya no es <a> */ ?>
+                                                <?php echo $data['codigo_orions_g2']; ?>
                                             </div>
                                             <div style="
-                                                margin-top:7px;
-                                                background:#eef5ff;
-                                                border:1px solid #c6d4e6;
-                                                border-radius:10px;
-                                                padding:8px 10px;
-                                                font-size:12px;
-                                                color:#333;
-                                                box-shadow:0 2px 5px rgba(0,0,0,0.1);
-                                                line-height:16px;">
-                                                <div><b>Fecha Inicio:</b> <?php echo $data['fecha_inicio_g2']; ?></div>
-                                                <div><b>Fecha Fin:</b> <?php echo $data['fecha_fin_g2']; ?></div>
+                                                        margin-top:7px;
+                                                        background:#eef5ff;
+                                                        border:1px solid #c6d4e6;
+                                                        border-radius:10px;
+                                                        padding:8px 10px;
+                                                        font-size:12px;
+                                                        color:#333;
+                                                        box-shadow:0 2px 5px rgba(0,0,0,0.1);
+                                                        line-height:18px;">
+
+                                                <?php
+                                                // Separar Fecha y Hora para Galpón 2
+                                                $inicio_g2 = date_create($data['fecha_inicio_g2']);
+                                                $fin_g2 = date_create($data['fecha_fin_g2']);
+                                                ?>
+
+                                                <div style="margin-bottom: 6px;">
+                                                    <b>Fecha Inicio:</b> <?php echo date_format($inicio_g2, 'Y-m-d'); ?><br>
+                                                    <b>Hora Inicio:</b> <?php echo date_format($inicio_g2, 'H:i:s'); ?>
+                                                </div>
+                                                <hr style="border: 0; border-top: 1px solid #c6d4e6; margin: 6px 0;">
+                                                <div>
+                                                    <b>Fecha Fin:</b> <?php echo date_format($fin_g2, 'Y-m-d'); ?><br>
+                                                    <b>Hora Fin:</b> <?php echo date_format($fin_g2, 'H:i:s'); ?>
+                                                </div>
                                             </div>
                                         <?php } ?>
                                     </div>
@@ -252,7 +290,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                                 <a href="ver_gastos.php?codigo_orions=<?php echo $data['codigo_orions_almacen']; ?>" title="VER TODOS LOS GASTOS DE LA COSECHA"
                                     target="_blank"
                                     class="btn btn-info btn-sm">
-                                    Ver todos los gastos
+                                    VER TODOS LOS GASTOS
                                 </a>
                             </td>
                             <!-- MODAL DE GASTOS -->
@@ -523,7 +561,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                                 <a href="procesar.php?codigo_orions=<?php echo $data['codigo_orions_almacen']; ?>"
                                     target="_blank"
                                     class="btn btn-info btn-sm">
-                                    Calcular Peso Neto
+                                    CALCULAR PESO NETO
                                 </a>
                             </td>
 

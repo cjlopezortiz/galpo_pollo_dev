@@ -164,6 +164,7 @@ if (!empty($res) && (is_array($res) || $res instanceof Traversable)) {
                     $precio_ini         = $data['precio_inicio_g1'] ?? ($data['precio_inicio_g2'] ?? null);
                     $preinicio_ali      = $data['alimento_preinicio_g1'] ?? ($data['alimento_preinicio_g2'] ?? null);
                     $precio_pre         = $data['precio_preinicio_g1'] ?? ($data['precio_preinicio_g2'] ?? null);
+                    $mortandadia        = $data['mortanda_dia_g1'] ?? ($data['mortanda_dia_g2'] ?? null);
 
                     $cloro              = $data['cloro'] ?? null;
                     $precio_cloro       = $data['precio_cloro'] ?? null;
@@ -353,14 +354,15 @@ if (!empty($res) && (is_array($res) || $res instanceof Traversable)) {
                     if (!empty($fayido) && !empty($precio_pollo)) {
                         $precio_unitario_fayido = $precio_pollo;
                         $totalperdida = $fayido * $precio_pollo;
+                        $totalmortanda = $fayido + $mortandadia;
                     ?>
                         <div class="row">
                             <div class="col-12 mt-2">
                                 <div style="background:#ffe8e8; border-left:5px solid #dc3545; padding:15px; border-radius:12px; margin-bottom:15px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
-                                    <h6 style="font-weight:bold; color:#dc3545; margin-bottom: 5px;">☠ Cantidad de mortandad de pollos (Costo no sumado)</h6>
-                                    <p style="margin:0; font-size: 13px;"><b>Cantidad Mortandad:</b> <?php echo $fayido; ?></p>
-                                    <p style="margin:0; font-size: 13px;"><b>Precio unitario de pollo:</b> $<?php echo number_format($precio_unitario_fayido, 0, ',', '.'); ?></p>
-                                    <p style="margin:0; font-size: 13px;"><b>Total perdida:</b> $<?php echo number_format($totalperdida, 0, ',', '.'); ?></p>
+                                    <h6 style="font-weight:bold; color:#dc3545; margin-bottom: 5px;">☠ Cantidad de mortandad de pollos (Muertos)</h6>
+                                    <p style="margin:0; font-size: 13px;"><b>Cantidad Mortandad:</b> <?php echo $totalmortanda; ?></p>
+                                    <!-- <p style="margin:0; font-size: 13px;"><b>Precio unitario de pollo:</b> $<?php echo number_format($precio_unitario_fayido, 0, ',', '.'); ?></p>
+                                    <p style="margin:0; font-size: 13px;"><b>Total perdida:</b> $<?php echo number_format($totalperdida, 0, ',', '.'); ?></p> -->
                                     <p style="margin:0; color:#dc3545; font-style:italic; font-size: 12px; margin-top: 5px;">* No incluido en el total final.</p>
                                 </div>
                             </div>

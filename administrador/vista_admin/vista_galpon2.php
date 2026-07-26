@@ -13,16 +13,15 @@ if (is_array($res)) {
     // Si es un arreglo de registros
     elseif (isset($res[0]['rol_id'])) {
         $rol_id = $res[0]['rol_id'];
-    }
-    else {
+    } else {
         $rol_id = null;
     }
-   //var_dump($rol_id);
+    //var_dump($rol_id);
 } elseif ($res instanceof mysqli_result) {
     $fila = mysqli_fetch_assoc($res);
     if ($fila && isset($fila['rol_id'])) {
         $rol_id = $fila['rol_id'];
-       // var_dump($rol_id);
+        // var_dump($rol_id);
     } else {
         echo "No se encontró el campo rol_id";
     }
@@ -52,14 +51,14 @@ if ($rol_user != 1 && $rol_user != 2) {
 <div class="col-sm-12">
     <!-- Inicio titulos de la pagina-->
     <div class="page-head">
-          <link rel="stylesheet" href=".././css/stylos.css">
+        <link rel="stylesheet" href=".././css/stylos.css">
         <div class="page-head">
             <!-- BEGIN PAGE TITLE -->
             <!-- TÍTULO MODERNO -->
             <div class="page-head-modern">
                 <h1>
-                    Galpón Avícola Sur
-                    <small>Produccion de Pollos de Engorde</small>
+                    GALPÓN AVÍCOLA SUR HEMBRAS
+                    <!-- <small>Produccion de Pollos de Engorde</small> -->
                 </h1>
             </div>
             <!-- END PAGE TITLE -->
@@ -69,11 +68,8 @@ if ($rol_user != 1 && $rol_user != 2) {
         <!-- BREADCRUMB 1 -->
         <ul class="breadcrumb breadcrumb-modern">
             <li>
+                <h4>Producción de Pollos de Engorde</h4>
                 <a href="index.php">Inicio</a>
-                <i class="fa fa-angle-right"></i>
-            </li>
-            <li>
-                <a href="index.php">Produccion de Pollos de Engorde</a>
             </li>
         </ul>
 
@@ -81,6 +77,12 @@ if ($rol_user != 1 && $rol_user != 2) {
         <ul class="breadcrumb breadcrumb-modern">
             <li>
                 <a href="almacen.php">Almacén</a>
+            </li>
+            <li>
+                <a href="control_alimento.php">Control de Alimento</a>
+            </li>
+            <li>
+                <a href="registro_medicamentos.php">REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS</a>
             </li>
         </ul>
         <br />
@@ -92,31 +94,31 @@ if ($rol_user != 1 && $rol_user != 2) {
                         <div class="text-center">Item</div>
                     </th>
                     <th>
-                        <div class="text-center">código cosecha</div>
+                        <div class="text-center">Perfil <br />machos</div>
+                    </th>
+                    <th>
+                        <div class="text-center">código <br />cosecha</div>
                     </th>
                     <th>
                         <div class="text-center">Fecha<br />Inicio</div>
                     </th>
                     <th>
-                        <div class="text-center">Tipo Alimento</div>
+                        <div class="text-center">Edad<br />Inicio</div>
                     </th>
                     <th>
-                        <div class="text-center">Color Pollo</div>
+                        <div class="text-center">Tipo<br /> Alimento</div>
                     </th>
                     <th>
-                        <div class="text-center">Cantidad Pollos</div>
+                        <div class="text-center">Color <br />Pollo</div>
                     </th>
                     <th>
-                        <div class="text-center">Cantidad Alimento Inicio</div>
+                        <div class="text-center">Cantidad <br />Pollos</div>
                     </th>
                     <th>
-                        <div class="text-center">Cantidad Alimento Crecimiento</div>
+                        <div class="text-center">Mortanda Cosecha<br />Dia</div>
                     </th>
                     <th>
-                        <div class="text-center">Cantidad Alimento Engorde</div>
-                    </th>
-                    <th>
-                        <div class="text-center">Mortanda Cosecha Perdida</div>
+                        <div class="text-center">Mortanda Cosecha <br />Total</div>
                     </th>
                     <th>
                         <div class="text-center">Fecha<br />Fin</div>
@@ -152,7 +154,11 @@ if ($rol_user != 1 && $rol_user != 2) {
                             $data['alimento_inicio'] . "||" .
                             $data['precio_inicio'] . "||" .
                             $data['alimento_preinicio'] . "||" .
-                            $data['precio_preinicio'];
+                            $data['precio_preinicio'] . "||" .
+                            $data['edad'] . "||" .
+                            $data['salidas'] . "||" .
+                            $data['peso_salidas'] . "||" .
+                            $data['mortanda_dia'];
 
 
                         $url_destino = "almacen.php";
@@ -162,14 +168,42 @@ if ($rol_user != 1 && $rol_user != 2) {
                             <td>
                                 <div class="text-center"><?php echo $data['codigo']; ?></div>
                             </td>
+                            <td style="cursor:pointer;" title="PERFIL MACHOS"
+                                onclick="window.open('../fpdf-perfil-machos/machos.php?codigo_orions=<?php echo $data['codigo_orions']; ?>', '_blank');">
+                                <div class="text-center" style="text-decoration:none;">
+                                    <div class="galpon-card" style="pointer-events:none;"> <!-- permite que el td reciba el clic -->
+                                        <a href="../fpdf-perfil-machos/machos.php?codigo_orions=<?php echo $data['codigo_orions']; ?>"
+                                            target="_blank"
+                                            style="pointer-events:none;">
+                                            <img src="../imagenes/logo-pdf.png" style="text-decoration:none;">
+                                            <div class="almacen-box">Ver</div>
+
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
                             <td style="cursor:pointer;">
                                 <div class="text-center" style="pointer-events:none;">
                                     <?php echo !empty($data['codigo_orions']) ? $data['codigo_orions'] : 'N/A'; ?>
                                 </div>
                             </td>
-
                             <td>
-                                <div class="text-center"><?php echo $data['fecha_inicio']; ?></div>
+                                <div class="text-center">
+                                    <?php
+                                    $fecha = new DateTime($data['fecha_inicio']);
+                                    // 1. Muestra solo la fecha (día/mes/año)
+                                    echo $fecha->format('d/m/Y');
+                                    ?>
+                                    <!-- 2. Título en medio -->
+                                    <h6>Hora</h6>
+                                    <?php
+                                    // 3. Muestra solo la hora (hora:minutos:segundos)
+                                    echo $fecha->format('H:i:s');
+                                    ?>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-center"><?php echo !empty($data['edad']) ? $data['edad'] : 'N/A'; ?></div>
                             </td>
                             <td>
                                 <div class="text-center"><?php echo !empty($data['tipo_alimento']) ? $data['tipo_alimento'] : 'N/A'; ?></div>
@@ -188,66 +222,12 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     ?>
                                     <!-- Mostrar la cantidad -->
                                     <?php echo $cantidad; ?>
-                                    <!-- Mostrar el precio debajo -->
-                                    <div style="font-size:12px; color:green; font-weight:bold;">
-                                        $<?php echo number_format($precio_total, 0, ',', '.');
-                                            ?>
-                                    </div>
                                 </div>
                             </td>
-                            <td>
-                                <div class="text-center">
-                                    <?php
-                                    $cantidad = $data['alimento_inicio'];
-                                    // Precio unitario tomado desde la consulta
-                                    $precio_unitario = $data['precio_inicio'];
-                                    // Cálculo del total
-                                    $precio_total = $cantidad * $precio_unitario;
-                                    ?>
-                                    <!-- Mostrar la cantidad -->
-                                    <?php echo $cantidad; ?>
-                                    <!-- Mostrar el precio debajo -->
-                                    <div style="font-size:12px; color:green; font-weight:bold;">
-                                        $<?php echo number_format($precio_total, 0, ',', '.');
-                                            ?>
-                                    </div>
-                                </div>
+                             <td>
+                                <div class="text-center"><?php echo !empty($data['mortanda_dia']) ? $data['mortanda_dia'] : 'N/A'; ?></div>
                             </td>
-                            <td>
-                                <div class="text-center">
-                                    <?php
-                                    $cantidad = $data['alimento_preinicio'];
-                                    // Precio unitario tomado desde la consulta
-                                    $precio_unitario = $data['precio_preinicio'];
-                                    // Cálculo del total
-                                    $precio_total = $cantidad * $precio_unitario;
-                                    ?>
-                                    <!-- Mostrar la cantidad -->
-                                    <?php echo $cantidad; ?>
-                                    <!-- Mostrar el precio debajo -->
-                                    <div style="font-size:12px; color:green; font-weight:bold;">
-                                        $<?php echo number_format($precio_total, 0, ',', '.');
-                                            ?>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <?php
-                                    $cantidad = $data['cantidad'];
-                                    // Precio unitario tomado desde la consulta
-                                    $precio_unitario = $data['precio_alimento'];
-                                    // Cálculo del total
-                                    $precio_total = $cantidad * $precio_unitario;
-                                    ?>
-                                    <!-- Mostrar la cantidad -->
-                                    <?php echo $cantidad; ?>
-                                    <!-- Mostrar el precio debajo -->
-                                    <div style="font-size:12px; color:green; font-weight:bold;">
-                                        $<?php echo number_format($precio_total, 0, ',', '.'); ?>
-                                    </div>
-                                </div>
-                            </td>
+                          
                             <td>
                                 <div class="text-center">
                                     <?php
@@ -260,13 +240,25 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     <!-- Mostrar la cantidad -->
                                     <?php echo $cantidad; ?>
                                     <!-- Mostrar el precio debajo -->
-                                    <div style="font-size:12px; color:green; font-weight:bold;">
+                                    <!-- <div style="font-size:12px; color:green; font-weight:bold;">
                                         $<?php echo number_format($precio_total, 0, ',', '.'); ?>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </td>
                             <td>
-                                <div class="text-center"><?php echo $data['fecha_fin']; ?></div>
+                                <div class="text-center">
+                                    <?php
+                                    $fecha = new DateTime($data['fecha_fin']);
+                                    // 1. Muestra solo la fecha (día/mes/año)
+                                    echo $fecha->format('d/m/Y');
+                                    ?>
+                                    <!-- 2. Título en medio -->
+                                    <h6>Hora</h6>
+                                    <?php
+                                    // 3. Muestra solo la hora (hora:minutos:segundos)
+                                    echo $fecha->format('H:i:s');
+                                    ?>
+                                </div>
                             </td>
                             <td>
                                 <div class="text-center"><?php echo !empty($data['descripcion']) ? $data['descripcion'] : 'N/A'; ?></div>

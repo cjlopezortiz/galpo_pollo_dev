@@ -50,8 +50,8 @@ if (isset($_GET['accion'])) {
 		if ($reg->execute()) {
 
 			/* ===============================
-	   OBTENER SIGUIENTE CODIGO ALMACEN
-	================================ */
+        OBTENER SIGUIENTE CODIGO ALMACEN
+     ================================ */
 			$sqlMaxAlmacen = "SELECT IFNULL(MAX(codigo),0)+1 AS codigo FROM almacen";
 			$stmtMaxAlmacen = $conexion->prepare($sqlMaxAlmacen);
 			$stmtMaxAlmacen->execute();
@@ -60,8 +60,8 @@ if (isset($_GET['accion'])) {
 			$codigoAlmacen = $rowAlmacen['codigo'];
 
 			/* ===============================
-	   INSERT EN ALMACEN
-	================================ */
+        INSERT EN ALMACEN
+     ================================ */
 			$sqlAlmacen = "INSERT INTO almacen (codigo, codigo_orions) VALUES (?, ?)";
 			$stmtAlmacen = $conexion->prepare($sqlAlmacen);
 
@@ -74,8 +74,8 @@ if (isset($_GET['accion'])) {
 			}
 
 			/* ===============================
-	   OBTENER SIGUIENTE CODIGO DETALLE
-	================================ */
+        OBTENER SIGUIENTE CODIGO DETALLE
+     ================================ */
 			$sqlMaxDetalle = "SELECT IFNULL(MAX(codigo),0)+1 AS codigo FROM peso_neto_detalle";
 			$stmtMaxDetalle = $conexion->prepare($sqlMaxDetalle);
 			$stmtMaxDetalle->execute();
@@ -84,8 +84,8 @@ if (isset($_GET['accion'])) {
 			$codigoDetalle = $rowDetalle['codigo'];
 
 			/* ===============================
-	   INSERT EN PESO_NETO_DETALLE
-	================================ */
+        INSERT EN PESO_NETO_DETALLE
+     ================================ */
 			$sqlDetalle = "INSERT INTO peso_neto_detalle (codigo, codigo_orions) VALUES (?, ?)";
 			$stmtDetalle = $conexion->prepare($sqlDetalle);
 
@@ -94,6 +94,55 @@ if (isset($_GET['accion'])) {
 
 			if (!$stmtDetalle->execute()) {
 				echo "ERROR DETALLE: " . implode(" | ", $stmtDetalle->errorInfo());
+				exit;
+			}
+
+			/* ===============================
+        OBTENER SIGUIENTE CODIGO CONTROL ALIMENTO
+     ================================ */
+			$sqlMaxAlimento = "SELECT IFNULL(MAX(codigo),0)+1 AS codigo FROM control_alimento";
+			$stmtMaxAlimento = $conexion->prepare($sqlMaxAlimento);
+			$stmtMaxAlimento->execute();
+			$rowAlimento = $stmtMaxAlimento->fetch(PDO::FETCH_ASSOC);
+
+			$codigoAlimento = $rowAlimento['codigo'];
+
+			/* ===============================
+        INSERT EN CONTROL_ALIMENTO
+     ================================ */
+			$sqlAlimento = "INSERT INTO control_alimento (codigo, codigo_orions) VALUES (?, ?)";
+			$stmtAlimento = $conexion->prepare($sqlAlimento);
+
+			$stmtAlimento->bindParam(1, $codigoAlimento);
+			$stmtAlimento->bindParam(2, $codigo_orions);
+
+			if (!$stmtAlimento->execute()) {
+				echo "ERROR CONTROL ALIMENTO: " . implode(" | ", $stmtAlimento->errorInfo());
+				exit;
+			}
+
+
+			/* ===============================
+        OBTENER REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS
+     ================================ */
+			$sqlMaxRegistroMedicamento = "SELECT IFNULL(MAX(codigo),0)+1 AS codigo FROM registro_medicamentos";
+			$stmtMaxRegistroMedicamento = $conexion->prepare($sqlMaxRegistroMedicamento);
+			$stmtMaxRegistroMedicamento->execute();
+			$rowRegistroMedicamento = $stmtMaxRegistroMedicamento->fetch(PDO::FETCH_ASSOC);
+
+			$codigoRegistroMedicamento = $rowRegistroMedicamento['codigo'];
+
+			/* ===============================
+        INSERT REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS
+     ================================ */
+			$sqlRegistroMedicamento = "INSERT INTO registro_medicamentos (codigo, codigo_orions) VALUES (?, ?)";
+			$stmtRegistroMedicamento = $conexion->prepare($sqlRegistroMedicamento);
+
+			$stmtRegistroMedicamento->bindParam(1, $codigoRegistroMedicamento);
+			$stmtRegistroMedicamento->bindParam(2, $codigo_orions);
+
+			if (!$stmtRegistroMedicamento->execute()) {
+				echo "ERROR REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS: " . implode(" | ", $stmtRegistroMedicamento->errorInfo());
 				exit;
 			}
 
@@ -116,6 +165,10 @@ if (isset($_GET['accion'])) {
 		$precio_inicio = $_POST['precio_inicio'];
 		$alimento_preinicio = $_POST['alimento_preinicio'];
 		$precio_preinicio = $_POST['precio_preinicio'];
+		$edad = $_POST['edad'];
+		$salidas = $_POST['salidas'];
+		$peso_salidas = $_POST['peso_salidas'];
+		$mortanda_dia = $_POST['mortanda_dia'];
 
 
 		$sql = "UPDATE galpon_1 SET 
@@ -134,7 +187,11 @@ if (isset($_GET['accion'])) {
 					   alimento_inicio=:alimento_inicio,
 					   precio_inicio=:precio_inicio,
 					   alimento_preinicio=:alimento_preinicio,
-					   precio_preinicio=:precio_preinicio
+					   precio_preinicio=:precio_preinicio,
+					   edad=:edad,
+					   salidas=:salidas,
+					   peso_salidas=:peso_salidas,
+					   mortanda_dia=:mortanda_dia
 
 					  
 				WHERE codigo = :codigo;";
@@ -156,6 +213,10 @@ if (isset($_GET['accion'])) {
 		$reg->bindParam(":precio_inicio", $precio_inicio);
 		$reg->bindParam(":alimento_preinicio", $alimento_preinicio);
 		$reg->bindParam(":precio_preinicio", $precio_preinicio);
+		$reg->bindParam(":edad", $edad);
+		$reg->bindParam(":salidas", $salidas);
+		$reg->bindParam(":peso_salidas", $peso_salidas);
+		$reg->bindParam(":mortanda_dia", $mortanda_dia);
 
 		if ($reg->execute() == TRUE) {
 			echo 1;

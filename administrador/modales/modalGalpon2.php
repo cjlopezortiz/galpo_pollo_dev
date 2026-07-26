@@ -15,7 +15,7 @@
 				<div class="text-center" id="errorcodigo_orions2"></div>
 				<br />
 				<label>Fecha Inicio</label>
-				<input type="date" id="fecha_inicio" class="form-control input-sm" required>
+				<input type="datetime-local" id="fecha_inicio" class="form-control input-sm" required>
 				<div class="text-center" id="errorfecha_inicio2"></div>
 				<br />
 				<label>Cantidad Pollos</label>
@@ -58,12 +58,12 @@
 				<input type="text" id="color" name="color" class="form-control input-sm" placeholder="Color" required>
 				<div class="text-center" id="errorcolor2"></div>
 				<br />
-				<label>Mortanda Cosecha</label>
+				<label>Mortanda Llegada Cosecha</label>
 				<input type="number" id="fayido" name="fayido" class="form-control input-sm" placeholder="Mortanda cosecha" required>
 				<div class="text-center" id="errorfayido2"></div>
 				<br />
 				<label>Fecha Fin</label>
-				<input type="date" id="fecha_fin" class="form-control input-sm" required>
+				<input type="datetime-local" id="fecha_fin" class="form-control input-sm" required>
 				<div class="text-center" id="errorfecha_fin2"></div>
 				<br />
 				<label>Observaciones</label>
@@ -100,7 +100,10 @@
 				<input type="number" id="codigo_orionsu" name="codigo_orionsu" class="form-control input-sm" readonly required>
 				<br />
 				<label>Fecha Inicio</label>
-				<input type="date" id="fecha_iniciou" name="fecha_iniciou" class="form-control input-sm" required="">
+				<input type="datetime-local" id="fecha_iniciou" name="fecha_iniciou" class="form-control input-sm" required="">
+				<br />
+				<label>Edad</label>
+				<input type="number" id="edadu" name="edadu" class="form-control input-sm" required="">
 				<br />
 				<label>Cantidad Pollos</label>
 				<input type="number" id="cantidad_pollou" name="cantidad_pollou" class="form-control input-sm" required="">
@@ -132,11 +135,20 @@
 				<label>Color</label>
 				<input type="text" id="coloru" name="coloru" class="form-control input-sm" required="">
 				<br />
-				<label>Mortanda Cosecha</label>
+				<label>Mortandad Dia</label>
+				<input type="number" id="mortanda_diau" name="mortanda_diau" class="form-control input-sm" required="">
+				<br />
+				<label>Mortanda Cosecha Total</label>
 				<input type="number" id="fayidou" name="fayidou" class="form-control input-sm" required="">
 				<br />
+				<label>Salidas</label>
+				<input type="float" id="salidasu" name="salidasu" class="form-control input-sm" required="">
+				<br />
+				<label>Peso salidas</label>
+				<input type="float" id="peso_salidasu" name="peso_salidasu" class="form-control input-sm" required="">
+				<br />
 				<label>Fecha Fin</label>
-				<input type="date" id="fecha_finu" name="fecha_finu" class="form-control input-sm" required="">
+				<input type="datetime-local" id="fecha_finu" name="fecha_finu" class="form-control input-sm" required="">
 				<br />
 				<label>Observaciones</label>
 				<textarea id="descripcionu" name="descripcionu" rows="4" cols="34"></textarea>

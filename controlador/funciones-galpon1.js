@@ -261,6 +261,10 @@ function agregarFormGalpon1(datos) {
   $("#precio_iniciou").val(d[13]);
   $("#alimento_preiniciou").val(d[14]);
   $("#precio_preiniciou").val(d[15]);
+  $("#edadu").val(d[16]);
+  $("#salidasu").val(d[17]);
+  $("#peso_salidasu").val(d[18]);
+  $("#mortanda_diau").val(d[19]);
 
 }
 
@@ -282,6 +286,10 @@ function modificarGalpon1() {
   precio_inicio = $("#precio_iniciou").val();
   alimento_preinicio = $("#alimento_preiniciou").val();
   precio_preinicio = $("#precio_preiniciou").val();
+  edad = $("#edadu").val();
+  salidas = $("#salidasu").val();
+  peso_salidas = $("#peso_salidasu").val();
+  mortanda_dia = $("#mortanda_diau").val();
 
 
 
@@ -317,7 +325,15 @@ function modificarGalpon1() {
     "&alimento_preinicio=" +
     alimento_preinicio +
     "&precio_preinicio=" +
-    precio_preinicio;
+    precio_preinicio +
+     "&edad=" +
+    edad +
+     "&salidas=" +
+    salidas +
+     "&peso_salidas=" +
+    peso_salidas +
+     "&mortanda_dia=" +
+    mortanda_dia;
     
 
 

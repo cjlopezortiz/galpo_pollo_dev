@@ -8,7 +8,7 @@ class misGalpon2
         $conexion = new Conexion();
         $arreglo = array();
         $consulta = "SELECT
-                              codigo,
+                            codigo,
                             codigo_orions,
                             cantidad_pollo,
                             precio_pollo,
@@ -23,7 +23,11 @@ class misGalpon2
                             alimento_inicio,
                             precio_inicio,
                             alimento_preinicio,
-                            precio_preinicio
+                            precio_preinicio,
+                            edad,
+                            salidas,
+                            peso_salidas,
+                            mortanda_dia
                             FROM galpon_2
                             WHERE codigo = :codigo";
         $modules = $conexion->prepare($consulta);
@@ -61,7 +65,11 @@ class misGalpon2
                             alimento_inicio,
                             precio_inicio,
                             alimento_preinicio,
-                            precio_preinicio
+                            precio_preinicio,
+                            edad,
+                            salidas,
+                            peso_salidas,
+                            mortanda_dia
                             FROM galpon_2
                             WHERE codigo = :codigo";
         $modules = $conexion->prepare($consulta);
@@ -100,7 +108,11 @@ class misGalpon2
                             alimento_inicio,
                             precio_inicio,
                             alimento_preinicio,
-                            precio_preinicio
+                            precio_preinicio,
+                            edad,
+                            salidas,
+                            peso_salidas,
+                            mortanda_dia
                      FROM galpon_2
                      WHERE codigo_orions = :codigo_orions
                      ORDER BY codigo ASC";

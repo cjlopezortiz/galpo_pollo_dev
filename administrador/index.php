@@ -78,7 +78,7 @@ if ($rol_user == 1) {
     ?>
 </head>
 
-<body style="background: linear-gradient(135deg,#4e73df,#1cc88a); min-height:100vh;">
+<body style="background: linear-gradient(fff,#fff,#fff); min-height:100vh;">
 
     <div class="container mt-4">
 
@@ -93,8 +93,7 @@ if ($rol_user == 1) {
                     target="_blank"
                     data-toggle="tooltip"
                     title="Abrir Manual en PDF">
-                    Manual de usuario
-                    <img src="../imagenes/logo-pdf.png"
+                    Manual de Crianza de Pollos Blancos de Engorde<img src="../imagenes/logo-pdf.png"
                         alt="PDF"
                         style="width:25px; height:25px; margin-right:5px;">
                 </a>
@@ -159,7 +158,7 @@ if ($rol_user == 1) {
             <div class="row">
 
                 <div class="bg-white p-3 border rounded text-center mb-4">
-                    <h1 class="m-0 text-dark" style="font-weight: bold;">LÍNEA: GALPÓNES AVÍCOLA MARICELA LÓPEZ</h1>
+                    <h1 class="m-0 text-dark" style="font-weight: bold;">LÍNEA DE: GALPÓNES AVÍCOLA MARICELA LÓPEZ</h1>
                 </div>
                 <br><br>
 
@@ -167,8 +166,9 @@ if ($rol_user == 1) {
                 <div class="col-sm-4">
                     <a href="galpon1.php">
                         <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola Norte</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b><?php echo $cant_galpon1; ?></b></div>
+                            <div class="galpon-title">GALPÓN AVÍCOLA NORTE MACHOS</div>
+                            <div class="galpon-sub">SEGUIMIENTO INVENTARIO DE AVES</div>
+                            <div class="galpon-sub">CANTIDAD DE COSECHAS: <b><?php echo $cant_galpon1; ?></b></div>
 
                             <a href="almacen.php">
                                 <div class="almacen-box">Almacenamiento</div>
@@ -181,8 +181,9 @@ if ($rol_user == 1) {
                 <div class="col-sm-4">
                     <a href="galpon2.php">
                         <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola Sur</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b><?php echo $cant_galpon2; ?></b></div>
+                            <div class="galpon-title">GALPÓN AVÍCOLA SUR HEMBRAS</div>
+                            <div class="galpon-sub">SEGUIMIENTO INVENTARIO DE AVES</div>
+                            <div class="galpon-sub">CANTIDAD DE COSECHAS: <b><?php echo $cant_galpon2; ?></b></div>
 
                             <a href="almacen.php">
                                 <div class="almacen-box">Almacenamiento</div>
@@ -195,8 +196,9 @@ if ($rol_user == 1) {
                 <div class="col-sm-4">
                     <a href="#" style="text-decoration:none;">
                         <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola Central</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
+                            <div class="galpon-title">GALPÓN AVÍCOLA CENTRAL MACHOS</div>
+                            <div class="galpon-sub">SEGUIMIENTO INVENTARIO DE AVES</div>
+                            <div class="galpon-sub">CANTIDAD DE COSECHAS <b>N/A</b></div>
 
                             <a href="#" style="text-decoration:none;">
                                 <div class="almacen-box">Almacenamiento</div>
@@ -209,8 +211,9 @@ if ($rol_user == 1) {
                 <div class="col-sm-4">
                     <a href="#" style="text-decoration:none;">
                         <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola La Colmena</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
+                            <div class="galpon-title">GALPÓN AVÍCOLA COLMENA HEMBRAS</div>
+                            <div class="galpon-sub">SEGUIMIENTO INVENTARIO DE AVES</div>
+                            <div class="galpon-sub">CANTIDAD DE COSECHAS <b>N/A</b></div>
 
                             <a href="#" style="text-decoration:none;">
                                 <div class="almacen-box">Almacenamiento</div>
@@ -223,8 +226,9 @@ if ($rol_user == 1) {
                 <div class="col-sm-4">
                     <a href="#" style="text-decoration:none;">
                         <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola El Corral</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
+                            <div class="galpon-title">GALPÓN AVÍCOLA CORRAL MACHOS</div>
+                            <div class="galpon-sub">SEGUIMIENTO INVENTARIO DE AVES</div>
+                            <div class="galpon-sub">CANTIDAD DE COSECHAS <b>N/A</b></div>
 
                             <a href="#" style="text-decoration:none;">
                                 <div class="almacen-box">Almacenamiento</div>
@@ -237,9 +241,9 @@ if ($rol_user == 1) {
                 <div class="col-sm-4">
                     <a href="#" style="text-decoration:none;">
                         <div class="galpon-card">
-                            <div class="galpon-title">Galpón Avícola La Pradera</div>
-                            <div class="galpon-sub">Cantidad de cosechas: <b>N/A</b></div>
-
+                            <div class="galpon-title">GALPÓN AVÍCOLA PRADERA HEMBRAS</div>
+                            <div class="galpon-sub">SEGUIMIENTO INVENTARIO DE AVES</div>
+                            <div class="galpon-sub">CANTIDAD DE COSECHAS <b>N/A</b></div>
                             <a href="#" style="text-decoration:none;">
                                 <div class="almacen-box">Almacenamiento</div>
                             </a>
@@ -248,31 +252,62 @@ if ($rol_user == 1) {
                 </div>
                 <div class="row">
                     <br><br>
-                    <!-- Munuel 6 -->
-                    <div class="col-sm-4">
+                    <!-- 6 -->
 
-                    </div>
                     <div class="col-sm-4">
-                        <a href="usuarios.php">
+                        <a href="control_alimento.php">
                             <div class="galpon-card">
-                                <div class="galpon-title">Usuarios</div>
+                                <div class="galpon-title">CONTROL DE ALIMENTO</div>
 
                                 <div class="galpon-sub">
                                     <?php if ($rol_user == 1 || $rol_user == 2): ?>
-                                        Cantidad: <b><?php echo $cant_usuarios; ?></b>
-                                    <?php endif; ?>
-
-                                    <?php if ($rol_user == 3 || $rol_user == 4): ?>
-                                        <b class="text-primary">Ver →</b>
+                                        CONTROL DE ALIMENTO : <b><?php //echo $cant_usuarios; 
+                                                                    ?></b>
                                     <?php endif; ?>
                                 </div>
 
-                                <a href="usuarios.php">
-                                    <div class="almacen-box">Entrar</div>
+                                <a href="control_alimento.php">
+                                    <div>Entrar</div>
                                 </a>
                             </div>
                         </a>
                     </div>
+                    <div class="col-sm-4">
+                        <a href="usuarios.php">
+                            <div class="galpon-card">
+                                <div class="galpon-title">USUARIOS</div>
+
+                                <div class="galpon-sub">
+                                    <?php if ($rol_user == 1 || $rol_user == 2): ?>
+                                        USUARIOS: <b><?php echo $cant_usuarios; ?></b>
+                                    <?php endif; ?>
+                                </div>
+
+                                <a href="usuarios.php">
+                                    <div>Entrar</div>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-4">
+                        <a href="registro_medicamentos.php">
+                            <div class="galpon-card">
+                                <div class="galpon-title">REGISTRO USO DE MEDICAMENTOS</div>
+
+                                <div class="galpon-sub">
+                                    <?php if ($rol_user == 1 || $rol_user == 2): ?>
+                                        VETERINARIA : <b><?php //echo $cant_usuarios; 
+                                                            ?></b>
+                                    <?php endif; ?>
+                                </div>
+
+                                <a href="registro_medicamentos.php">
+                                    <div>Entrar</div>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
                 </div>
             </div>
         <?php

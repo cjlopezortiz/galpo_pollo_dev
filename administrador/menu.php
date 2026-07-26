@@ -12,18 +12,18 @@ $user_nombre = $_SESSION['nombre'];
         <!-- SECCIÓN IZQUIERDA: Logotipo -->
         <a class="nav-brand-modern" href="index.php">
             <div class="logo-wrapper">
-                <img src="../imagenes/pollo4.jpg" alt="Logo" class="navbar-logo">
+                <img src="../imagenes/pollopdf2.png" alt="Logo" class="navbar-logo">
             </div>
             <div class="brand-text-wrapper">
-                <span class="brand-text-top">Pollo Express</span>
-                <span class="brand-text-sub">Panel de Control</span>
+                <span class="brand-text-top">LÍNEA DE POLLO</span>
+                <span class="brand-text-sub">PANEL DE CONTROL</span>
             </div>
         </a>
 
         <!-- SECCIÓN CENTRAL: Inicio y Usuario -->
         <div class="nav-center-content">
             <a class="nav-link-modern active-modern" href="index.php">
-                <i class="fas fa-th-large"></i> Inicio
+                <i class="fas fa-th-large"></i> INICIO
             </a>
             
             <span class="nav-user-info-modern">
@@ -36,7 +36,7 @@ $user_nombre = $_SESSION['nombre'];
         <!-- SECCIÓN DERECHA: Cerrar Sesión fijo a la derecha -->
         <div class="nav-right-content">
             <a class="btn-logout-modern" href="../modelo/salir.php">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                <i class="fas fa-sign-out-alt"></i> CERRAR SESIÓN
             </a>
         </div>
 
