@@ -323,7 +323,7 @@ $precio_final_liquidacion = 0;
                     $ <?php echo number_format($granTotalValor, 0); ?>
                 </th>
                 <div style="text-align: left;">
-                <th class="text-center" colspan="2" style="background-color: #2633a6; color: white;">
+                <th class="text-center" colspan="2" style="background-color: #2693a6; color: white;">
                     <a href="almacen.php" class="btn btn-default" style="border-radius: 20px; border: 1px solid #919926; font-weight: bold;">
                         <i class="fa fa-arrow-left"></i> Volver al Almacén
                     </a>
