@@ -51,6 +51,10 @@ if (isset($_GET['accion'])) {
 		$precio_arriendo = $_POST['precio_arriendo'];
 		$gastos_varios = $_POST['gastos_varios'];
 		$precio_gastos_varios = $_POST['precio_gastos_varios'];
+		$gas = $_POST['gas'];
+		$precio_gas = $_POST['precio_gas'];
+		$alimento_itacol = $_POST['alimento_itacol'];
+		$precio_itacol = $_POST['precio_itacol'];
 		$sql = "INSERT INTO almacen(
                     codigo, codigo_orions, descripcion_material, cantidad_total, precio_kilo,
                     cloro, vinagre, hacido_hacetico, vitaminas,
@@ -61,7 +65,7 @@ if (isset($_GET['accion'])) {
                     abc, precio_abc, vicarbonato, precio_vicarbonato,
                     melasa, precio_melasa, agua_potable, precio_agua,
 					luz, precio_luz, arriendo, precio_arriendo, gastos_varios, 
-					precio_gastos_varios
+					precio_gastos_varios, gas, precio_gas, alimento_itacol, precio_itacol
                 ) 
 				VALUES (
 						?, ?, ?, ?, 
@@ -73,7 +77,8 @@ if (isset($_GET['accion'])) {
 						?, ?, ?, ?, 
 						?, ?, ?, ?, 
 						?, ?, ?, ?, 
-						?, ?, ?, ?, ?
+						?, ?, ?, ?, 
+						?, ?, ?, ?,?
                         )";
 		$reg = $conexion->prepare($sql);
 		$reg->bindParam(1,  $maxAlmacenes);
@@ -128,6 +133,12 @@ if (isset($_GET['accion'])) {
 		$reg->bindParam(40, $gastos_varios);
 		$reg->bindParam(41, $precio_gastos_varios);
 
+		$reg->bindParam(42, $gas);
+		$reg->bindParam(43, $precio_gas);
+
+		$reg->bindParam(44, $alimento_itacol);
+		$reg->bindParam(45, $precio_itacol);
+
 
 		if ($reg->execute() == TRUE) {
 			echo 1;
@@ -179,6 +190,10 @@ if (isset($_GET['accion'])) {
 		$gastos_varios = $_POST['gastos_varios'];
 		$precio_gastos_varios = $_POST['precio_gastos_varios'];
 		$precio_gastos_varios = floatval($precio_gastos_varios);
+		$gas = $_POST['gas'];
+		$precio_gas = $_POST['precio_gas'];
+		$alimento_itacol = $_POST['alimento_itacol'];
+		$precio_itacol = $_POST['precio_itacol'];
 
 		// Consultar valor actual en BD
 		$sqlCheck = "SELECT precio_gastos_varios 
@@ -237,7 +252,11 @@ if (isset($_GET['accion'])) {
 		arriendo = :arriendo,
 		precio_arriendo = :precio_arriendo,
 		gastos_varios = :gastos_varios,
-		precio_gastos_varios = IFNULL(precio_gastos_varios, 0) + :precio_gastos_varios
+		precio_gastos_varios = IFNULL(precio_gastos_varios, 0) + :precio_gastos_varios,
+		gas = :gas,
+		precio_gas = :precio_gas,
+		alimento_itacol = :alimento_itacol,
+		precio_itacol = :precio_itacol
 	WHERE codigo = :codigo";
 
 
@@ -284,6 +303,10 @@ if (isset($_GET['accion'])) {
 		$reg->bindParam(":precio_arriendo", $precio_arriendo);
 		$reg->bindParam(":gastos_varios", $gastos_varios);
 		$reg->bindParam(":precio_gastos_varios", $precio_gastos_varios);
+		$reg->bindParam(":gas", $gas);
+		$reg->bindParam(":precio_gas", $precio_gas);
+		$reg->bindParam(":alimento_itacol", $alimento_itacol);
+		$reg->bindParam(":precio_itacol", $precio_itacol);
 
 		echo $reg->execute() ? 1 : 0;
 	} else if ($accion == 'eliminar') {

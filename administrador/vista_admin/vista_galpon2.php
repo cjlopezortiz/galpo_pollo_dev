@@ -79,10 +79,10 @@ if ($rol_user != 1 && $rol_user != 2) {
                 <a href="almacen.php">Almacén</a>
             </li>
             <li>
-                <a href="control_alimento.php">Control de Alimento</a>
+                <a target="_blank" href="control_alimento.php">Control de Alimento</a>
             </li>
             <li>
-                <a href="registro_medicamentos.php">REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS</a>
+                <a target="_blank" href="registro_medicamentos.php">REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS</a>
             </li>
         </ul>
         <br />
@@ -94,13 +94,16 @@ if ($rol_user != 1 && $rol_user != 2) {
                         <div class="text-center">Item</div>
                     </th>
                     <th>
-                        <div class="text-center">Perfil <br />machos</div>
+                        <div class="text-center">Perfil <br />Hembras</div>
                     </th>
                     <th>
                         <div class="text-center">código <br />cosecha</div>
                     </th>
                     <th>
                         <div class="text-center">Fecha<br />Inicio</div>
+                    </th>
+                    <th>
+                        <div class="text-center">Fecha<br />Fin</div>
                     </th>
                     <th>
                         <div class="text-center">Edad<br />Inicio</div>
@@ -120,9 +123,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                     <th>
                         <div class="text-center">Mortanda Cosecha <br />Total</div>
                     </th>
-                    <th>
-                        <div class="text-center">Fecha<br />Fin</div>
-                    </th>
+
                     <th>
                         <div class="text-center">Observaciones</div>
                     </th>
@@ -168,11 +169,11 @@ if ($rol_user != 1 && $rol_user != 2) {
                             <td>
                                 <div class="text-center"><?php echo $data['codigo']; ?></div>
                             </td>
-                            <td style="cursor:pointer;" title="PERFIL MACHOS"
-                                onclick="window.open('../fpdf-perfil-machos/machos.php?codigo_orions=<?php echo $data['codigo_orions']; ?>', '_blank');">
+                            <td style="cursor:pointer;" title="PERFIL Hembras"
+                                onclick="window.open('../fpdf-perfil-hembras/hembras.php?codigo_orions=<?php echo $data['codigo_orions']; ?>', '_blank');">
                                 <div class="text-center" style="text-decoration:none;">
                                     <div class="galpon-card" style="pointer-events:none;"> <!-- permite que el td reciba el clic -->
-                                        <a href="../fpdf-perfil-machos/machos.php?codigo_orions=<?php echo $data['codigo_orions']; ?>"
+                                        <a href="../fpdf-perfil-hembras/hembras.php?codigo_orions=<?php echo $data['codigo_orions']; ?>"
                                             target="_blank"
                                             style="pointer-events:none;">
                                             <img src="../imagenes/logo-pdf.png" style="text-decoration:none;">
@@ -191,6 +192,21 @@ if ($rol_user != 1 && $rol_user != 2) {
                                 <div class="text-center">
                                     <?php
                                     $fecha = new DateTime($data['fecha_inicio']);
+                                    // 1. Muestra solo la fecha (día/mes/año)
+                                    echo $fecha->format('d/m/Y');
+                                    ?>
+                                    <!-- 2. Título en medio -->
+                                    <h6>Hora</h6>
+                                    <?php
+                                    // 3. Muestra solo la hora (hora:minutos:segundos)
+                                    echo $fecha->format('H:i:s');
+                                    ?>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-center">
+                                    <?php
+                                    $fecha = new DateTime($data['fecha_fin']);
                                     // 1. Muestra solo la fecha (día/mes/año)
                                     echo $fecha->format('d/m/Y');
                                     ?>
@@ -224,10 +240,10 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     <?php echo $cantidad; ?>
                                 </div>
                             </td>
-                             <td>
+                            <td>
                                 <div class="text-center"><?php echo !empty($data['mortanda_dia']) ? $data['mortanda_dia'] : 'N/A'; ?></div>
                             </td>
-                          
+
                             <td>
                                 <div class="text-center">
                                     <?php
@@ -245,21 +261,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     </div> -->
                                 </div>
                             </td>
-                            <td>
-                                <div class="text-center">
-                                    <?php
-                                    $fecha = new DateTime($data['fecha_fin']);
-                                    // 1. Muestra solo la fecha (día/mes/año)
-                                    echo $fecha->format('d/m/Y');
-                                    ?>
-                                    <!-- 2. Título en medio -->
-                                    <h6>Hora</h6>
-                                    <?php
-                                    // 3. Muestra solo la hora (hora:minutos:segundos)
-                                    echo $fecha->format('H:i:s');
-                                    ?>
-                                </div>
-                            </td>
+
                             <td>
                                 <div class="text-center"><?php echo !empty($data['descripcion']) ? $data['descripcion'] : 'N/A'; ?></div>
                             </td>

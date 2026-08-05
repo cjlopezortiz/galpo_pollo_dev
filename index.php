@@ -145,7 +145,7 @@
                         <label>Contraseña</label>
                         <input type="password" name="contrasena" class="form-control mb-2" required>
 
-                        <a href="#" style="font-size: 13px;">¿Has olvidado tu contraseña?</a>
+                        <!-- <a href="#" style="font-size: 13px;">¿Has olvidado tu contraseña?</a> -->
 
                         <button type="submit" class="btn btn-warning mt-3">Iniciar sesión</button>
 

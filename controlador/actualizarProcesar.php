@@ -11,8 +11,8 @@ $datos = array(
     'precio_pollo'  => $_POST['precio_pollo'],
     'bruto'         => $_POST['bruto'],
     'canastas'      => $_POST['canastas'],
-    'total_general' => $_POST['total_general']
+    'total_general' => $_POST['total_general'],
+    'peso_observacion'  => $_POST['peso_observacion']
 );
 // Llamamos a la función que pegamos en el paso anterior
 echo $obj->registrarOActualizar($datos);
-?>

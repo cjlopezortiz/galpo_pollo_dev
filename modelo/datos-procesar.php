@@ -17,6 +17,7 @@ class misProcesos
             precio_pollo,
             bruto,
             canastas,
+            peso_observacion,
             (bruto - canastas) AS neto_calculado,
             total_general
         FROM peso_neto_detalle
@@ -33,7 +34,34 @@ class misProcesos
 
         return $datosOrdenados;
     }
+    // Esta es la función que ya tienes para mostrar los datos
+    function viewProcesosliki($codigo = null)
+    {
+        if (!$codigo) return [];
 
+        require_once 'conexion.php';
+        $conexion = new Conexion();
+
+        $consulta = "
+                        SELECT
+                        fila, 
+                        SUM(bruto) AS suma_total_bruto,
+                        SUM(COALESCE(bruto, 0) - COALESCE(canastas, 0)) AS suma_total_general,
+                        SUM((COALESCE(bruto, 0) - COALESCE(canastas, 0)) * COALESCE(precio_pollo, 0)) AS gran_total_valor
+                        FROM peso_neto_detalle
+                        WHERE codigo_orions = :codigo;";
+
+        $modules = $conexion->prepare($consulta);
+        $modules->execute([':codigo' => $codigo]);
+        $resultados = $modules->fetchAll(PDO::FETCH_ASSOC);
+
+        $datosOrdenados = [];
+        foreach ($resultados as $r) {
+            $datosOrdenados[$r['fila']] = $r;
+        }
+
+        return $datosOrdenados;
+    }
     public function totalNetoPorCodigo($codigo)
     {
         require_once 'conexion.php';
@@ -64,13 +92,14 @@ class misProcesos
         // Usamos ON DUPLICATE KEY UPDATE para que identifique la pareja (codigo_orions + fila)
         $db = $conexion->prepare("
         INSERT INTO peso_neto_detalle 
-            (codigo_orions, fila, bruto, precio_pollo, canastas, total_general, fecha) 
+            (codigo_orions, fila, bruto, peso_observacion, precio_pollo, canastas, total_general, fecha) 
         VALUES 
-            (:orions, :fila, :bruto, :precio_pollo, :canastas, :total, CURRENT_TIMESTAMP)
+            (:orions, :fila, :bruto, :precio_pollo, :canastas, :peso_observacion, :total, CURRENT_TIMESTAMP)
         ON DUPLICATE KEY UPDATE 
             precio_pollo = :precio_pollo, 
             bruto = :bruto, 
             canastas = :canastas, 
+            peso_observacion = :peso_observacion, 
             total_general = :total,
             fecha = CURRENT_TIMESTAMP
     ");
@@ -81,7 +110,8 @@ class misProcesos
             ':precio_pollo'     => $datos['precio_pollo'],
             ':bruto'    => $datos['bruto'],
             ':canastas' => $datos['canastas'],
-            ':total'    => $datos['total_general']
+            ':total'    => $datos['total_general'],
+            ':peso_observacion'    => $datos['peso_observacion']
         ]);
     }
 }

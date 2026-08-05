@@ -12,6 +12,7 @@ if ($accion == 'modificar') {
     $bruto = $_POST['bruto'];
     $canastas = $_POST['canastas'];
     $total = $_POST['total_general'];
+    $peso_observacion = $_POST['peso_observacion'];
 
     // 1. Verificamos si ya existe esta combinación de Cosecha + Fila
     $check = $conexion->prepare("SELECT codigo FROM peso_neto_detalle WHERE codigo_orions = :corions AND fila = :f");
@@ -20,7 +21,7 @@ if ($accion == 'modificar') {
 
     if ($registro_existente) {
         // SI EXISTE: Actualizamos esa fila específica
-        $sql = "UPDATE peso_neto_detalle SET bruto=:b, canastas=:c, total_general=:t, precio_pollo=:p, fecha=CURRENT_TIMESTAMP 
+        $sql = "UPDATE peso_neto_detalle SET bruto=:b, canastas=:c, peso_observacion=:o, total_general=:t, precio_pollo=:p, fecha=CURRENT_TIMESTAMP 
                 WHERE codigo_orions=:corions AND fila=:f";
         $reg = $conexion->prepare($sql);
         $res = $reg->execute([
@@ -29,13 +30,14 @@ if ($accion == 'modificar') {
             ":t" => $total,
             ":p" => $precio_pollo,
             ":corions" => $codigo_orions,
-            ":f" => $fila
+            ":f" => $fila,
+            ":o" => $peso_observacion
         ]);
     } else {
         // NO EXISTE: Insertamos nuevo registro vinculándolo al código y a su fila
         $sql = "INSERT INTO peso_neto_detalle 
-            (codigo_orions, fila, bruto, canastas, total_general, precio_pollo, fecha) 
-            VALUES (:corions, :f, :b, :c, :t, :p, CURRENT_TIMESTAMP)";
+            (codigo_orions, fila, bruto, canastas, peso_observacion, total_general, precio_pollo, fecha) 
+            VALUES (:corions, :f, :b, :c, :t, :p, o, CURRENT_TIMESTAMP)";
         $reg = $conexion->prepare($sql);
         $res = $reg->execute([
             ":corions" => $codigo_orions,
@@ -43,7 +45,8 @@ if ($accion == 'modificar') {
             ":b" => $bruto,
             ":c" => $canastas,
             ":t" => $total,
-            ":p" => $precio_pollo
+            ":p" => $precio_pollo,
+            ":o" => $peso_observacion
         ]);
     }
     echo $res ? 1 : 0;

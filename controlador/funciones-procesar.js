@@ -7,12 +7,23 @@ function agregarFormProcesar(datos) {
 
     var d = datos.split('||');
 
+    // Mapeo correcto según la cadena generada PHP:
+    // d[0] -> id
+    // d[1] -> bruto
+    // d[2] -> precio_pollo
+    // d[3] -> canastas
+    // d[4] -> total fila
+    // d[5] -> codigo cosecha
+    // d[6] -> peso_observacion
+    // d[7] -> numero de fila ($i)
+
     $('#codigou').val(d[0]);          // id
     $('#brutou').val(d[1]);           // bruto
     $('#canastasu').val(d[3]);        // canastas
     $('#total_generalu').val(d[4]);   // total fila
     $('#codigo_orions_u').val(d[5]);  // codigo cosecha
-    $('#fila_u').val(d[6]);           // fila
+    $('#peso_observacionu').val(d[6]);// OBSERVACION CLIENTE (CORREGIDO)
+    $('#fila_u').val(d[7]);           // NUMERO DE FILA (CORREGIDO)
 
     let precioDB = parseFloat(d[2]) || 0;
 
@@ -24,17 +35,20 @@ function agregarFormProcesar(datos) {
         // SI NO TIENE PRECIO USA EL GLOBAL
         $('#precio_pollou').val(precioGlobalPollo);
     }
-
 }
 
 
-// CALCULAR TOTAL AUTOMATICO
+// CALCULAR TOTAL AUTOMÁTICO EN EL MODAL
 $(document).on('input', '#brutou, #canastasu', function() {
 
-    let bruto = parseFloat($('#brutou').val()) || 0;
-    let canastas = parseFloat($('#canastasu').val()) || 0;
+    // Remplazamos comas por puntos por si vienen en formato '31,3'
+    let valBruto = $('#brutou').val().replace(',', '.');
+    let valCanastas = $('#canastasu').val().replace(',', '.');
 
-    let total = (bruto - canastas).toFixed(2);
+    let bruto = parseFloat(valBruto) || 0;
+    let canastas = parseFloat(valCanastas) || 0;
+    
+    let total = (bruto - canastas).toFixed(3);
 
     $('#total_generalu').val(total);
 
@@ -57,7 +71,8 @@ $(document).on('input', '#precio_pollou', function() {
         bruto: $('#brutou').val(),
         canastas: $('#canastasu').val(),
         total_general: $('#total_generalu').val(),
-        precio_pollo: $('#precio_pollou').val()
+        precio_pollo: $('#precio_pollou').val(),
+        peso_observacion: $('#peso_observacionu').val()
     };
     $.ajax({
             type: "POST",

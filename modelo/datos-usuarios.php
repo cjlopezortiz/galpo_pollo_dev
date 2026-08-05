@@ -170,8 +170,8 @@ class misUsuarios
         return $total;
     }
     // Máximo código de usuarios
-        public function maxUsuarios()
-        {
+    public function maxUsuarios()
+    {
             require_once 'conexion.php';
             $conexion = new Conexion();
             $sqlcon = "SELECT max(codigo) as maximo FROM usuario";
@@ -181,5 +181,5 @@ class misUsuarios
             $consecutivo = $rowcon['maximo'];
             $consecutivo++;
             return $consecutivo;
-        }
+    }
 }

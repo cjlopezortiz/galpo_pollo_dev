@@ -81,6 +81,10 @@ function agregarDatosAlmacen() {
     precio_arriendo = $('#precio_arriendo').val();
     gastos_varios = $('#gastos_varios').val();
     precio_gastos_varios = $('#precio_gastos_varios').val();
+    gas = $('#gas').val();
+    precio_gas = $('#precio_gas').val();
+    alimento_itacol = $('#alimento_itacol').val();
+    precio_itacol = $('#precio_itacol').val();
 
 
     // CADENA FINAL
@@ -124,7 +128,11 @@ function agregarDatosAlmacen() {
         "&arriendo=" + arriendo +
         "&precio_arriendo=" + precio_arriendo +
         "&gastos_varios=" + gastos_varios +
-        "&precio_gastos_varios=" + precio_gastos_varios;
+        "&precio_gastos_varios=" + precio_gastos_varios +
+        "&gas=" + gas +
+        "&precio_gas=" + precio_gas +
+        "&alimento_itacol=" + alimento_itacol +
+        "&precio_itacol=" + precio_itacol;
 
 
     $.ajax({
@@ -191,6 +199,10 @@ function agregarFormAlmacen(datos) {
     $('#precio_arriendou').val(d[38]);
     $('#gastos_variosu').val(d[39]);
     $('#precio_gastos_variosu').val(d[40]);
+    $('#gasu').val(d[41]);
+    $('#precio_gasu').val(d[42]);
+    $('#alimento_itacolu').val(d[43]);
+    $('#precio_itacolu').val(d[44]);
 }
 
 
@@ -241,6 +253,10 @@ function modificarAlmacen() {
     precio_arriendo = $('#precio_arriendou').val();
     gastos_varios = $('#gastos_variosu').val();
     precio_gastos_varios = $('#precio_gastos_variosu').val();
+    gas = $('#gasu').val();
+    precio_gas = $('#precio_gasu').val();
+    alimento_itacol = $('#alimento_itacolu').val();
+    precio_itacol = $('#precio_itacolu').val();
 
 
     cadena = 
@@ -284,7 +300,11 @@ function modificarAlmacen() {
         "&arriendo=" + arriendo +
         "&precio_arriendo=" + precio_arriendo +
         "&gastos_varios=" + gastos_varios +
-        "&precio_gastos_varios=" + precio_gastos_varios;
+        "&precio_gastos_varios=" + precio_gastos_varios +
+        "&gas=" + gas +
+        "&precio_gas=" + precio_gas +
+        "&alimento_itacol=" + alimento_itacol +
+        "&precio_itacol=" + precio_itacol;
 
 
     $.ajax({

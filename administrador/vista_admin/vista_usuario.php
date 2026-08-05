@@ -13,16 +13,15 @@ if (is_array($res)) {
     // Si es un arreglo de registros
     elseif (isset($res[0]['rol_id'])) {
         $rol_id = $res[0]['rol_id'];
-    }
-    else {
+    } else {
         $rol_id = null;
     }
-   //var_dump($rol_id);
+    //var_dump($rol_id);
 } elseif ($res instanceof mysqli_result) {
     $fila = mysqli_fetch_assoc($res);
     if ($fila && isset($fila['rol_id'])) {
         $rol_id = $fila['rol_id'];
-       // var_dump($rol_id);
+        // var_dump($rol_id);
     } else {
         echo "No se encontró el campo rol_id";
     }
@@ -50,7 +49,7 @@ if ($rol_user != 1 && $rol_user != 2) {
     <!-- Inicio titulos de la pagina-->
     <div class="page-head">
         <div class="page-head-modern">
-          
+
             <!-- BEGIN PAGE TITLE -->
             <div class="page-title">
                 <h1>USUARIOS

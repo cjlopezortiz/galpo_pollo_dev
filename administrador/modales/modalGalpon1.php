@@ -23,7 +23,7 @@
 				<div class="text-center" id="errorcantidad_pollo"></div>
 				<br />
 				<label><strong>Precio Semilla (por unidad)</strong></label>
-				<input type="number" id="precio_pollo" name="precio_pollo" class="form-control input-sm" placeholder="Precio semilla (por unidad)" required>
+				<input type="number" step="any" id="precio_pollo" name="precio_pollo" class="form-control input-sm" placeholder="Precio semilla (por unidad)" required>
 				<div class="text-center" id="errorprecio_pollo"></div>
 				<br />
 				<label>Tipo Alimento</label>
@@ -35,24 +35,24 @@
 				<div class="text-center" id="erroralimento_inicio"></div>
 				<br />
 				<label>Precio Alimento Inicio (por costal)</label>
-				<input type="number" id="precio_inicio" name="precio_inicio" class="form-control input-sm" placeholder="Alimento Preinicio" required>
+				<input type="number" step="any" id="precio_inicio" name="precio_inicio" class="form-control input-sm" placeholder="Alimento Preinicio" required>
 				<div class="text-center" id="errorprecio_inicio"></div>
 				<br />
-				<label>Cantidad Alimento Crecimiento</label>
+				<label>Cantidad Alimento Preinicio</label>
 				<input type="number" id="alimento_preinicio" name="alimento_preinicio" class="form-control input-sm" placeholder="Alimento inicio " required>
 				<div class="text-center" id="erroralimento_preinicio"></div>
 				<br />
-				<label>Precio Alimento Crecimiento (por costal) </label>
-				<input type="number" id="precio_preinicio" name="precio_preinicio" class="form-control input-sm" placeholder="Alimento Preinicio" required>
+				<label>Precio Alimento Preinicio (por costal) </label>
+				<input type="number" step="any" id="precio_preinicio" name="precio_preinicio" class="form-control input-sm" placeholder="Alimento Preinicio" required>
 				<div class="text-center" id="errorprecio_preinicio"></div>
 				<br />
 				<label>Cantidad Alimento Engorde</label>
 				<input type="number" id="cantidad" name="cantidad" class="form-control input-sm" placeholder="Cantidad alimento" required>
 				<div class="text-center" id="errorcantidad"></div>
 				<br />
-				<label><strong>Precio Alimento (por costal)</strong></label>
+				<label><strong>Precio Alimento Engorde (por costal)</strong></label>
 				<input type="number" id="precio_alimento" name="precio_alimento" class="form-control input-sm" placeholder="Precio alimento (por costal)" required>
-				<div class="text-center" id="errorprecio_alimento"></div>
+				<div class="text-center" step="any" id="errorprecio_alimento"></div>
 				<br />
 				<label>Color</label>
 				<input type="text" id="color" name="color" class="form-control input-sm" placeholder="Color" required>
@@ -109,7 +109,7 @@
 				<input type="number" id="cantidad_pollou" name="cantidad_pollou" class="form-control input-sm" required="">
 				<br />
 				<label><strong>Precio Semilla (por unidad)</strong></label>
-				<input type="number" id="precio_pollou" name="precio_pollou" class="form-control input-sm" required>
+				<input type="number" step="any" id="precio_pollou" name="precio_pollou" class="form-control input-sm" required>
 				<br />
 				<label>Tipo Alimento</label>
 				<textarea id="tipo_alimentou" name="tipo_alimentou" rows="4" cols="34"></textarea>
@@ -118,19 +118,19 @@
 				<input type="number" id="alimento_iniciou" name="alimento_iniciou" class="form-control input-sm" placeholder="Alimento inicio " required>
 				<br />
 				<label>Precio Alimento Inicio (por costal)</label>
-				<input type="number" id="precio_iniciou" name="precio_iniciou" class="form-control input-sm" placeholder="Alimento Preinicio" required>
+				<input type="number" step="any" id="precio_iniciou" name="precio_iniciou" class="form-control input-sm" placeholder="Alimento Preinicio" required>
 				<br />
-				<label>Cantidad Alimento Crecimiento</label>
+				<label>Cantidad Alimento Preinicio</label>
 				<input type="number" id="alimento_preiniciou" name="alimento_preiniciou" class="form-control input-sm" placeholder="Alimento inicio " required>
 				<br />
-				<label>Precio Alimento Crecimiento (por costal)</label>
-				<input type="number" id="precio_preiniciou" name="precio_preiniciou" class="form-control input-sm" placeholder="Alimento Preinicio" required>
+				<label>Precio Alimento Preinicio (por costal)</label>
+				<input type="number" step="any" id="precio_preiniciou" name="precio_preiniciou" class="form-control input-sm" placeholder="Alimento Preinicio" required>
 				<br />
 				<label>Cantidad alimento Engorde</label>
 				<input type="number" id="cantidadu" name="cantidadu" class="form-control input-sm" required="">
 				<br />
-				<label><strong>Precio alimento (por costal)</strong></label>
-				<input type="number" id="precio_alimentou" name="precio_alimentou" class="form-control input-sm" required>
+				<label><strong>Precio alimento Engorde (por costal)</strong></label>
+				<input type="number" step="any" id="precio_alimentou" name="precio_alimentou" class="form-control input-sm" required>
 				<br />
 				<label>Color</label>
 				<input type="text" id="coloru" name="coloru" class="form-control input-sm" required="">

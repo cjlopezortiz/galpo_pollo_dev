@@ -24,7 +24,7 @@
 				<br />
 				<label><strong>Precio Semilla (por unidad)</strong></label>
 				<input type="number" id="precio_pollo" name="precio_pollo" class="form-control input-sm" placeholder="Precio semilla (por unidad)" required>
-				<div class="text-center" id="errorprecio_pollo2"></div>
+				<div class="text-center" step="any" id="errorprecio_pollo2"></div>
 				<br />
 				<label>Tipo Alimento</label>
 				<input type="text" id="tipo_alimento" name="tipo_alimento" class="form-control input-sm" placeholder="Tipo alimento " required>
@@ -35,24 +35,24 @@
 				<div class="text-center" id="erroralimento_inicio2"></div>
 				<br />
 				<label>Precio Alimento Inicio (por costal)</label>
-				<input type="number" id="precio_inicio" name="precio_inicio" class="form-control input-sm" placeholder="Alimento Preinicio" required>
+				<input type="number" step="any" id="precio_inicio" name="precio_inicio" class="form-control input-sm" placeholder="Alimento Preinicio" required>
 				<div class="text-center" id="errorprecio_inicio2"></div>
 				<br />
-				<label>Cantidad Alimento Crecimiento</label>
+				<label>Cantidad Alimento Preinicio</label>
 				<input type="number" id="alimento_preinicio" name="alimento_preinicio" class="form-control input-sm" placeholder="Alimento inicio " required>
 				<div class="text-center" id="erroralimento_preinicio2"></div>
 				<br />
-				<label>Precio Alimento Crecimiento (por costal) </label>
-				<input type="number" id="precio_preinicio" name="precio_preinicio" class="form-control input-sm" placeholder="Alimento Preinicio" required>
+				<label>Precio Alimento Preinicio (por costal) </label>
+				<input type="number" step="any" id="precio_preinicio" name="precio_preinicio" class="form-control input-sm" placeholder="Alimento Preinicio" required>
 				<div class="text-center" id="errorprecio_preinicio2"></div>
 				<br />
 				<label>Cantidad Alimento Engorde</label>
 				<input type="number" id="cantidad" name="cantidad" class="form-control input-sm" placeholder="Cantidad alimento" required>
 				<div class="text-center" id="errorcantidad2"></div>
 				<br />
-				<label><strong>Precio Alimento (por costal)</strong></label>
+				<label><strong>Precio Alimento Engorde (por costal)</strong></label>
 				<input type="number" id="precio_alimento" name="precio_alimento" class="form-control input-sm" placeholder="Precio alimento (por costal)" required>
-				<div class="text-center" id="errorprecio_alimento2"></div>
+				<div class="text-center" step="any" id="errorprecio_alimento2"></div>
 				<br />
 				<label>Color</label>
 				<input type="text" id="color" name="color" class="form-control input-sm" placeholder="Color" required>

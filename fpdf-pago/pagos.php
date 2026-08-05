@@ -25,6 +25,15 @@ $total_neto = $total_data['total_neto'] ?? 0;
 $precio_pollo_liqui = $total_data['precio_pollo'] ?? 0;
 $total_final = $total_neto * $precio_pollo_liqui;
 
+// Consulta de datos
+$reslikidacion = $obj->viewProcesosliki($codigoUnico);
+
+// Extraer los datos de la liquidación desde la consulta SQL
+$likiData           = (is_array($reslikidacion) && !empty($reslikidacion)) ? reset($reslikidacion) : [];
+$totalNetoLiki      = $likiData['suma_total_general'] ?? 0;
+$granTotalValorLiki = $likiData['gran_total_valor'] ?? 0;
+$totalkilosnetos    = $likiData['suma_total_bruto'] ?? 0;
+
 // ======================================================
 // 1. RECOLECCIÓN DE DATOS DE GASTOS Y CÁLCULO DEL TOTAL
 // ======================================================
@@ -52,7 +61,7 @@ $campos_gastos = [
     ['CANTIDAD POLLOS', 'cantidad_pollo_g1', 'precio_pollo_g1'],
     ['ALIMENTO ENGORDE', 'cantidad_g1', 'precio_alimento_g1'],
     ['ALIMENTO INICIO', 'alimento_inicio_g1', 'precio_inicio_g1'],
-    ['ALIMENTO CRECIMIENTO', 'alimento_preinicio_g1', 'precio_preinicio_g1'],
+    ['ALIMENTO PREINICIO', 'alimento_preinicio_g1', 'precio_preinicio_g1'],
     ['CLORO', 'cloro', 'precio_cloro'],
     ['VINAGRE', 'vinagre', 'precio_vinagre'],
     ['ÁCIDO ACÉTICO', 'hacido_hacetico', 'precio_hacido'],
@@ -63,7 +72,7 @@ $campos_gastos = [
     ['TAMO', 'tamo', 'precio_tamo'],
     ['CAL', 'cal', 'precio_cal'],
     ['ANTIBIÓTICO', 'antibiotico', 'precio_antibiotico'],
-    ['OTROS (ABC)', 'abc', 'precio_abc'],
+    ['OTROS (AFG)', 'abc', 'precio_abc'],
     ['BICARBONATO', 'vicarbonato', 'precio_vicarbonato'],
     ['MELASA', 'melasa', 'precio_melasa'],
     ['AGUA POTABLE', 'agua_potable', 'precio_agua'],
@@ -71,7 +80,9 @@ $campos_gastos = [
     ['ARRIENDO', 'arriendo', 'precio_arriendo'],
     ['YODO', 'yodo', 'precio_yodo'],
     ['GASTOS VARIOS', 'gastos_varios', 'precio_gastos_varios'],
-    ['POLLOS MUERTOS', 'fayido_g1', 'precio_pollo_g1']
+    //['POLLOS MUERTOS', 'fayido_g1', 'precio_pollo_g1'],
+    ['Gas', 'gas', 'precio_gas'],
+    ['Alimento Itacol', 'alimento_itacol', 'precio_itacol']
 ];
 foreach ($campos_gastos as $campo) {
     $etiqueta = $campo[0];
@@ -237,44 +248,42 @@ $t_liquidacion->easyCell(utf8_decode('RESUMEN DE LIQUIDACIÓN COMERCIAL'), 'cols
 $t_liquidacion->printRow();
 
 
+$cantidad_kilos  = $total_neto;
+$precio_kilo     = $precio_pollo_liqui;
+$total_venta     = $total_final;
+$ganancia_final = $granTotalValorLiki - $precio_final;
+//$ganancia_final  = $total_venta - $precio_final;
+$sueldo_empleado = 0.30 * $ganancia_final;
 
-$cantidad_kilos = $total_neto;
-$precio_kilo    = $precio_pollo_liqui;
-$total_venta    = $total_final;
-$ganancia_final = $total_venta - $precio_final;
-$sueldo_empleado = 0.03  * $ganancia_final;
 
-// Filas de Datos de Venta
+// ==========================================================
+// FILAS DE DATOS DE VENTA
+// ==========================================================
 $t_liquidacion->easyCell(utf8_decode('VOLUMEN NETO COMERCIALIZADO (KILOGRAMOS)'), 'font-style:M; color:#334155; bgcolor:#F8FAFC');
-$t_liquidacion->easyCell(number_format($cantidad_kilos, 0) . ' Kg', 'align:C; font-style:B; color:#0F172A');
-$t_liquidacion->printRow();
-
-$t_liquidacion->easyCell(utf8_decode('VALOR DE LIQUIDACIÓN POR KILO'), 'font-style:M; color:#334155; bgcolor:#F8FAFC');
-$t_liquidacion->easyCell('$ ' . number_format($precio_kilo), 'align:C; font-style:B; color:#0F172A');
+// CORRECCIÓN AQUÍ: Se usa $totalNetoLiki directamente como número, no como array
+$t_liquidacion->easyCell(number_format($totalNetoLiki, 3, ',', '.') . ' Kg', 'align:C; font-style:B; color:#0F172A');
 $t_liquidacion->printRow();
 
 $t_liquidacion->easyCell(utf8_decode('INGRESO BRUTO TOTAL POR LIQUIDACIÓN'), 'font-style:M; bgcolor:#F0F8FF; color:#1E293B');
-$t_liquidacion->easyCell('$ ' . number_format($total_venta), 'align:C; font-style:B; bgcolor:#F0F8FF; color:#0F172A; paddingY:4');
+$t_liquidacion->easyCell('$ ' . number_format($granTotalValorLiki, 0, ',', '.'), 'align:C; font-style:B; bgcolor:#F0F8FF; color:#0F172A; paddingY:4');
 $t_liquidacion->printRow();
 
 $t_liquidacion->easyCell(utf8_decode('GANANCIA FINAL MENOS GASTOS'), 'font-style:M; bgcolor:#F0FFFF; color:#1E293B; paddingY:4');
-$t_liquidacion->easyCell('$ ' . number_format($ganancia_final), 'align:C; font-style:B; bgcolor:#F0FFFF; color:#0F172A; paddingY:4');
+$t_liquidacion->easyCell('$ ' . number_format($ganancia_final, 0, ',', '.'), 'align:C; font-style:B; bgcolor:#F0FFFF; color:#0F172A; paddingY:4');
 $t_liquidacion->printRow();
-
-
 
 $t_liquidacion->endTable(8);
 
 /* ==========================================================
-    BLOQUE DESTACADO: UTILIDAD NETO / GANANCIA FINAL
+    BLOQUE DESTACADO: SUELDO EMPLEADO / PAGO TOTAL
 ========================================================== */
 $estilo_color_ganancia = ($ganancia_final >= 0) ? 'color:#166534; bgcolor:#F5F5DC; border-color:#BBF7D0;' : 'color:#00FFFF; bgcolor:#00FFFF; border-color:#00FFFF;';
-$titulo_rentabilidad = ($ganancia_final >= 0) ? 'SUELDO EMPLEDO (3%)' : 'PAGO TOTAL';
+$titulo_rentabilidad   = ($ganancia_final >= 0) ? 'SUELDO EMPLEADO (30%)' : 'PAGO TOTAL NEGATIVO DE EMPLEADO';
 
 $t_ganancia = new easyTable($pdf, '%{100}', 'border:1; ' . $estilo_color_ganancia . ' paddingY:4;');
 $t_ganancia->easyCell(utf8_decode($titulo_rentabilidad), 'align:C; font-style:B; font-size:10;');
 $t_ganancia->printRow();
-$t_ganancia->easyCell('$ ' . number_format($sueldo_empleado), 'align:C; font-style:B; font-size:15; paddingY:5');
+$t_ganancia->easyCell('$ ' . number_format($sueldo_empleado, 0, ',', '.'), 'align:C; font-style:B; font-size:15; paddingY:5');
 $t_ganancia->printRow();
 $t_ganancia->endTable(8);
 
@@ -282,12 +291,12 @@ $t_ganancia->endTable(8);
     BLOQUE DESTACADO: UTILIDAD NETO / GANANCIA FINAL
 ========================================================== */
 $estilo_color_ganancia = ($ganancia_final >= 0) ? 'color:#166534; bgcolor:#F0FDF4; border-color:#BBF7D0;' : 'color:#991B1B; bgcolor:#FEF2F2; border-color:#FCA5A5;';
-$titulo_rentabilidad = ($ganancia_final >= 0) ? 'RENTABILIDAD NETA POSITIVA' : 'BALANCE OPERATIVO NEGATIVO';
+$titulo_rentabilidad   = ($ganancia_final >= 0) ? 'RENTABILIDAD NETA POSITIVA' : 'BALANCE OPERATIVO NEGATIVO';
 
 $t_ganancia = new easyTable($pdf, '%{100}', 'border:1; ' . $estilo_color_ganancia . ' paddingY:4;');
 $t_ganancia->easyCell(utf8_decode($titulo_rentabilidad), 'align:C; font-style:B; font-size:10;');
 $t_ganancia->printRow();
-$t_ganancia->easyCell('$ ' . number_format($ganancia_final - $ganancia_final * 0.03, 0, ',', '.'), 'align:C; font-style:B; font-size:15; paddingY:5');
+$t_ganancia->easyCell('$ ' . number_format($ganancia_final - ($ganancia_final * 0.30), 0, ',', '.'), 'align:C; font-style:B; font-size:15; paddingY:5');
 $t_ganancia->printRow();
 $t_ganancia->endTable(8);
 

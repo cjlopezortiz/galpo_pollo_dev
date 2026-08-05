@@ -57,6 +57,7 @@ if ($rol_user != 1 && $rol_user != 2) {
 <div class="col-sm-12">
     <!-- Inicio titulos de la pagina-->
     <div class="page-head">
+        <link rel="stylesheet" href=".././css/stylos.css">
         <div class="page-head-modern">
             <!-- BEGIN PAGE TITLE -->
             <div class="page-title">
@@ -78,10 +79,10 @@ if ($rol_user != 1 && $rol_user != 2) {
         <!-- BREADCRUMB 2 -->
         <ul class="breadcrumb breadcrumb-modern">
             <li>
-                <a href="almacen.php">Almacén</a>
+                <a target="_blank" href="almacen.php">Almacén</a>
             </li>
             <li>
-                <a href="control_alimento.php">Control de Alimentos</a>
+                <a target="_blank" href="control_alimento.php">Control de Alimentos</a>
             </li>
         </ul>
         <!-- END PAGE BREADCRUMB -->
@@ -251,8 +252,9 @@ if ($rol_user != 1 && $rol_user != 2) {
                                                             <b>Hora Fin:</b> <?php echo date_format($fin_g1, 'H:i:s'); ?>
                                                         </div>
                                                     <?php } //else {
-                                                        //echo "Sin fechas registradas";
-                                                    //} ?>
+                                                    //echo "Sin fechas registradas";
+                                                    //} 
+                                                    ?>
                                                 </div>
                                             <?php } ?>
 
@@ -288,8 +290,9 @@ if ($rol_user != 1 && $rol_user != 2) {
                                                             <b>Hora Fin:</b> <?php echo date_format($fin_g2, 'H:i:s'); ?>
                                                         </div>
                                                     <?php } //else {
-                                                        //echo "Sin fechas registradas";
-                                                   // } ?>
+                                                    //echo "Sin fechas registradas";
+                                                    // } 
+                                                    ?>
                                                 </div>
                                             <?php } ?>
 

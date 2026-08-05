@@ -3,7 +3,7 @@
 	<div class="modal-dialog modal-sm" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				  <link rel="stylesheet" href=".././css/stylos.css">
+				<link rel="stylesheet" href=".././css/stylos.css">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -183,12 +183,12 @@
 
 					<!-- ABC -->
 					<div class="col-md-6">
-						<label>Cantidad ABC</label>
+						<label>Cantidad AFG</label>
 						<input type="number" id="abc" name="abc" class="form-control input-sm" required>
 					</div>
 
 					<div class="col-md-6">
-						<label>Precio ABC</label>
+						<label>Precio AFG</label>
 						<input type="number" id="precio_abc" name="precio_abc" class="form-control input-sm" required>
 					</div>
 
@@ -266,7 +266,26 @@
 						<label>Precio Gast varios</label>
 						<input type="number" id="precio_gastos_varios" name="precio_gastos_varios" rows="4" class="form-control"></textarea>
 					</div>
+					<!-- GAS -->
+					<div class="col-md-6">
+						<label>Gas</label>
+						<input type="number" id="gas" name="gas" class="form-control input-sm" required>
+					</div>
 
+					<div class="col-md-6">
+						<label>Precio Gas</label>
+						<input type="number" id="precio_gas" name="precio_gas" class="form-control input-sm" required>
+					</div>
+					<!-- Alimento Itacol -->
+					<div class="col-md-6">
+						<label>Alimento Itacol</label>
+						<input type="number" id="alimento_itacol" name="alimento_itacol"  class="form-control input-sm" required>
+					</div>
+
+					<div class="col-md-6">
+						<label>Precio Itacol</label>
+						<input type="number" id="precio_itacol" name="precio_itacol" class="form-control input-sm" required>
+					</div>
 					<div class="w-100"><br></div>
 					<!-- OBSERVACIONES -->
 					<!-- <div class="col-md-12">
@@ -470,12 +489,12 @@
 
 							<!-- ABC -->
 							<div class="col-md-6">
-								<label>Cantidad ABC</label>
+								<label>Cantidad AFG</label>
 								<input type="number" id="abcu" name="abcu" class="form-control input-sm" required>
 							</div>
 
 							<div class="col-md-6">
-								<label>Precio ABC</label>
+								<label>Precio AFG</label>
 								<input type="number" id="precio_abcu" name="precio_abcu" class="form-control input-sm" required>
 							</div>
 
@@ -573,6 +592,27 @@
 									$('[data-toggle="tooltip"]').tooltip();
 								});
 							</script>
+							<!-- GAS -->
+							<div class="col-md-6">
+								<label>Gas</label>
+								<input type="number" id="gasu" name="gasu" class="form-control input-sm" required>
+							</div>
+
+							<div class="col-md-6">
+								<label>Precio Gas</label>
+								<input type="number" id="precio_gasu" name="precio_gasu" class="form-control input-sm" required>
+							</div>
+							<!-- Alimento Itacol -->
+							<div class="col-md-6">
+								<label>Alimento Itacol</label>
+								<input type="number" id="alimento_itacolu" name="alimento_itacolu" class="form-control input-sm" required>
+							</div>
+
+							<div class="col-md-6">
+								<label>Precio Itacol</label>
+								<input type="number" id="precio_itacolu" name="precio_itacolu" class="form-control input-sm" required>
+							</div>
+							<div class="w-100"><br></div>
 							<!-- OBSERVACIONES -->
 							<div class="col-md-12">
 								<label>Observación cosecha</label>

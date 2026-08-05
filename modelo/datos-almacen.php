@@ -134,6 +134,10 @@ class misAlmacenes
                         a.precio_arriendo,
                         a.gastos_varios,
                         a.precio_gastos_varios,
+                        a.gas,
+                        a.precio_gas,
+                        a.alimento_itacol,
+                        a.precio_itacol,
                         
                           g.codigo_orions AS codigo_orions_g1,
                           g.tipo_alimento AS tipo_alimento_g1,
