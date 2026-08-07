@@ -4,7 +4,8 @@ require_once 'conexion.php';
 require_once 'datos-almacen.php';
 $conexion = new Conexion();
 $mis_almacenes = new misAlmacenes();
-
+session_start();
+$usuario_codigo = $_SESSION['codigo'];
 if (isset($_GET['accion'])) {
 	$accion = $_GET['accion'];
 	if ($accion == 'registrar') {
@@ -65,7 +66,7 @@ if (isset($_GET['accion'])) {
                     abc, precio_abc, vicarbonato, precio_vicarbonato,
                     melasa, precio_melasa, agua_potable, precio_agua,
 					luz, precio_luz, arriendo, precio_arriendo, gastos_varios, 
-					precio_gastos_varios, gas, precio_gas, alimento_itacol, precio_itacol
+					precio_gastos_varios, gas, precio_gas, alimento_itacol, precio_itacol,usuario_codigo
                 ) 
 				VALUES (
 						?, ?, ?, ?, 
@@ -78,7 +79,7 @@ if (isset($_GET['accion'])) {
 						?, ?, ?, ?, 
 						?, ?, ?, ?, 
 						?, ?, ?, ?, 
-						?, ?, ?, ?,?
+						?, ?, ?, ?,?,?
                         )";
 		$reg = $conexion->prepare($sql);
 		$reg->bindParam(1,  $maxAlmacenes);
@@ -139,6 +140,7 @@ if (isset($_GET['accion'])) {
 		$reg->bindParam(44, $alimento_itacol);
 		$reg->bindParam(45, $precio_itacol);
 
+		$reg->bindParam(46, $usuario_codigo);
 
 		if ($reg->execute() == TRUE) {
 			echo 1;

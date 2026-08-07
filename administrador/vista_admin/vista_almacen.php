@@ -51,7 +51,7 @@ if ($rol_user != 1 && $rol_user != 2) {
     $codigoUnico = $res[0]['codigo_orions_almacen'] ?? null;
     $total = $obj->totalNetoPorCodigo($codigoUnico);
     $codigo = $res[0]['codigo_orions_almacen'] ?? null;
-    $res = $mis_almacen->viewAlmacenes($codigo);
+    $res = $mis_almacen->viewAlmacenes($codigo, $usuario_codigo  = null);
 
 
     //   var_dump($total);

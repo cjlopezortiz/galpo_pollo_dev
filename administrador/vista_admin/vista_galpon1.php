@@ -3,6 +3,7 @@ require_once '../../modelo/val-admin.php';
 include '../../modelo/datos-galpon1.php';
 include '../../modelo/datos-almacen.php';
 include_once '../../modelo/datos-usuarios.php';
+//session_start();
 $mis_usuarios = new misUsuarios();
 $res = $mis_usuarios->viewUsuarios();
 if (is_array($res)) {
@@ -42,19 +43,20 @@ if ($rol_user != 1 && $rol_user != 2) {
     $mis_galpon1 = new misGalpon1();
 
     // Coonsulta todos al almacen
-    // $res1 = $mis_galpon1->viewGalpones1();
-    // $res = $mis_almacen->viewAlmacenes();
+$user_codigo = $_SESSION['codigo'];
+   // Consulta todos los documentos
+if (isset($_GET['codigo_orions']) && !empty($_GET['codigo_orions'])) {
 
-    // Coonsulta todos los documentos
-    if (isset($_GET['codigo_orions']) && !empty($_GET['codigo_orions'])) {
-        $codigo_orions = $_GET['codigo_orions'];
-        // Filtrar solo ese código
-        $res = $mis_galpon1->viewGalpones1($codigo_orions);
-        //exit;   // <- quítalo después de probar
-    } else {
-        // Si no hay código, mostrar todo
-        $res = $mis_galpon1->viewGalpones1();
-    }
+    $codigo_orions = $_GET['codigo_orions'];
+
+    // Filtrar por código y por usuario
+    $res = $mis_galpon1->viewGalpones1($codigo_orions, $user_codigo);
+
+} else {
+
+    // Mostrar únicamente las cosechas del usuario logueado
+    $res = $mis_galpon1->viewGalpones1(null, $user_codigo);
+}
 }
 ?>
 <div class="col-sm-12">

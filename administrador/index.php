@@ -39,6 +39,7 @@ if (is_array($res)) {
 }
 $rol_user = $rol_id;
 $user_nombre = $_SESSION['nombre'];
+
 ?>
 <?php
 if ($rol_user == 1 || $rol_user == 2) {
@@ -49,10 +50,10 @@ if ($rol_user == 1 || $rol_user == 2) {
     } else {
         $pagina = "";
     }
-    $cant_usuarios = $mis_usuarios->countUsuarios();
+    $cant_usuarios = $mis_usuarios->countUsuarios($_SESSION['codigo']);
     $cant_almacen = $mis_almacen->countAlmacen();
-    $cant_galpon2 = $mis_galpon2->countGalpon2();
-    $cant_galpon1 = $mis_galpon1->countGalpon1();
+    $cant_galpon2 = $mis_galpon2->countGalpon2($_SESSION['codigo']);
+    $cant_galpon1 = $mis_galpon1->countGalpon1($_SESSION['codigo']);
     $cant_documento = $mis_documentos->countDocumento();
     $rol = $mis_roles->viewRoles();
 }
@@ -156,10 +157,15 @@ if ($rol_user == 1) {
             </style>
 
             <div class="row">
-
-                <div class="bg-white p-3 border rounded text-center mb-4">
-                    <h1 class="m-0 text-dark" style="font-weight: bold;">LÍNEA DE: GALPÓNES AVÍCOLA MARICELA LÓPEZ</h1>
-                </div>
+                <?php if (isset($_SESSION['codigo']) && $_SESSION['codigo'] == 1): ?>
+                    <div class="bg-white p-3 border rounded text-center mb-4">
+                        <h1 class="m-0 text-dark" style="font-weight: bold;">LÍNEA DE: GALPÓNES AVÍCOLA CARLOS LÓPEZ</h1>
+                    </div>
+                <?php else: ?>
+                    <div class="bg-white p-3 border rounded text-center mb-4">
+                        <h1 class="m-0 text-dark" style="font-weight: bold;">LÍNEA DE: GALPÓNES AVÍCOLA MARICELA LÓPEZ</h1>
+                    </div>
+                <?php endif; ?>
                 <br><br>
 
                 <!-- GALPON 1 -->

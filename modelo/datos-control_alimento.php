@@ -3,36 +3,35 @@
 class misAlimentos
 {
     // Retornar todo el control de alimentos
-    function viewControlAlimentos()
+    function viewControlAlimentos($usuario_codigo)
     {
         require_once 'conexion.php';
+
         $conexion = new Conexion();
-        $arreglo = array();
-        $consulta = "SELECT codigo,
-                            codigo_orions,
-                            fecha_control_aliment,
-                            entradas,
-                            salidas,
-                            consumo_tabla,
-                            consumo_real,
-                            acumulado_tabla,
-                            acumulado_real,
-                            saldo_real,
-                            programacion,
-                            observaciones
-                    FROM control_alimento
-                    ORDER BY fecha_control_aliment ASC";
+
+        $consulta = "SELECT
+                    codigo,
+                    codigo_orions,
+                    fecha_control_aliment,
+                    entradas,
+                    salidas,
+                    consumo_tabla,
+                    consumo_real,
+                    acumulado_tabla,
+                    acumulado_real,
+                    saldo_real,
+                    programacion,
+                    observaciones
+                FROM control_alimento
+                WHERE usuario_codigo = :usuario_codigo
+                ORDER BY fecha_control_aliment ASC";
+
         $modules = $conexion->prepare($consulta);
+        $modules->bindParam(':usuario_codigo', $usuario_codigo);
+
         $modules->execute();
-        $total = $modules->rowCount();
-        if ($total > 0) {
-            $i = 0;
-            while ($data = $modules->fetch(PDO::FETCH_ASSOC)) {
-                $arreglo[$i] = $data;
-                $i++;
-            }
-        }
-        return $arreglo;
+
+        return $modules->fetchAll(PDO::FETCH_ASSOC);
     }
     function viewControlAlimento()
     {
@@ -52,8 +51,11 @@ class misAlimentos
                             programacion,
                             observaciones
                     FROM control_alimento
-                     WHERE codigo = :codigo";
+                      WHERE usuario_codigo = :usuario_codigo
+                     ORDER BY codigo ASC";
         $modules = $conexion->prepare($consulta);
+        $modules->bindParam(':usuario_codigo', $usuario_codigo);
+        $modules->bindParam(':codigo_orions', $codigo_orions);
         $modules->execute();
         $total = $modules->rowCount();
         if ($total > 0) {

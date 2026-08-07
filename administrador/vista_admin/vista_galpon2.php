@@ -40,11 +40,12 @@ if ($rol_user != 1 && $rol_user != 2) {
     $mis_galpon2 = new misGalpon2();
     $mis_almacen = new misAlmacenes();
     // Coonsulta todos los documentos
+    $user_codigo = $_SESSION['codigo'];
     if (isset($_GET['codigo_orions']) && !empty($_GET['codigo_orions'])) {
         $codigo_orions = $_GET['codigo_orions'];
-        $res = $mis_galpon2->viewGalpones2($codigo_orions);
+        $res = $mis_galpon2->viewGalpones2($codigo_orions, $user_codigo);
     } else {
-        $res = $mis_galpon2->viewGalpones2();
+        $res = $mis_galpon2->viewGalpones2(null, $user_codigo);
     }
 }
 ?>

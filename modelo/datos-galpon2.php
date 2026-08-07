@@ -86,48 +86,75 @@ class misGalpon2
         return $arreglo;
     }
 
-    function viewGalpones2($codigo_orions = null)
+    function viewGalpones2($codigo_orions = null, $usuario_codigo = null)
     {
         require_once 'conexion.php';
         $conexion = new Conexion();
 
-        if ($codigo_orions != null) {
+        if ($codigo_orions !== null) {
+
             $consulta = "SELECT
-                            codigo,
-                            codigo_orions,
-                            cantidad_pollo,
-                            precio_pollo,
-                            color,
-                            fayido,
-                            tipo_alimento,
-                            cantidad,
-                            precio_alimento,
-                            fecha_inicio,
-                            fecha_fin,
-                            descripcion,
-                            alimento_inicio,
-                            precio_inicio,
-                            alimento_preinicio,
-                            precio_preinicio,
-                            edad,
-                            salidas,
-                            peso_salidas,
-                            mortanda_dia
+                        codigo,
+                        codigo_orions,
+                        cantidad_pollo,
+                        precio_pollo,
+                        color,
+                        fayido,
+                        tipo_alimento,
+                        cantidad,
+                        precio_alimento,
+                        fecha_inicio,
+                        fecha_fin,
+                        descripcion,
+                        alimento_inicio,
+                        precio_inicio,
+                        alimento_preinicio,
+                        precio_preinicio,
+                        edad,
+                        salidas,
+                        peso_salidas,
+                        mortanda_dia
                      FROM galpon_2
                      WHERE codigo_orions = :codigo_orions
+                     AND usuario_codigo = :usuario_codigo
                      ORDER BY codigo ASC";
 
             $modules = $conexion->prepare($consulta);
             $modules->bindParam(':codigo_orions', $codigo_orions);
+            $modules->bindParam(':usuario_codigo', $usuario_codigo);
         } else {
-            $consulta = "SELECT * FROM galpon_2 ORDER BY codigo ASC";
+
+            $consulta = "SELECT
+                        codigo,
+                        codigo_orions,
+                        cantidad_pollo,
+                        precio_pollo,
+                        color,
+                        fayido,
+                        tipo_alimento,
+                        cantidad,
+                        precio_alimento,
+                        fecha_inicio,
+                        fecha_fin,
+                        descripcion,
+                        alimento_inicio,
+                        precio_inicio,
+                        alimento_preinicio,
+                        precio_preinicio,
+                        edad,
+                        salidas,
+                        peso_salidas,
+                        mortanda_dia
+                     FROM galpon_2
+                     WHERE usuario_codigo = :usuario_codigo
+                     ORDER BY codigo ASC";
+
             $modules = $conexion->prepare($consulta);
+            $modules->bindParam(':usuario_codigo', $usuario_codigo);
         }
 
         $modules->execute();
-        $arreglo = $modules->fetchAll(PDO::FETCH_ASSOC);
-
-        return $arreglo;
+        return $modules->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
@@ -148,18 +175,36 @@ class misGalpon2
         return $total;
     }
 
-    function countGalpon2()
+    // function countGalpon2()
+    // {
+    //     require_once 'conexion.php';
+    //     $conexion = new Conexion();
+    //     $consulta = "SELECT count(codigo_orions) as cant
+    //                  FROM galpon_2";
+    //     $modules = $conexion->prepare($consulta);
+
+    //     $modules->execute();
+    //     $data = $modules->fetch(PDO::FETCH_ASSOC);
+    //     $total = 0;
+    //     $total = $data['cant'];
+    //     return $total;
+    // }
+     function countGalpon2($usuario_codigo = null)
     {
         require_once 'conexion.php';
         $conexion = new Conexion();
-        $consulta = "SELECT count(codigo_orions) as cant
-                     FROM galpon_2";
+
+        $consulta = "SELECT COUNT(codigo) AS cant
+                 FROM galpon_2
+                 WHERE usuario_codigo = :usuario_codigo";
+
         $modules = $conexion->prepare($consulta);
+        $modules->bindParam(':usuario_codigo', $usuario_codigo);
         $modules->execute();
+
         $data = $modules->fetch(PDO::FETCH_ASSOC);
-        $total = 0;
-        $total = $data['cant'];
-        return $total;
+
+        return $data['cant'];
     }
     function countGalponir2()
     {

@@ -1,58 +1,42 @@
 <?php
+// if (session_status() === PHP_SESSION_NONE) {
+//     session_start();
+// }
+
 require_once '../../modelo/val-admin.php';
 require_once '../../modelo/datos-usuarios.php';
 require_once '../../modelo/datos-rol.php';
-include_once '../../modelo/datos-usuarios.php';
+
 $mis_usuarios = new misUsuarios();
-$res = $mis_usuarios->viewUsuarios();
-if (is_array($res)) {
-    // Si es un arreglo con la clave rol_id
-    if (isset($res['rol_id'])) {
-        $rol_id = $res['rol_id'];
-    }
-    // Si es un arreglo de registros
-    elseif (isset($res[0]['rol_id'])) {
-        $rol_id = $res[0]['rol_id'];
-    } else {
-        $rol_id = null;
-    }
-    //var_dump($rol_id);
-} elseif ($res instanceof mysqli_result) {
-    $fila = mysqli_fetch_assoc($res);
-    if ($fila && isset($fila['rol_id'])) {
-        $rol_id = $fila['rol_id'];
-        // var_dump($rol_id);
-    } else {
-        echo "No se encontró el campo rol_id";
-    }
+$mis_roles = new misRoles();
+
+// Identificar al usuario logueado desde la sesión
+$id_usuario_sesion = isset($_SESSION['codigo']) ? $_SESSION['codigo'] : (isset($_SESSION['usuario_codigo']) ? $_SESSION['usuario_codigo'] : null);
+
+// Si es administrador (rol_id == 1), ve todos; si no, ve únicamente sus datos
+if (isset($_SESSION['rol_id']) && $_SESSION['rol_id'] == 1) {
+    $res = $mis_usuarios->viewUsuarioSesion($id_usuario_sesion);
 } else {
-    echo "viewUsuarios() no está retornando datos válidos.";
+    $res = $mis_usuarios->viewUsuarioSesion($id_usuario_sesion);
 }
-$rol_user = $rol_id;
-////require_once '../../modelo/datos-centroFormacion.php';
-////include_once '../../modelo/datos-regional.php';
+
+$rol_user = isset($_SESSION['rol_id']) ? $_SESSION['rol_id'] : null;
+
 /// Validamos el usuario
 if ($rol_user != 1 && $rol_user != 2) {
     echo '<script language = javascript>
     alert ("Debe seleccionar un centro de formación.") 
     self.location="../index.php"
     </script>';
-} else {
-    // Instancias
-    $mis_usuarios = new misUsuarios();
-    $mis_roles = new misRoles();
-    // Coonsulta todos los documentos
-    $res = $mis_usuarios->viewUsuarios();
 }
 ?>
 <div class="col-sm-12">
-    <!-- Inicio titulos de la pagina-->
+    <!-- Inicio títulos de la página-->
     <div class="page-head">
         <div class="page-head-modern">
-
             <!-- BEGIN PAGE TITLE -->
             <div class="page-title">
-                <h1>USUARIOS
+                <h1>MIS DATOS / USUARIOS
                     <small></small>
                 </h1>
             </div>
@@ -66,12 +50,10 @@ if ($rol_user != 1 && $rol_user != 2) {
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span class="active">Lista de usuarios</span>
+                <span class="active">Mis registros</span>
             </li>
         </ul>
         <!-- END PAGE BREADCRUMB -->
-        <!-- BEGIN PAGE BASE CONTENT -->
-        <!-- BEGIN DASHBOARD STATS 1-->
         <br />
         <!-- INICIO DEL CONTENIDO -->
         <div class="table-responsive">
@@ -87,10 +69,10 @@ if ($rol_user != 1 && $rol_user != 2) {
                         <div class="text-center">Nombre</div>
                     </th>
                     <th>
-                        <div class="text-center">Telefono</div>
+                        <div class="text-center">Teléfono</div>
                     </th>
                     <th>
-                        <div class="text-center">Correo<br />electronico</div>
+                        <div class="text-center">Correo<br />electrónico</div>
                     </th>
                     <th>
                         <div class="text-center">Estado</div>
@@ -101,75 +83,60 @@ if ($rol_user != 1 && $rol_user != 2) {
                 </thead>
                 <tbody>
                     <?php
-                    $res = $mis_usuarios->viewUsuarios();
-                    foreach ($res as $data) {
-                        // Rol del usuario
-                        $cant_usuarios = 1;
-                        // $rol = $mis_roles->viewRol($data['rol_id']);
-                        // Datos
-                        if ($data['estado'] == 1) {
-                            $estado = "Activo";
-                        } else {
-                            $estado = "Inactivo";
-                        }
-                        $datos = $data['codigo'] . "||" .
-                            $data['tipo_documento'] . "||" .
-                            $data['numero_documento'] . "||" .
-                            $data['nombre'] . "||" .
-                            $data['usuario'] . "||" .
-                            $data['contrasena'] . "||" .
-                            $data['email'] . "||" .
-                            $data['telefono'] . "||" .
-                            $data['estado'] . "||" .
-                            $data['rol_id'];
-                    ?>
-                        <tr>
-                            <td>
-                                <div class="text-center">
-                                    <?php echo $data['codigo']; ?></div>
-        </div>
-        </td>
-        <td>
-            <div class="text-center">
-                <?php echo $data['numero_documento']; ?>
-            </div>
-        </td>
-        <td>
-            <div class="text-center">
-                <?php echo $data['nombre']; ?>
-            </div>
-        </td>
-        <td>
-            <div class="text-center">
-                <?php echo $data['telefono']; ?>
-            </div>
-        </td>
-        <td>
-            <div class="text-center">
-                <?php echo $data['email']; ?>
-            </div>
-        </td>
+                    if (!empty($res)) {
+                        foreach ($res as $data) {
+                            $estado = ($data['estado'] == 1) ? "Activo" : "Inactivo";
 
-        <td class="text-center">
-            <?php echo $estado; ?>
-        </td>
-        <td>
-            <div class="text-center">
-                <button class="btn btn-primary glyphicon glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modalEdicionUsuario" onclick="agregarformUsuario('<?php echo  $datos ?>')"></button>
-            </div>
-        </td>
-        </tr>
-    <?php
+                            $datos = $data['codigo'] . "||" .
+                                $data['tipo_documento'] . "||" .
+                                $data['numero_documento'] . "||" .
+                                $data['nombre'] . "||" .
+                                $data['usuario'] . "||" .
+                                $data['contrasena'] . "||" .
+                                $data['email'] . "||" .
+                                $data['telefono'] . "||" .
+                                $data['estado'] . "||" .
+                                $data['rol_id'];
+                    ?>
+                            <tr>
+                                <td>
+                                    <div class="text-center"><?php echo $data['codigo']; ?></div>
+                                </td>
+                                <td>
+                                    <div class="text-center"><?php echo $data['numero_documento']; ?></div>
+                                </td>
+                                <td>
+                                    <div class="text-center"><?php echo $data['nombre']; ?></div>
+                                </td>
+                                <td>
+                                    <div class="text-center"><?php echo $data['telefono']; ?></div>
+                                </td>
+                                <td>
+                                    <div class="text-center"><?php echo $data['email']; ?></div>
+                                </td>
+                                <td class="text-center">
+                                    <?php echo $estado; ?>
+                                </td>
+                                <td>
+                                    <div class="text-center">
+                                        <button class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modalEdicionUsuario" onclick="agregarformUsuario('<?php echo $datos; ?>')"></button>
+                                    </div>
+                                </td>
+                            </tr>
+                    <?php
+                        }
                     }
-    ?>
-    </tbody>
-    </table>
+                    ?>
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <?php if (isset($_SESSION['rol_id']) && $_SESSION['rol_id'] == 1): ?>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalNuevoUsuario">Crear usuario</button>
+        <?php endif; ?>
+        <br />
+        <br />
     </div>
-    <br />
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalNuevoUsuario">Crear usuario</button>
-    <br />
-    <br />
-</div>
 </div>
 <script>
     $(document).ready(function() {

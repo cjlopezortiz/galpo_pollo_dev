@@ -3,7 +3,8 @@ date_default_timezone_set("America/Bogota");
 require_once 'conexion.php';
 
 $conexion = new Conexion();
-
+session_start();
+$usuario_codigo = $_SESSION['codigo'];
 if (isset($_GET['accion'])) {
     $accion = $_GET['accion'];
 
@@ -35,7 +36,8 @@ if (isset($_GET['accion'])) {
                         vencimiento, 
                         administracion, 
                         animales, 
-                        galpon_tratado
+                        galpon_tratado,
+                        usuario_codigo
                     ) VALUES (
                         :codigo_orions, 
                         :fecha, 
@@ -48,7 +50,8 @@ if (isset($_GET['accion'])) {
                         :vencimiento, 
                         :administracion, 
                         :animales, 
-                        :galpon_tratado
+                        :galpon_tratado,
+                        usuario_codigo
                     )";
 
             $reg = $conexion->prepare($sql);
@@ -64,6 +67,7 @@ if (isset($_GET['accion'])) {
             $reg->bindParam(':administracion', $administracion);
             $reg->bindParam(':animales', $animales);
             $reg->bindParam(':galpon_tratado', $galpon_tratado);
+            $reg->bindParam(':usuario_codigo', $usuario_codigo);
 
             if ($reg->execute()) {
                 echo 1;

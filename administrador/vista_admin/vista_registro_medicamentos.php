@@ -139,7 +139,8 @@ if ($rol_user != 1 && $rol_user != 2) {
                 </thead>
                 <tbody>
                     <?php
-                    $res_control_regist_medic = $mis_medicamentos->viewMedicamentos();
+                    $usuario_codigo = $_SESSION['codigo'];
+                    $res_control_regist_medic = $mis_medicamentos->viewMedicamentos($usuario_codigo);
                     // Consultas generales necesarias para las búsquedas internas
                     $res2 = $mis_galpon2->viewGalpones2();
                     $res1 = $mis_galpon1->viewGalpones1();

@@ -4,6 +4,8 @@ require_once 'conexion.php';
 require_once 'datos-galpon2.php';
 $conexion = new Conexion();
 $mis_galpon2 = new misGalpon2();
+session_start();
+$usuario_codigo = $_SESSION['codigo'];
 if (isset($_GET['accion'])) {
 	$accion = $_GET['accion'];
 	if ($accion == 'registrar') {
@@ -24,8 +26,8 @@ if (isset($_GET['accion'])) {
 		$precio_inicio = $_POST['precio_inicio'];
 		$alimento_preinicio = $_POST['alimento_preinicio'];
 		$precio_preinicio = $_POST['precio_preinicio'];
-		$sql = "INSERT INTO galpon_2 (codigo, codigo_orions, cantidad_pollo, precio_pollo, color, fayido, tipo_alimento, cantidad, precio_alimento, fecha_inicio, fecha_fin, descripcion, alimento_inicio, precio_inicio, alimento_preinicio, precio_preinicio) 
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		$sql = "INSERT INTO galpon_2 (codigo, codigo_orions, cantidad_pollo, precio_pollo, color, fayido, tipo_alimento, cantidad, precio_alimento, fecha_inicio, fecha_fin, descripcion, alimento_inicio, precio_inicio, alimento_preinicio, precio_preinicio, usuario_codigo) 
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		$reg = $conexion->prepare($sql);
 		$reg->bindParam(1, $maxGalpon2);
 		$reg->bindParam(2, $codigo_orions);
@@ -43,6 +45,7 @@ if (isset($_GET['accion'])) {
 		$reg->bindParam(14, $precio_inicio);
 		$reg->bindParam(15, $alimento_preinicio);
 		$reg->bindParam(16, $precio_preinicio);
+		$reg->bindParam(17, $usuario_codigo);
 
 
 		if ($reg->execute()) {
@@ -60,11 +63,12 @@ if (isset($_GET['accion'])) {
 			/* ===============================
         INSERT EN ALMACEN
      ================================ */
-			$sqlAlmacen = "INSERT INTO almacen (codigo, codigo_orions) VALUES (?, ?)";
+			$sqlAlmacen = "INSERT INTO almacen (codigo, codigo_orions, usuario_codigo) VALUES (?, ?, ?)";
 			$stmtAlmacen = $conexion->prepare($sqlAlmacen);
 
 			$stmtAlmacen->bindParam(1, $codigoAlmacen);
 			$stmtAlmacen->bindParam(2, $codigo_orions);
+			$stmtAlmacen->bindParam(3, $usuario_codigo);
 
 			if (!$stmtAlmacen->execute()) {
 				echo "ERROR ALMACEN: " . implode(" | ", $stmtAlmacen->errorInfo());
@@ -84,11 +88,12 @@ if (isset($_GET['accion'])) {
 			/* ===============================
         INSERT EN PESO_NETO_DETALLE
      ================================ */
-			$sqlDetalle = "INSERT INTO peso_neto_detalle (codigo, codigo_orions) VALUES (?, ?)";
+			$sqlDetalle = "INSERT INTO peso_neto_detalle (codigo, codigo_orions, usuario_codigo) VALUES (?, ?, ?)";
 			$stmtDetalle = $conexion->prepare($sqlDetalle);
 
 			$stmtDetalle->bindParam(1, $codigoDetalle);
 			$stmtDetalle->bindParam(2, $codigo_orions);
+			$stmtDetalle->bindParam(3, $usuario_codigo);
 
 			if (!$stmtDetalle->execute()) {
 				echo "ERROR DETALLE: " . implode(" | ", $stmtDetalle->errorInfo());
@@ -108,11 +113,12 @@ if (isset($_GET['accion'])) {
 			/* ===============================
         INSERT EN CONTROL_ALIMENTO
      ================================ */
-			$sqlAlimento = "INSERT INTO control_alimento (codigo, codigo_orions) VALUES (?, ?)";
+			$sqlAlimento = "INSERT INTO control_alimento (codigo, codigo_orions, usuario_codigo) VALUES (?, ?, ?)";
 			$stmtAlimento = $conexion->prepare($sqlAlimento);
 
 			$stmtAlimento->bindParam(1, $codigoAlimento);
 			$stmtAlimento->bindParam(2, $codigo_orions);
+			$stmtAlimento->bindParam(3, $usuario_codigo);
 
 			if (!$stmtAlimento->execute()) {
 				echo "ERROR CONTROL ALIMENTO: " . implode(" | ", $stmtAlimento->errorInfo());
@@ -131,11 +137,12 @@ if (isset($_GET['accion'])) {
 			/* ===============================
         INSERT REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS
      ================================ */
-			$sqlRegistroMedicamento = "INSERT INTO registro_medicamentos (codigo, codigo_orions) VALUES (?, ?)";
+			$sqlRegistroMedicamento = "INSERT INTO registro_medicamentos (codigo, codigo_orions, usuario_codigo) VALUES (?, ?, ?)";
 			$stmtRegistroMedicamento = $conexion->prepare($sqlRegistroMedicamento);
 
 			$stmtRegistroMedicamento->bindParam(1, $codigoRegistroMedicamento);
 			$stmtRegistroMedicamento->bindParam(2, $codigo_orions);
+			$stmtRegistroMedicamento->bindParam(3, $usuario_codigo);
 
 			if (!$stmtRegistroMedicamento->execute()) {
 				echo "ERROR REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS: " . implode(" | ", $stmtRegistroMedicamento->errorInfo());

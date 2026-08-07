@@ -47,7 +47,7 @@ $user_nombre = $_SESSION['nombre'];
     /* --- CONFIGURACIÓN ESTRUCTURAL FORZADA CON FLEXBOX --- */
     
     .navbar-modern {
-        background-color: #667aa8 !important; /* Fondo azul oscuro profundo */
+        background-color: #aabeec !important; /* Fondo azul oscuro profundo */
         padding: 0.6rem 1.5rem;
         border-bottom: 1px solid #303238;
         width: 100%;
@@ -136,7 +136,7 @@ $user_nombre = $_SESSION['nombre'];
 
     .active-modern, .nav-link-modern:hover {
         color: #f8fafc !important;
-        background-color: #f585ec !important;
+        background-color: #d88fd2 !important;
         border-radius: 6px;
     }
 
@@ -167,7 +167,7 @@ $user_nombre = $_SESSION['nombre'];
     /* Botón de Cerrar Sesión (A la extrema derecha fijo) */
     .btn-logout-modern {
         color: #f1f5f9 !important;
-        background-color: #f585ec !important; /* Rojo moderno plano */
+        background-color: #b47db0 !important; /* Rojo moderno plano */
         border-radius: 6px !important;
         font-weight: 600 !important;
         font-size: 0.9rem !important;
