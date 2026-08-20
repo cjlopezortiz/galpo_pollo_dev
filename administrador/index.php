@@ -100,10 +100,10 @@ if ($rol_user == 1) {
                 </a>
             </li>
         </ul>
-        <h4 class="text-right text-white mb-4" style="color: #ffffff;">
+        <h3 class="text-right text-white mb-4">
 
-            Bienvenido: <strong><?php echo $user_nombre; ?></strong>
-        </h4>
+             <strong>Bienvenido:  <?php echo $user_nombre; ?></strong>
+        </h3>
         <?php
         if ($rol_user == 1 || $rol_user == 2) {
         ?>
@@ -159,11 +159,11 @@ if ($rol_user == 1) {
             <div class="row">
                 <?php if (isset($_SESSION['codigo']) && $_SESSION['codigo'] == 1): ?>
                     <div class="bg-white p-3 border rounded text-center mb-4">
-                        <h1 class="m-0 text-dark" style="font-weight: bold;">LÍNEA DE: GALPÓNES AVÍCOLA CARLOS LÓPEZ</h1>
+                        <h1 class="m-0 text-dark" style="font-weight: bold;">LÍNEA DE: GALPÓNES AVÍCOLA</h1>
                     </div>
                 <?php else: ?>
                     <div class="bg-white p-3 border rounded text-center mb-4">
-                        <h1 class="m-0 text-dark" style="font-weight: bold;">LÍNEA DE: GALPÓNES AVÍCOLA MARICELA LÓPEZ</h1>
+                        <h1 class="m-0 text-dark" style="font-weight: bold;">LÍNEA DE: GALPÓNES AVÍCOLA</h1>
                     </div>
                 <?php endif; ?>
                 <br><br>

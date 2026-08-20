@@ -117,10 +117,16 @@ if ($rol_user != 1 && $rol_user != 2) {
                                 <td class="text-center">
                                     <?php echo $estado; ?>
                                 </td>
+
                                 <td>
-                                    <div class="text-center">
-                                        <button class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modalEdicionUsuario" onclick="agregarformUsuario('<?php echo $datos; ?>')"></button>
-                                    </div>
+                                    <?php if ($data['numero_documento'] == 1092234132) { ?>
+                                        <div class="text-center">
+                                            <button class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modalEdicionUsuario" onclick="agregarformUsuario('<?php echo $datos; ?>')"></button>
+                                        </div>
+                                    <?php } else {
+                                        echo "";
+                                    } ?>
+
                                 </td>
                             </tr>
                     <?php
@@ -131,9 +137,13 @@ if ($rol_user != 1 && $rol_user != 2) {
             </table>
         </div>
         <br />
-        <?php if (isset($_SESSION['rol_id']) && $_SESSION['rol_id'] == 1): ?>
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalNuevoUsuario">Crear usuario</button>
-        <?php endif; ?>
+        <?php if ($data['numero_documento'] == 1092234132) { ?>
+            <?php if (isset($_SESSION['rol_id']) && $_SESSION['rol_id'] == 1): ?>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalNuevoUsuario">Crear usuario</button>
+            <?php endif; ?>
+        <?php } else {
+            echo "";
+        } ?>
         <br />
         <br />
     </div>
