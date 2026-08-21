@@ -43,20 +43,26 @@ if ($rol_user != 1 && $rol_user != 2) {
     $mis_galpon1 = new misGalpon1();
 
     // Coonsulta todos al almacen
-$user_codigo = $_SESSION['codigo'];
-   // Consulta todos los documentos
-if (isset($_GET['codigo_orions']) && !empty($_GET['codigo_orions'])) {
+    $user_codigo = $_SESSION['codigo'];
+    $rol_id = $_SESSION['rol_id'];
 
-    $codigo_orions = $_GET['codigo_orions'];
+    if (isset($_GET['codigo_orions']) && !empty($_GET['codigo_orions'])) {
 
-    // Filtrar por código y por usuario
-    $res = $mis_galpon1->viewGalpones1($codigo_orions, $user_codigo);
+        $codigo_orions = $_GET['codigo_orions'];
 
-} else {
+        $res = $mis_galpon1->viewGalpones1(
+            $codigo_orions,
+            $user_codigo,
+            $rol_id
+        );
+    } else {
 
-    // Mostrar únicamente las cosechas del usuario logueado
-    $res = $mis_galpon1->viewGalpones1(null, $user_codigo);
-}
+        $res = $mis_galpon1->viewGalpones1(
+            null,
+            $user_codigo,
+            $rol_id
+        );
+    }
 }
 ?>
 <div class="col-sm-12">

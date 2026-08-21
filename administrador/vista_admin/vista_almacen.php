@@ -51,12 +51,10 @@ if ($rol_user != 1 && $rol_user != 2) {
     $codigoUnico = $res[0]['codigo_orions_almacen'] ?? null;
     $total = $obj->totalNetoPorCodigo($codigoUnico);
     $codigo = $res[0]['codigo_orions_almacen'] ?? null;
-    $res = $mis_almacen->viewAlmacenes($codigo, $usuario_codigo  = null);
+    $usuario_codigo = $_SESSION['codigo'];
+    $rol_id = $_SESSION['rol_id'];
 
-
-    //   var_dump($total);
-    //   die();
-
+    $res = $mis_almacen->viewAlmacenes($codigo, $usuario_codigo, $rol_id);
 }
 ?>
 
@@ -297,10 +295,10 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     VER TODOS LOS GASTOS
                                 </a>
                             </td>
-                    
-                           
+
+
                             <?php
-            
+
                             ?>
                             <td style="cursor:pointer;" title="VER EL REPORTE DE LA COSECHA"
                                 onclick="window.open('../fpdf-pago/pagos.php?codigo_orions_almacen=<?php echo $data['codigo_orions_almacen']; ?>', '_blank');">

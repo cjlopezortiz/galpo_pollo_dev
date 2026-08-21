@@ -3,31 +3,63 @@
 class misAlimentos
 {
     // Retornar todo el control de alimentos
-    function viewControlAlimentos($usuario_codigo)
+    // Retornar control de alimentos según el rol
+    function viewControlAlimentos($usuario_codigo, $rol_id)
     {
         require_once 'conexion.php';
 
         $conexion = new Conexion();
 
-        $consulta = "SELECT
-                    codigo,
-                    codigo_orions,
-                    fecha_control_aliment,
-                    entradas,
-                    salidas,
-                    consumo_tabla,
-                    consumo_real,
-                    acumulado_tabla,
-                    acumulado_real,
-                    saldo_real,
-                    programacion,
-                    observaciones
-                FROM control_alimento
-                WHERE usuario_codigo = :usuario_codigo
-                ORDER BY fecha_control_aliment ASC";
+        if ($rol_id == 1) {
 
-        $modules = $conexion->prepare($consulta);
-        $modules->bindParam(':usuario_codigo', $usuario_codigo);
+            // ADMINISTRADOR: puede ver todos los registros
+            $consulta = "SELECT 
+                        codigo,
+                        codigo_orions,
+                        fecha_control_aliment,
+                        entradas,
+                        salidas,
+                        consumo_tabla,
+                        consumo_real,
+                        acumulado_tabla,
+                        acumulado_real,
+                        saldo_real,
+                        programacion,
+                        observaciones,
+                        usuario_codigo
+                    FROM control_alimento
+                    ORDER BY codigo ASC";
+
+            $modules = $conexion->prepare($consulta);
+        } else {
+
+            // ROL 2: solamente puede ver sus propios registros
+            $consulta = "SELECT 
+                        codigo,
+                        codigo_orions,
+                        fecha_control_aliment,
+                        entradas,
+                        salidas,
+                        consumo_tabla,
+                        consumo_real,
+                        acumulado_tabla,
+                        acumulado_real,
+                        saldo_real,
+                        programacion,
+                        observaciones,
+                        usuario_codigo
+                    FROM control_alimento
+                    WHERE usuario_codigo = :usuario_codigo
+                    ORDER BY codigo ASC";
+
+            $modules = $conexion->prepare($consulta);
+
+            $modules->bindParam(
+                ':usuario_codigo',
+                $usuario_codigo,
+                PDO::PARAM_INT
+            );
+        }
 
         $modules->execute();
 
@@ -69,17 +101,43 @@ class misAlimentos
     }
 
     // Contar el total de registros de control de alimentos
-    function countAlimentos()
+
+    function countAlimentos($usuario_codigo = null, $rol_id = null)
     {
         require_once 'conexion.php';
+
         $conexion = new Conexion();
-        $total = 0;
-        $consulta = "SELECT count(codigo) as cant FROM control_alimento";
-        $modules = $conexion->prepare($consulta);
+
+        if ($rol_id == 1) {
+
+            // ROL 1: Administrador
+            // Cuenta todos los galpones
+            $consulta = "SELECT COUNT(codigo) AS cant
+                     FROM control_alimento";
+
+            $modules = $conexion->prepare($consulta);
+        } else {
+
+            // ROL 2: Usuario
+            // Cuenta solamente sus propios galpones
+            $consulta = "SELECT COUNT(codigo) AS cant
+                     FROM control_alimento
+                     WHERE usuario_codigo = :usuario_codigo";
+
+            $modules = $conexion->prepare($consulta);
+
+            $modules->bindParam(
+                ':usuario_codigo',
+                $usuario_codigo,
+                PDO::PARAM_INT
+            );
+        }
+
         $modules->execute();
+
         $data = $modules->fetch(PDO::FETCH_ASSOC);
-        $total = $data['cant'];
-        return $total;
+
+        return $data['cant'];
     }
 
     // Máximo ID consecutivo de la tabla

@@ -66,82 +66,143 @@ class misAlmacenes
     }
 
     // --- ESTA ES LA FUNCIÓN PRINCIPAL (CORREGIDA) ---
-    function viewAlmacenes($codigo = null, $usuario_codigo = null)
+    // --- FUNCIÓN PARA MOSTRAR ALMACENES SEGÚN EL ROL ---
+    function viewAlmacenes($codigo = null, $usuario_codigo = null, $rol_id = null)
     {
         require_once 'conexion.php';
+
         $conexion = new Conexion();
 
-        // Obtener usuario de sesión si no viene como parámetro
-        if ($usuario_codigo === null) {
-            if (session_status() == PHP_SESSION_NONE) {
-                session_start();
-            }
+        // Obtener datos de sesión si no vienen como parámetros
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
 
+        if ($usuario_codigo === null) {
             $usuario_codigo = $_SESSION['codigo'] ?? 0;
+        }
+
+        if ($rol_id === null) {
+            $rol_id = $_SESSION['rol_id'] ?? 0;
         }
 
         $arreglo = array();
         $params = array();
         $where = array();
 
-        // Filtrar por código de cosecha
+        // ==========================================
+        // FILTRO POR CÓDIGO DE COSECHA / ORIONS
+        // ==========================================
         if (!empty($codigo)) {
+
             $where[] = "a.codigo_orions = :codigo_orions_almacen";
+
             $params[':codigo_orions_almacen'] = $codigo;
         }
 
-        // Siempre filtrar por usuario
-        $where[] = "a.usuario_codigo = :usuario_codigo";
-        $params[':usuario_codigo'] = $usuario_codigo;
+        // ==========================================
+        // ROL 1 = ADMINISTRADOR
+        // Puede ver todos los registros
+        // ==========================================
+        if ($rol_id == 1) {
 
-        $where_clause = " WHERE " . implode(" AND ", $where);
+            // No se agrega filtro por usuario
 
+        } else {
+
+            // ==========================================
+            // ROL 2 = USUARIO
+            // Solo puede ver sus propios registros
+            // ==========================================
+
+            $where[] = "a.usuario_codigo = :usuario_codigo";
+
+            $params[':usuario_codigo'] = $usuario_codigo;
+        }
+
+        // ==========================================
+        // CONSTRUIR WHERE
+        // ==========================================
+        $where_clause = "";
+
+        if (!empty($where)) {
+
+            $where_clause = " WHERE " . implode(" AND ", $where);
+        }
+
+        // ==========================================
+        // CONSULTA
+        // ==========================================
         $consulta = "SELECT 
+
                     a.codigo,
                     a.codigo_orions AS codigo_orions_almacen,
                     a.descripcion_material,
                     a.cantidad_total,
                     a.precio_kilo,
+
                     a.cloro,
                     a.vinagre,
                     a.hacido_hacetico,
                     a.vitaminas,
+
                     a.precio_cloro,
                     a.precio_vinagre,
                     a.yodo,
                     a.precio_yodo,
                     a.precio_hacido,
                     a.precio_vitamina,
+
                     a.anores,
                     a.precio_anores,
+
                     a.vacunas,
                     a.precio_vacunas,
+
                     a.respiros,
                     a.precio_respiros,
+
                     a.tamo,
                     a.precio_tamo,
+
                     a.cal,
                     a.precio_cal,
+
                     a.antibiotico,
                     a.precio_antibiotico,
+
                     a.abc,
                     a.precio_abc,
+
                     a.vicarbonato,
                     a.precio_vicarbonato,
+
                     a.melasa,
                     a.precio_melasa,
+
                     a.agua_potable,
                     a.precio_agua,
+
                     a.luz,
                     a.precio_luz,
+
                     a.arriendo,
                     a.precio_arriendo,
+
                     a.gastos_varios,
                     a.precio_gastos_varios,
+
                     a.gas,
                     a.precio_gas,
+
                     a.alimento_itacol,
                     a.precio_itacol,
+
+                    a.usuario_codigo,
+
+                    -- ==================================
+                    -- GALPÓN 1
+                    -- ==================================
 
                     g.codigo_orions AS codigo_orions_g1,
                     g.tipo_alimento AS tipo_alimento_g1,
@@ -161,6 +222,10 @@ class misAlmacenes
                     g.salidas AS salidas_g1,
                     g.peso_salidas AS peso_salidas_g1,
                     g.mortanda_dia AS mortanda_dia_g1,
+
+                    -- ==================================
+                    -- GALPÓN 2
+                    -- ==================================
 
                     g2.codigo_orions AS codigo_orions_g2,
                     g2.tipo_alimento AS tipo_alimento_g2,
@@ -182,19 +247,45 @@ class misAlmacenes
                     g2.mortanda_dia AS mortanda_dia_g2
 
                 FROM almacen a
+
                 LEFT JOIN galpon_1 g
                     ON a.codigo_orions = g.codigo_orions
+                    AND (
+                        :rol_join_g1 = 1
+                        OR g.usuario_codigo = :usuario_join_g1
+                    )
+
                 LEFT JOIN galpon_2 g2
                     ON a.codigo_orions = g2.codigo_orions
+                    AND (
+                        :rol_join_g2 = 1
+                        OR g2.usuario_codigo = :usuario_join_g2
+                    )
 
                 $where_clause
 
                 ORDER BY a.codigo ASC";
 
+        // ==========================================
+        // PARÁMETROS DE LOS JOIN
+        // ==========================================
+
+        $params[':rol_join_g1'] = $rol_id;
+        $params[':usuario_join_g1'] = $usuario_codigo;
+
+        $params[':rol_join_g2'] = $rol_id;
+        $params[':usuario_join_g2'] = $usuario_codigo;
+
+        // ==========================================
+        // EJECUTAR
+        // ==========================================
+
         $modules = $conexion->prepare($consulta);
+
         $modules->execute($params);
 
         while ($data = $modules->fetch(PDO::FETCH_ASSOC)) {
+
             $arreglo[] = $data;
         }
 

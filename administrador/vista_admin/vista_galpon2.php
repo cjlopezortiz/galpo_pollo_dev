@@ -37,15 +37,30 @@ if ($rol_user != 1 && $rol_user != 2) {
     </script>';
 } else {
     // Instancias
-    $mis_galpon2 = new misGalpon2();
+     // Instancias
+    // Instancias
     $mis_almacen = new misAlmacenes();
-    // Coonsulta todos los documentos
+    $mis_galpon2 = new misGalpon2();
+     // Coonsulta todos al almacen
     $user_codigo = $_SESSION['codigo'];
+    $rol_id = $_SESSION['rol_id'];
+
     if (isset($_GET['codigo_orions']) && !empty($_GET['codigo_orions'])) {
+
         $codigo_orions = $_GET['codigo_orions'];
-        $res = $mis_galpon2->viewGalpones2($codigo_orions, $user_codigo);
+
+        $res = $mis_galpon2->viewGalpones2(
+            $codigo_orions,
+            $user_codigo,
+            $rol_id
+        );
     } else {
-        $res = $mis_galpon2->viewGalpones2(null, $user_codigo);
+
+        $res = $mis_galpon2->viewGalpones2(
+            null,
+            $user_codigo,
+            $rol_id
+        );
     }
 }
 ?>

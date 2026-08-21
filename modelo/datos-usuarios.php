@@ -193,18 +193,31 @@ class misUsuarios
         return $arreglo;
     }
 
-    function countUsuarios($codigo)
+    function countUsuarios($codigo, $rol_id)
     {
         require_once 'conexion.php';
         $conexion = new Conexion();
-        $total = 0;
-        $consulta = "SELECT count(codigo) as cant FROM usuario  WHERE codigo = :codigo";
-        $modules = $conexion->prepare($consulta);
-          $modules->bindParam(":codigo", $codigo);
+
+        if ($rol_id == 1) {
+
+            // Administrador cuenta todos los usuarios
+            $consulta = "SELECT COUNT(codigo) AS cant FROM usuario";
+            $modules = $conexion->prepare($consulta);
+        } else {
+
+            // Granjero cuenta solo su propio usuario
+            $consulta = "SELECT COUNT(codigo) AS cant
+                     FROM usuario
+                     WHERE codigo = :codigo";
+
+            $modules = $conexion->prepare($consulta);
+            $modules->bindParam(":codigo", $codigo);
+        }
+
         $modules->execute();
         $data = $modules->fetch(PDO::FETCH_ASSOC);
-        $total = $data['cant'];
-        return $total;
+
+        return $data['cant'];
     }
 
     // Máximo código de usuarios
@@ -221,13 +234,13 @@ class misUsuarios
         return $consecutivo;
     }
     function viewUsuariosPorDocumento($numero_documento)
-{
-    require_once 'conexion.php';
-    $conexion = new Conexion();
+    {
+        require_once 'conexion.php';
+        $conexion = new Conexion();
 
-    $arreglo = array();
+        $arreglo = array();
 
-    $consulta = "SELECT
+        $consulta = "SELECT
                     codigo,
                     tipo_documento,
                     numero_documento,
@@ -242,14 +255,14 @@ class misUsuarios
                 WHERE numero_documento = :numero_documento
                 ORDER BY codigo ASC";
 
-    $modules = $conexion->prepare($consulta);
-    $modules->bindParam(':numero_documento', $numero_documento);
-    $modules->execute();
+        $modules = $conexion->prepare($consulta);
+        $modules->bindParam(':numero_documento', $numero_documento);
+        $modules->execute();
 
-    while ($data = $modules->fetch(PDO::FETCH_ASSOC)) {
-        $arreglo[] = $data;
+        while ($data = $modules->fetch(PDO::FETCH_ASSOC)) {
+            $arreglo[] = $data;
+        }
+
+        return $arreglo;
     }
-
-    return $arreglo;
-}
 }

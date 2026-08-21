@@ -7,12 +7,16 @@ require '../modelo/datos-galpon1.php';
 require '../modelo/datos-galpon2.php';
 require '../modelo/datos-documento.php';
 require_once '../modelo/datos-rol.php';
+require_once '../modelo/datos-registro_medicamentos.php';
+require_once '../modelo/datos-control_alimento.php';
 $mis_usuarios = new misUsuarios();
 $mis_almacen = new misAlmacenes();
 $mis_documentos = new misDocumentos();
 $mis_galpon2 = new misGalpon2();
 $mis_galpon1 = new misGalpon1();
 $mis_roles = new misRoles();
+$mis_medicamentos = new misMedicamentos();
+$mis_control_aliment = new misAlimentos();
 $res = $mis_usuarios->viewUsuarios();
 if (is_array($res)) {
     // Si es un arreglo con la clave rol_id
@@ -50,10 +54,12 @@ if ($rol_user == 1 || $rol_user == 2) {
     } else {
         $pagina = "";
     }
-    $cant_usuarios = $mis_usuarios->countUsuarios($_SESSION['codigo']);
+    $cant_usuarios = $mis_usuarios->countUsuarios($_SESSION['codigo'], $_SESSION['rol_id']);
+    $cant_medicamentos = $mis_medicamentos->countMedicamento($_SESSION['codigo'], $_SESSION['rol_id']);
+    $cant_control_alimeto = $mis_control_aliment->countAlimentos($_SESSION['codigo'], $_SESSION['rol_id']);
     $cant_almacen = $mis_almacen->countAlmacen();
-    $cant_galpon2 = $mis_galpon2->countGalpon2($_SESSION['codigo']);
-    $cant_galpon1 = $mis_galpon1->countGalpon1($_SESSION['codigo']);
+    $cant_galpon2 = $mis_galpon2->countGalpon2($_SESSION['codigo'], $_SESSION['rol_id']);
+    $cant_galpon1 = $mis_galpon1->countGalpon1($_SESSION['codigo'], $_SESSION['rol_id']);
     $cant_documento = $mis_documentos->countDocumento();
     $rol = $mis_roles->viewRoles();
 }
@@ -102,7 +108,7 @@ if ($rol_user == 1) {
         </ul>
         <h3 class="text-right text-white mb-4">
 
-             <strong>Bienvenido:  <?php echo $user_nombre; ?></strong>
+            <strong>Bienvenido: <?php echo $user_nombre; ?></strong>
         </h3>
         <?php
         if ($rol_user == 1 || $rol_user == 2) {
@@ -266,10 +272,8 @@ if ($rol_user == 1) {
                                 <div class="galpon-title">CONTROL DE ALIMENTO</div>
 
                                 <div class="galpon-sub">
-                                    <?php if ($rol_user == 1 || $rol_user == 2): ?>
-                                        CONTROL DE ALIMENTO : <b><?php //echo $cant_usuarios; 
-                                                                    ?></b>
-                                    <?php endif; ?>
+                                    CONTROL DE ALIMENTO : <b><?php echo $cant_control_alimeto; 
+ ?></b>
                                 </div>
 
                                 <a href="control_alimento.php">
@@ -282,13 +286,9 @@ if ($rol_user == 1) {
                         <a href="usuarios.php">
                             <div class="galpon-card">
                                 <div class="galpon-title">USUARIOS</div>
-
                                 <div class="galpon-sub">
-                                    <?php if ($rol_user == 1 || $rol_user == 2): ?>
-                                        USUARIOS: <b><?php echo $cant_usuarios; ?></b>
-                                    <?php endif; ?>
+                                    USUARIOS: <b><?php echo $cant_usuarios; ?></b>
                                 </div>
-
                                 <a href="usuarios.php">
                                     <div>Entrar</div>
                                 </a>
@@ -301,10 +301,7 @@ if ($rol_user == 1) {
                                 <div class="galpon-title">REGISTRO USO DE MEDICAMENTOS</div>
 
                                 <div class="galpon-sub">
-                                    <?php if ($rol_user == 1 || $rol_user == 2): ?>
-                                        VETERINARIA : <b><?php //echo $cant_usuarios; 
-                                                            ?></b>
-                                    <?php endif; ?>
+                                    VETERINARIA : <b><?php echo $cant_medicamentos; ?></b>
                                 </div>
 
                                 <a href="registro_medicamentos.php">

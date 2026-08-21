@@ -47,20 +47,20 @@ if ($rol_user != 1 && $rol_user != 2) {
     $mis_control_aliment = new misAlimentos();
 
     // Coonsulta todos al almacen
-  // session_start();
+    // session_start();
 
-$usuario_codigo = $_SESSION['codigo'];
+    $usuario_codigo = $_SESSION['codigo'];
+    $rolId          = $_SESSION['rol_id'];
+    //var_dump($rolId);
+    if (isset($_GET['codigo_orions']) && !empty($_GET['codigo_orions'])) {
 
-if (isset($_GET['codigo_orions']) && !empty($_GET['codigo_orions'])) {
+        $codigo_orions = $_GET['codigo_orions'];
 
-    $codigo_orions = $_GET['codigo_orions'];
+        $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo, $rolId);
+    } else {
 
-    $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo);
-
-} else {
-
-    $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo);
-}
+        $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo, $rolId);
+    }
     //$res = $mis_almacen->viewAlmacenes();
     $codigoUnico = $res[0]['codigo_orions_almacen'] ?? null;
     $total = $obj->totalNetoPorCodigo($codigoUnico);
@@ -154,11 +154,13 @@ if (isset($_GET['codigo_orions']) && !empty($_GET['codigo_orions'])) {
                 </thead>
                 <tbody>
                     <?php
-                    $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo);
+                    $usuario_codigo = $_SESSION['codigo'];
+                    $rolId = $_SESSION['rol_id'];
+                    $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo, $rolId);
                     // Consultas generales necesarias para las búsquedas internas
                     $res2 = $mis_galpon2->viewGalpones2();
                     $res1 = $mis_galpon1->viewGalpones1();
-          
+
                     if (is_array($res_control) || $res_control instanceof Traversable) {
                         foreach ($res_control as $data) {
 

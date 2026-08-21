@@ -7,7 +7,7 @@ $mis_documentos = new misDocumentos();
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-          <link rel="stylesheet" href=".././css/stylos.css">
+        <link rel="stylesheet" href=".././css/stylos.css">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
         <div class="modal-title">
@@ -110,6 +110,7 @@ $mis_documentos = new misDocumentos();
               <label for="rol_id">Rol</label>
               <select name="rol_id" id="rol_id" class="form-control" required>
                 <option value="1">Administrador</option>
+                <option value="2">Grangero</option>
               </select>
 
               <div class="text-center" id="errorrol"></div>
@@ -222,6 +223,7 @@ $mis_documentos = new misDocumentos();
             <label for="rol_idu">Rol</label>
             <select name="rol_idu" id="rol_idu" class="form-control" required>
               <option value="1">Administrador</option>
+              <option value="2">Grangero</option>
             </select>
           </div>
         </div>

@@ -3,39 +3,68 @@
 class misMedicamentos
 {
     // Retornar todo el registro de medicamentos
-    function viewMedicamentos($usuario_codigo)
+    function viewMedicamentos($usuario_codigo, $rol_id)
     {
         require_once 'conexion.php';
+
         $conexion = new Conexion();
-        $arreglo = array();
-        $consulta = "SELECT codigo,
-                            codigo_orions,
-                            fecha, 
-                            nombre_producto, 
-                            causa, 
-                            laboratorio, 
-                            registro_ica, 
-                            dosis,
-                            lote_producto, 
-                            vencimiento,
-                            administracion,
-                            animales, 
-                            galpon_tratado 
-                    FROM registro_medicamentos 
-                         WHERE usuario_codigo = :usuario_codigo
+
+        if ($rol_id == 1) {
+
+            // ROL 1: puede ver todos los registros
+            $consulta = "SELECT 
+                        codigo,
+                        codigo_orions,
+                        fecha,
+                        nombre_producto,
+                        causa,
+                        laboratorio,
+                        registro_ica,
+                        dosis,
+                        lote_producto,
+                        vencimiento,
+                        administracion,
+                        animales,
+                        galpon_tratado,
+                        usuario_codigo
+                    FROM registro_medicamentos
                     ORDER BY fecha DESC";
-        $modules = $conexion->prepare($consulta);
-        $modules->bindParam(':usuario_codigo', $usuario_codigo);
-        $modules->execute();
-        $total = $modules->rowCount();
-        if ($total > 0) {
-            $i = 0;
-            while ($data = $modules->fetch(PDO::FETCH_ASSOC)) {
-                $arreglo[$i] = $data;
-                $i++;
-            }
+
+            $modules = $conexion->prepare($consulta);
+        } else {
+
+            // ROL 2: solamente puede ver sus propios registros
+            $consulta = "SELECT 
+                        codigo,
+                        codigo_orions,
+                        fecha,
+                        nombre_producto,
+                        causa,
+                        laboratorio,
+                        registro_ica,
+                        dosis,
+                        lote_producto,
+                        vencimiento,
+                        administracion,
+                        animales,
+                        galpon_tratado,
+                        usuario_codigo
+                    FROM registro_medicamentos
+                    WHERE usuario_codigo = :usuario_codigo
+                    ORDER BY fecha DESC";
+
+            $modules = $conexion->prepare($consulta);
+
+            $modules->bindParam(
+                ':usuario_codigo',
+                $usuario_codigo,
+                PDO::PARAM_INT
+            );
         }
-        return $arreglo;
+
+        $modules->execute();
+
+        return $modules->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Retornar todo el registro de medicamentos
@@ -58,8 +87,8 @@ class misMedicamentos
                             animales, 
                             galpon_tratado 
                     FROM registro_medicamentos 
-                       WHERE usuario_codigo = :usuario_codigo
-                     WHERE codigo = :codigo";
+                    WHERE usuario_codigo = :usuario_codigo
+                    WHERE codigo = :codigo";
         $modules = $conexion->prepare($consulta);
         $modules->bindParam(':usuario_codigo', $usuario_codigo);
         $modules->bindParam(':codigo_orions', $codigo_orions);
@@ -76,17 +105,42 @@ class misMedicamentos
     }
 
     // Contar el total de registros de control de alimentos
-    function countMedicamento()
+    function countMedicamento($usuario_codigo = null, $rol_id = null)
     {
         require_once 'conexion.php';
+
         $conexion = new Conexion();
-        $total = 0;
-        $consulta = "SELECT count(codigo) as cant FROM registro_medicamentos";
-        $modules = $conexion->prepare($consulta);
+
+        if ($rol_id == 1) {
+
+            // ROL 1: Administrador
+            // Cuenta todos los galpones
+            $consulta = "SELECT COUNT(codigo) AS cant
+                     FROM registro_medicamentos";
+
+            $modules = $conexion->prepare($consulta);
+        } else {
+
+            // ROL 2: Usuario
+            // Cuenta solamente sus propios galpones
+            $consulta = "SELECT COUNT(codigo) AS cant
+                     FROM registro_medicamentos
+                     WHERE usuario_codigo = :usuario_codigo";
+
+            $modules = $conexion->prepare($consulta);
+
+            $modules->bindParam(
+                ':usuario_codigo',
+                $usuario_codigo,
+                PDO::PARAM_INT
+            );
+        }
+
         $modules->execute();
+
         $data = $modules->fetch(PDO::FETCH_ASSOC);
-        $total = $data['cant'];
-        return $total;
+
+        return $data['cant'];
     }
 
     // Máximo ID consecutivo de la tabla

@@ -14,10 +14,25 @@ $mis_roles = new misRoles();
 $id_usuario_sesion = isset($_SESSION['codigo']) ? $_SESSION['codigo'] : (isset($_SESSION['usuario_codigo']) ? $_SESSION['usuario_codigo'] : null);
 
 // Si es administrador (rol_id == 1), ve todos; si no, ve únicamente sus datos
-if (isset($_SESSION['rol_id']) && $_SESSION['rol_id'] == 1) {
+if (isset($_SESSION['rol_id']) == 1 && $_SESSION['rol_id'] == 2) {
     $res = $mis_usuarios->viewUsuarioSesion($id_usuario_sesion);
 } else {
-    $res = $mis_usuarios->viewUsuarioSesion($id_usuario_sesion);
+    $rol_user = $_SESSION['rol_id'];
+    $id_usuario_sesion = $_SESSION['codigo'];
+
+    if ($rol_user == 1) {
+
+        // Administrador: ve todos los usuarios
+        $res = $mis_usuarios->viewUsuarios();
+    } elseif ($rol_user == 2) {
+
+        // Granjero: solo ve su propio registro
+        $res = $mis_usuarios->viewUsuarioSesion($id_usuario_sesion);
+    } else {
+
+        $res = array();
+    }
+    $res = $mis_usuarios->viewUsuarios($id_usuario_sesion);
 }
 
 $rol_user = isset($_SESSION['rol_id']) ? $_SESSION['rol_id'] : null;
@@ -28,6 +43,13 @@ if ($rol_user != 1 && $rol_user != 2) {
     alert ("Debe seleccionar un centro de formación.") 
     self.location="../index.php"
     </script>';
+}
+if ($rol_user == 1) {
+    $pagina = "Administrador";
+} elseif ($rol_user == 2) {
+    $pagina = "Grngero";
+} else {
+    $pagina = "";
 }
 ?>
 <div class="col-sm-12">
@@ -63,6 +85,12 @@ if ($rol_user != 1 && $rol_user != 2) {
                         <div class="text-center">Item</div>
                     </th>
                     <th>
+                        <div class="text-center">Rol</div>
+                    </th>
+                    <th>
+                        <div class="text-center">Tipo documento</div>
+                    </th>
+                    <th>
                         <div class="text-center">Identificación</div>
                     </th>
                     <th>
@@ -86,6 +114,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                     if (!empty($res)) {
                         foreach ($res as $data) {
                             $estado = ($data['estado'] == 1) ? "Activo" : "Inactivo";
+                            $rol = ($data['rol_id'] == 1) ? "Administrador" : "Grangero";
 
                             $datos = $data['codigo'] . "||" .
                                 $data['tipo_documento'] . "||" .
@@ -101,6 +130,12 @@ if ($rol_user != 1 && $rol_user != 2) {
                             <tr>
                                 <td>
                                     <div class="text-center"><?php echo $data['codigo']; ?></div>
+                                </td>
+                                <td>
+                                    <div class="text-center"><?php echo $rol; ?></div>
+                                </td>
+                                <td>
+                                    <div class="text-center"><?php echo $data['tipo_documento']; ?></div>
                                 </td>
                                 <td>
                                     <div class="text-center"><?php echo $data['numero_documento']; ?></div>
@@ -119,14 +154,18 @@ if ($rol_user != 1 && $rol_user != 2) {
                                 </td>
 
                                 <td>
-                                    <?php if ($data['numero_documento'] == 1092234132) { ?>
+                                    <?php if ($rol_user == 1) { ?>
                                         <div class="text-center">
                                             <button class="btn btn-primary glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modalEdicionUsuario" onclick="agregarformUsuario('<?php echo $datos; ?>')"></button>
                                         </div>
-                                    <?php } else {
-                                        echo "";
-                                    } ?>
-
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <div class="text-center">N/A
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
                                 </td>
                             </tr>
                     <?php
@@ -137,13 +176,13 @@ if ($rol_user != 1 && $rol_user != 2) {
             </table>
         </div>
         <br />
-        <?php if ($data['numero_documento'] == 1092234132) { ?>
-            <?php if (isset($_SESSION['rol_id']) && $_SESSION['rol_id'] == 1): ?>
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalNuevoUsuario">Crear usuario</button>
-            <?php endif; ?>
-        <?php } else {
-            echo "";
-        } ?>
+        <?php if ($rol_user == 1) { ?>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalNuevoUsuario">Crear usuario</button>
+        <?php
+        } else {
+            NULL;
+        }
+        ?>
         <br />
         <br />
     </div>
