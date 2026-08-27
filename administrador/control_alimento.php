@@ -29,12 +29,7 @@ if (is_array($res)) {
 }
 ?>
 <?php
-if(isset($_GET['codigo_orions'])){
-	$codigo = $_GET['codigo_orions'];
-}
-else{
-	$codigo = "";
-}
+$codigo = isset($_GET['codigo_orions']) ? trim($_GET['codigo_orions']) : '';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -71,7 +66,7 @@ else{
 		$(document).ready(function() {
 			rol_user = <?php echo $rol_id ?>;
 			if (rol_user == 1 || rol_user == 2) {
-				$('#tablaControlAlimento').load('./vista_admin/vista_control_alimento.php');
+				$('#tablaControlAlimento').load('./vista_admin/vista_control_alimento.php?codigo_orions=<?php echo $codigo; ?>');
 			} else {
 				alert("Error...");
 			}

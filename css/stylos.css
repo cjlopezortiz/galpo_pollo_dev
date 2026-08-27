@@ -340,4 +340,37 @@
                         /* Evita que la marca de agua interfiera con los clics en el texto */
                         pointer-events: none;
                     }
+                    /* Estilo base para los enlaces de la tabla */
+.btn-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espacio entre el ícono y el texto */
+    padding: 8px 14px;
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Tamaño y color del ícono */
+.btn-link i {
+    font-size: 1.1rem;
+    color: #3b82f6; /* Color azul moderno */
+}
+
+/* Efecto al pasar el mouse */
+.btn-link:hover {
+    background-color: #3b82f6;
+    color: #ffffff;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-link:hover i {
+    color: #ffffff;
+}
                     

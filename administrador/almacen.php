@@ -28,6 +28,7 @@ if (is_array($res)) {
 } else {
     echo "viewUsuarios() no está retornando datos válidos.";
 }
+$codigo = isset($_GET['codigo_orions']) ? trim($_GET['codigo_orions']) : '';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -65,7 +66,7 @@ if (is_array($res)) {
 
 			rol_user = <?php echo $rol_id; ?>;
 			if (rol_user == 1 || rol_user == 2) {
-				$('#tablaAlmacen').load('./vista_admin/vista_almacen.php');
+				$('#tablaAlmacen').load('./vista_admin/vista_almacen.php?codigo_orions=<?php echo $codigo; ?>');
 			} else {
 				alert("Error...");
 			}

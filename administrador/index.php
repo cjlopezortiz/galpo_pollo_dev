@@ -183,7 +183,7 @@ if ($rol_user == 1) {
                             <div class="galpon-sub">CANTIDAD DE COSECHAS: <b><?php echo $cant_galpon1; ?></b></div>
 
                             <a href="almacen.php">
-                                <div class="almacen-box">Almacenamiento</div>
+                                <div class="almacen-box">Todos los almacenes</div>
                             </a>
                         </div>
                     </a>
@@ -198,7 +198,7 @@ if ($rol_user == 1) {
                             <div class="galpon-sub">CANTIDAD DE COSECHAS: <b><?php echo $cant_galpon2; ?></b></div>
 
                             <a href="almacen.php">
-                                <div class="almacen-box">Almacenamiento</div>
+                                <div class="almacen-box">Todos los almacenes</div>
                             </a>
                         </div>
                     </a>
@@ -213,7 +213,7 @@ if ($rol_user == 1) {
                             <div class="galpon-sub">CANTIDAD DE COSECHAS <b>N/A</b></div>
 
                             <a href="#" style="text-decoration:none;">
-                                <div class="almacen-box">Almacenamiento</div>
+                                <div class="almacen-box">Todos los almacenes</div>
                             </a>
                         </div>
                     </a>
@@ -228,7 +228,7 @@ if ($rol_user == 1) {
                             <div class="galpon-sub">CANTIDAD DE COSECHAS <b>N/A</b></div>
 
                             <a href="#" style="text-decoration:none;">
-                                <div class="almacen-box">Almacenamiento</div>
+                                <div class="almacen-box">Todos los almacenes</div>
                             </a>
                         </div>
                     </a>
@@ -243,7 +243,7 @@ if ($rol_user == 1) {
                             <div class="galpon-sub">CANTIDAD DE COSECHAS <b>N/A</b></div>
 
                             <a href="#" style="text-decoration:none;">
-                                <div class="almacen-box">Almacenamiento</div>
+                                <div class="almacen-box">Todos los almacenes</div>
                             </a>
                         </div>
                     </a>
@@ -257,7 +257,7 @@ if ($rol_user == 1) {
                             <div class="galpon-sub">SEGUIMIENTO INVENTARIO DE AVES</div>
                             <div class="galpon-sub">CANTIDAD DE COSECHAS <b>N/A</b></div>
                             <a href="#" style="text-decoration:none;">
-                                <div class="almacen-box">Almacenamiento</div>
+                                <div class="almacen-box">Todos los almacenes</div>
                             </a>
                         </div>
                     </a>

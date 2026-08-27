@@ -51,15 +51,16 @@ if ($rol_user != 1 && $rol_user != 2) {
 
     $usuario_codigo = $_SESSION['codigo'];
     $rolId          = $_SESSION['rol_id'];
+    $codigo_orions  = $_GET['codigo_orions'] ?? null; // Capturar GET si existe
     //var_dump($rolId);
     if (isset($_GET['codigo_orions']) && !empty($_GET['codigo_orions'])) {
 
         $codigo_orions = $_GET['codigo_orions'];
 
-        $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo, $rolId);
+        $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo, $codigo_orions, $rolId);
     } else {
 
-        $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo, $rolId);
+        $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo, $codigo_orions, $rolId);
     }
     //$res = $mis_almacen->viewAlmacenes();
     $codigoUnico = $res[0]['codigo_orions_almacen'] ?? null;
@@ -96,10 +97,16 @@ if ($rol_user != 1 && $rol_user != 2) {
         <!-- BREADCRUMB 2 -->
         <ul class="breadcrumb breadcrumb-modern">
             <li>
-                <a target="_blank" href="almacen.php">Almacén</a>
+                <a target="_blank" href="almacen.php">TODOS LOS ALMACENES</a>
             </li>
             <li>
-                <a target="_blank" href="registro_medicamentos.php">REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS</a>
+                <a target="_blank" href="galpon1.php">TODOS LOS GALPONES</a>
+            </li>
+            <li>
+                <a target="_blank" href="control_alimento.php">TODOS LOS CONTROLES DE ALIMENTO</a>
+            </li>
+            <li>
+                <a target="_blank" href="registro_medicamentos.php">TODOS LOS REGISTROS DE USO DE MEDICAMENTOS VETERINARIOS</a>
             </li>
         </ul>
         <!-- END PAGE BREADCRUMB -->
@@ -156,7 +163,8 @@ if ($rol_user != 1 && $rol_user != 2) {
                     <?php
                     $usuario_codigo = $_SESSION['codigo'];
                     $rolId = $_SESSION['rol_id'];
-                    $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo, $rolId);
+                    $codigo_orions  = $_GET['codigo_orions'] ?? null; // Capturar GET si existe
+                    $res_control = $mis_control_aliment->viewControlAlimentos($usuario_codigo, $codigo_orions, $rolId);
                     // Consultas generales necesarias para las búsquedas internas
                     $res2 = $mis_galpon2->viewGalpones2();
                     $res1 = $mis_galpon1->viewGalpones1();
@@ -217,6 +225,26 @@ if ($rol_user != 1 && $rol_user != 2) {
                                 $url = "galpon2.php?codigo_orions=" . $codigo_g2;
                             }
 
+                            $urlamacen = "#";
+
+                            if (!empty($codigo_g1)) {
+                                $urlamacen = "almacen.php?codigo_orions=" . $codigo_g1;
+                            }
+
+                            if (!empty($codigo_g2)) {
+                                $urlamacen = "almacen.php?codigo_orions=" . $codigo_g2;
+                            }
+
+                            $urlmedicamentos = "#";
+
+                            if (!empty($codigo_g1)) {
+                                $urlmedicamentos = "registro_medicamentos.php?codigo_orions=" . $codigo_g1;
+                            }
+
+                            if (!empty($codigo_g2)) {
+                                $urlmedicamentos = "registro_medicamentos.php?codigo_orions=" . $codigo_g2;
+                            }
+
                             // Preparamos la cadena de datos para el JS del modal
                             $datos = ($data['codigo'] ?? '') . "||" .
                                 ($id_buscar ?? '') . "||" .
@@ -240,46 +268,46 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     <a href="<?php echo $url; ?>" title="Ir al galpon" style="display:block; width:100%; height:100%; text-decoration:none; color:inherit;">
                                         <div>
                                             <!-- Si pertenece al Galpón 1 -->
-                                            <?php if (!empty($codigo_g1) && empty($codigo_g2)) { ?>
+                                            <?php if (!empty($codigo_g1)) { ?>
                                                 <span style="
-                                        display:inline-block;
-                                        background:#28a745;
-                                        color:white;
-                                        padding:4px 12px;
-                                        border-radius:20px;
-                                        font-size:12px;
-                                        font-weight:bold;
-                                        box-shadow:0px 1px 4px rgba(0,0,0,0.2);">
+                                                            display:inline-block;
+                                                            background:#28a745;
+                                                            color:white;
+                                                            padding:4px 12px;
+                                                            border-radius:20px;
+                                                            font-size:12px;
+                                                            font-weight:bold;
+                                                            box-shadow:0px 1px 4px rgba(0,0,0,0.2);">
                                                     GALPÓN AVÍCOLA NORTE MACHOS
                                                 </span>
-                                                <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
-                                                    <?php echo $codigo_g1; ?>
-                                                </div>
-                                                <div style="margin-top:7px; background:#f0f6ff; border:1px solid #d0d7e1; border-radius:10px; padding:8px 10px; font-size:12px; color:#333; box-shadow:0 2px 5px rgba(0,0,0,0.1); line-height:18px;">
-                                                    <?php
-                                                    if (!empty($data['fecha_inicio_g1'])) {
-                                                        $inicio_g1 = date_create($data['fecha_inicio_g1']);
-                                                        $fin_g1 = date_create($data['fecha_fin_g1'] ?? 'now');
-                                                    ?>
-                                                        <div style="margin-bottom: 6px;">
-                                                            <b>Fecha Inicio:</b> <?php echo date_format($inicio_g1, 'Y-m-d'); ?><br>
-                                                            <b>Hora Inicio:</b> <?php echo date_format($inicio_g1, 'H:i:s'); ?>
-                                                        </div>
-                                                        <hr style="border: 0; border-top: 1px solid #d0d7e1; margin: 6px 0;">
-                                                        <div>
-                                                            <b>Fecha Fin:</b> <?php echo date_format($fin_g1, 'Y-m-d'); ?><br>
-                                                            <b>Hora Fin:</b> <?php echo date_format($fin_g1, 'H:i:s'); ?>
-                                                        </div>
-                                                    <?php } //else {
-                                                    // echo "Sin fechas registradas";
-                                                    //} 
-                                                    ?>
-                                                </div>
-                                            <?php } ?>
 
-                                            <!-- Si pertenece al Galpón 2 -->
-                                            <?php if (!empty($codigo_g2)) { ?>
-                                                <span style="
+                                                <br>
+                                                <br>
+                                                <!-- Botón 2: Almacén -->
+                                                <a href="<?php echo $urlamacen; ?>"
+                                                    <?php if (!empty($codigo_g1)) { ?>
+                                                    style="display:inline-block; background:#28a745; color:white; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:bold; box-shadow:0px 1px 4px rgba(0,0,0,0.2); text-decoration:none;">
+                                                    ALMACEN
+                                                </a>
+                                            <?php } ?>
+                                            <br>
+                                            <br>
+                                            <!-- Botón 3: Uso Medicamentos -->
+                                            <a href="<?php echo $urlmedicamentos; ?>"
+                                                <?php if (!empty($codigo_g1)) { ?>
+                                                style="display:inline-block; background:#28a745; color:white; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:bold; box-shadow:0px 1px 4px rgba(0,0,0,0.2); text-decoration:none;">
+                                                USO Medicamentos
+                                            </a>
+                                        <?php } ?>
+                                        <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
+                                            <?php echo $codigo_g1; ?>
+                                        </div>
+
+                                    <?php } ?>
+
+                                    <!-- Si pertenece al Galpón 2 -->
+                                    <?php if (!empty($codigo_g2)) { ?>
+                                        <span style="
                                         display:inline-block;
                                         background:#007bff;
                                         color:white;
@@ -288,37 +316,37 @@ if ($rol_user != 1 && $rol_user != 2) {
                                         font-size:12px;
                                         font-weight:bold;
                                         box-shadow:0px 1px 4px rgba(0,0,0,0.2); ">
-                                                    GALPÓN AVÍCOLA SUR HEMBRAS
-                                                </span>
-                                                <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
-                                                    <?php echo $codigo_g2; ?>
-                                                </div>
-                                                <div style="margin-top:7px; background:#eef5ff; border:1px solid #c6d4e6; border-radius:10px; padding:8px 10px; font-size:12px; color:#333; box-shadow:0 2px 5px rgba(0,0,0,0.1); line-height:18px;">
-                                                    <?php
-                                                    if (!empty($data['fecha_inicio_g2'])) {
-                                                        $inicio_g2 = date_create($data['fecha_inicio_g2']);
-                                                        $fin_g2 = date_create($data['fecha_fin_g2'] ?? 'now');
-                                                    ?>
-                                                        <div style="margin-bottom: 6px;">
-                                                            <b>Fecha Inicio:</b> <?php echo date_format($inicio_g2, 'Y-m-d'); ?><br>
-                                                            <b>Hora Inicio:</b> <?php echo date_format($inicio_g2, 'H:i:s'); ?>
-                                                        </div>
-                                                        <hr style="border: 0; border-top: 1px solid #c6d4e6; margin: 6px 0;">
-                                                        <div>
-                                                            <b>Fecha Fin:</b> <?php echo date_format($fin_g2, 'Y-m-d'); ?><br>
-                                                            <b>Hora Fin:</b> <?php echo date_format($fin_g2, 'H:i:s'); ?>
-                                                        </div>
-                                                    <?php } //else {
-                                                    // echo "";
-                                                    //} 
-                                                    ?>
-                                                </div>
-                                            <?php } ?>
+                                            GALPÓN AVÍCOLA SUR HEMBRAS
+                                        </span>
+                                        <br>
+                                        <br>
+                                        <!-- Botón 2: Almacén -->
+                                        <a href="<?php echo $urlamacen; ?>"
+                                            <?php if (!empty($codigo_g2)) { ?>
+                                            style="display:inline-block; background:#007bff; color:white; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:bold; box-shadow:0px 1px 4px rgba(0,0,0,0.2); text-decoration:none;">
+                                            ALMACEN
+                                        </a>
+                                    <?php } ?>
+                                    <br>
+                                    <br>
+                                    <!-- Botón 3: Uso Medicamentos -->
+                                    <!-- Botón 2: Almacén -->
+                                    <a href="<?php echo $urlmedicamentos; ?>"
+                                        <?php if (!empty($codigo_g2)) { ?>
+                                        style="display:inline-block; background:#007bff; color:white; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:bold; box-shadow:0px 1px 4px rgba(0,0,0,0.2); text-decoration:none;">
+                                        USO Medicamentos
+                                    </a>
+                                <?php } ?>
+                                <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
+                                    <?php echo $codigo_g2; ?>
+                                </div>
 
-                                            <!-- Si no pertenece a ninguno -->
-                                            <?php if (empty($codigo_g1) && empty($codigo_g2)) { ?>
-                                                <span class="text-muted">No asignado</span>
-                                            <?php } ?>
+                            <?php } ?>
+
+                            <!-- Si no pertenece a ninguno -->
+                            <?php if (empty($codigo_g1) && empty($codigo_g2)) { ?>
+                                <span class="text-muted">No asignado</span>
+                            <?php } ?>
                                         </div>
                                     </a>
 

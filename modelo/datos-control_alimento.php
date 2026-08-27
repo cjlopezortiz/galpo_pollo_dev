@@ -4,60 +4,60 @@ class misAlimentos
 {
     // Retornar todo el control de alimentos
     // Retornar control de alimentos según el rol
-    function viewControlAlimentos($usuario_codigo, $rol_id)
+    // Retornar control de alimentos según el rol y código_orions
+    function viewControlAlimentos($usuario_codigo, $codigo_orions = null, $rol_id = null)
     {
         require_once 'conexion.php';
 
         $conexion = new Conexion();
 
-        if ($rol_id == 1) {
+        // Consulta base
+        $consulta = "SELECT
+                    codigo,
+                    codigo_orions,
+                    fecha_control_aliment,
+                    entradas,
+                    salidas,
+                    consumo_tabla,
+                    consumo_real,
+                    acumulado_tabla,
+                    acumulado_real,
+                    saldo_real,
+                    programacion,
+                    observaciones,
+                    usuario_codigo
+                FROM control_alimento
+                WHERE 1=1";
 
-            // ADMINISTRADOR: puede ver todos los registros
-            $consulta = "SELECT 
-                        codigo,
-                        codigo_orions,
-                        fecha_control_aliment,
-                        entradas,
-                        salidas,
-                        consumo_tabla,
-                        consumo_real,
-                        acumulado_tabla,
-                        acumulado_real,
-                        saldo_real,
-                        programacion,
-                        observaciones,
-                        usuario_codigo
-                    FROM control_alimento
-                    ORDER BY codigo ASC";
+        // Si NO es administrador, filtra por usuario
+        if ($rol_id != 1) {
+            $consulta .= " AND usuario_codigo = :usuario_codigo";
+        }
 
-            $modules = $conexion->prepare($consulta);
-        } else {
+        // Si viene codigo_orions, filtra por él
+        if (!empty($codigo_orions)) {
+            $consulta .= " AND codigo_orions = :codigo_orions";
+        }
 
-            // ROL 2: solamente puede ver sus propios registros
-            $consulta = "SELECT 
-                        codigo,
-                        codigo_orions,
-                        fecha_control_aliment,
-                        entradas,
-                        salidas,
-                        consumo_tabla,
-                        consumo_real,
-                        acumulado_tabla,
-                        acumulado_real,
-                        saldo_real,
-                        programacion,
-                        observaciones,
-                        usuario_codigo
-                    FROM control_alimento
-                    WHERE usuario_codigo = :usuario_codigo
-                    ORDER BY codigo ASC";
+        $consulta .= " ORDER BY codigo ASC";
 
-            $modules = $conexion->prepare($consulta);
+        $modules = $conexion->prepare($consulta);
 
+        // Bind usuario para rol diferente de administrador
+        if ($rol_id != 1) {
             $modules->bindParam(
                 ':usuario_codigo',
                 $usuario_codigo,
                 PDO::PARAM_INT
+            );
+        }
+
+        // Bind codigo_orions si existe
+        if (!empty($codigo_orions)) {
+            $modules->bindParam(
+                ':codigo_orions',
+                $codigo_orions,
+                PDO::PARAM_STR
             );
         }
 

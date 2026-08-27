@@ -37,11 +37,11 @@ if ($rol_user != 1 && $rol_user != 2) {
     </script>';
 } else {
     // Instancias
-     // Instancias
+    // Instancias
     // Instancias
     $mis_almacen = new misAlmacenes();
     $mis_galpon2 = new misGalpon2();
-     // Coonsulta todos al almacen
+    // Coonsulta todos al almacen
     $user_codigo = $_SESSION['codigo'];
     $rol_id = $_SESSION['rol_id'];
 
@@ -92,13 +92,16 @@ if ($rol_user != 1 && $rol_user != 2) {
         <!-- BREADCRUMB 2 -->
         <ul class="breadcrumb breadcrumb-modern">
             <li>
-                <a href="almacen.php">Almacén</a>
+                <a target="_blank" href="almacen.php">TODOS LOS ALMACENES</a>
             </li>
             <li>
-                <a target="_blank" href="control_alimento.php">Control de Alimento</a>
+                <a target="_blank" href="galpon2.php">TODOS LOS GALPONES HEMBRAS</a>
             </li>
             <li>
-                <a target="_blank" href="registro_medicamentos.php">REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS</a>
+                <a target="_blank" href="control_alimento.php">TODOS LOS CONTROLES DE ALIMENTO</a>
+            </li>
+            <li>
+                <a target="_blank" href="registro_medicamentos.php">TODOS LOS REGISTROS DE USO DE MEDICAMENTOS VETERINARIOS</a>
             </li>
         </ul>
         <br />
@@ -110,9 +113,6 @@ if ($rol_user != 1 && $rol_user != 2) {
                         <div class="text-center">Item</div>
                     </th>
                     <th>
-                        <div class="text-center">Perfil <br />Hembras</div>
-                    </th>
-                    <th>
                         <div class="text-center">código <br />cosecha</div>
                     </th>
                     <th>
@@ -121,15 +121,28 @@ if ($rol_user != 1 && $rol_user != 2) {
                     <th>
                         <div class="text-center">Fecha<br />Fin</div>
                     </th>
+
                     <th>
+                        <div class="text-center">Almacén</div>
+                    </th>
+                    <th>
+                        <div class="text-center">REGISTRO DE USO DE MEDICAMENTOS<br />VETERINARIOS</div>
+                    </th>
+                    <th>
+                        <div class="text-center">Control de<br />Alimento</div>
+                    </th>
+
+
+
+                    <!-- <th>
                         <div class="text-center">Edad<br />Inicio</div>
-                    </th>
-                    <th>
+                    </th> -->
+                    <!-- <th>
                         <div class="text-center">Tipo<br /> Alimento</div>
-                    </th>
-                    <th>
+                    </th> -->
+                    <!-- <th>
                         <div class="text-center">Color <br />Pollo</div>
-                    </th>
+                    </th> -->
                     <th>
                         <div class="text-center">Cantidad <br />Pollos</div>
                     </th>
@@ -142,6 +155,9 @@ if ($rol_user != 1 && $rol_user != 2) {
 
                     <th>
                         <div class="text-center">Observaciones</div>
+                    </th>
+                    <th>
+                        <div class="text-center">Perfil <br />machos</div>
                     </th>
                     <th>
                         <div class="text-center">Editar</div>
@@ -185,20 +201,6 @@ if ($rol_user != 1 && $rol_user != 2) {
                             <td>
                                 <div class="text-center"><?php echo $data['codigo']; ?></div>
                             </td>
-                            <td style="cursor:pointer;" title="PERFIL Hembras"
-                                onclick="window.open('../fpdf-perfil-hembras/hembras.php?codigo_orions=<?php echo $data['codigo_orions']; ?>', '_blank');">
-                                <div class="text-center" style="text-decoration:none;">
-                                    <div class="galpon-card" style="pointer-events:none;"> <!-- permite que el td reciba el clic -->
-                                        <a href="../fpdf-perfil-hembras/hembras.php?codigo_orions=<?php echo $data['codigo_orions']; ?>"
-                                            target="_blank"
-                                            style="pointer-events:none;">
-                                            <img src="../imagenes/logo-pdf.png" style="text-decoration:none;">
-                                            <div class="almacen-box">Ver</div>
-
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
                             <td style="cursor:pointer;">
                                 <div class="text-center" style="pointer-events:none;">
                                     <?php echo !empty($data['codigo_orions']) ? $data['codigo_orions'] : 'N/A'; ?>
@@ -234,15 +236,42 @@ if ($rol_user != 1 && $rol_user != 2) {
                                     ?>
                                 </div>
                             </td>
+
                             <td>
+                                <div class="text-center">
+                                    <a href="almacen.php?codigo_orions=<?php echo $data['codigo_orions'] ?>" class="btn-link">
+                                        <i class="fa-solid fa-boxes-stacked"></i>
+                                        <span>Almacén</span>
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-center">
+                                    <a target="_blank" href="registro_medicamentos.php?codigo_orions=<?php echo $data['codigo_orions'] ?>" class="btn-link">
+                                        <i class="fa-solid fa-pills"></i>
+                                        <span>Medicamentos</span>
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-center">
+                                    <a target="_blank" href="control_alimento.php?codigo_orions=<?php echo $data['codigo_orions'] ?>" class="btn-link">
+                                        <i class="fa-solid fa-utensils"></i>
+                                        <span>Control Alimentos</span>
+                                    </a>
+                                </div>
+                            </td>
+
+
+                            <!-- <td>
                                 <div class="text-center"><?php echo !empty($data['edad']) ? $data['edad'] : 'N/A'; ?></div>
-                            </td>
-                            <td>
+                            </td> -->
+                            <!-- <td>
                                 <div class="text-center"><?php echo !empty($data['tipo_alimento']) ? $data['tipo_alimento'] : 'N/A'; ?></div>
-                            </td>
-                            <td>
+                            </td> -->
+                            <!-- <td>
                                 <div class="text-center"><?php echo !empty($data['color']) ? $data['color'] : 'N/A'; ?> </div>
-                            </td>
+                            </td> -->
                             <td>
                                 <div class="text-center">
                                     <?php
@@ -280,6 +309,20 @@ if ($rol_user != 1 && $rol_user != 2) {
 
                             <td>
                                 <div class="text-center"><?php echo !empty($data['descripcion']) ? $data['descripcion'] : 'N/A'; ?></div>
+                            </td>
+                            <td style="cursor:pointer;" title="PERFIL HEMBRAS"
+                                onclick="window.open('../fpdf-perfil-hembras/hembras.php?codigo_orions=<?php echo $data['codigo_orions']; ?>', '_blank');">
+                                <div class="text-center" style="text-decoration:none;">
+                                    <div class="galpon-card" style="pointer-events:none;"> <!-- permite que el td reciba el clic -->
+                                        <a href="../fpdf-perfil-hembras/hembras.php?codigo_orions=<?php echo $data['codigo_orions']; ?>"
+                                            target="_blank"
+                                            style="pointer-events:none;">
+                                            <img src="../imagenes/logo-pdf.png" style="text-decoration:none;">
+                                            <div class="almacen-box">Ver</div>
+
+                                        </a>
+                                    </div>
+                                </div>
                             </td>
                             <td>
                                 <div class="text-center"><button class="btn btn-primary glyphicon glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modalEdicionGalpon2" onclick="agregarFormGalpon2('<?php echo  $datos ?>')"></button></div>

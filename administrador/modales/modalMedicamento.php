@@ -159,7 +159,7 @@
           <div class="modal-footer">
                 <div class="row">
                     <div class="col-xs-6 text-left">
-                        <button type="button" class="btn btn-danger" id="">
+                        <button type="button" class="btn btn-danger"  data-dismiss="modal" id="eliminarDatosRegistroMedicamentos">
                             Eliminar
                         </button>
                     </div>

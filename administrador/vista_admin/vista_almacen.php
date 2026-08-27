@@ -53,8 +53,10 @@ if ($rol_user != 1 && $rol_user != 2) {
     $codigo = $res[0]['codigo_orions_almacen'] ?? null;
     $usuario_codigo = $_SESSION['codigo'];
     $rol_id = $_SESSION['rol_id'];
+    $codigo_orions = $_GET['codigo_orions'] ?? null;
 
-    $res = $mis_almacen->viewAlmacenes($codigo, $usuario_codigo, $rol_id);
+    // Cambia $codigo por $codigo_orions
+    $res = $mis_almacen->viewAlmacenes($codigo_orions, $usuario_codigo, $rol_id);
 }
 ?>
 
@@ -80,10 +82,16 @@ if ($rol_user != 1 && $rol_user != 2) {
         <!-- BREADCRUMB 2 -->
         <ul class="breadcrumb breadcrumb-modern">
             <li>
-                <a target="_blank" href="control_alimento.php">Control de Alimentos</a>
+                <a target="_blank" href="almacen.php">TODOS LOS ALMACENES</a>
             </li>
             <li>
-                <a target="_blank" href="registro_medicamentos.php">REGISTRO DE USO DE MEDICAMENTOS VETERINARIOS</a>
+                <a target="_blank" href="galpon1.php">TODOS LOS GALPONES</a>
+            </li>
+            <li>
+                <a target="_blank" href="control_alimento.php">TODOS LOS CONTROLES DE ALIMENTO</a>
+            </li>
+            <li>
+                <a target="_blank" href="registro_medicamentos.php">TODOS LOS REGISTROS DE USO DE MEDICAMENTOS VETERINARIOS</a>
             </li>
         </ul>
         <br />
@@ -93,6 +101,7 @@ if ($rol_user != 1 && $rol_user != 2) {
                     <th>
                         <div class="text-center">Item</div>
                     </th>
+
                     <th>
                         <div class="text-center">Codigo <br />cosecha</div>
                     </th>
@@ -194,10 +203,32 @@ if ($rol_user != 1 && $rol_user != 2) {
                                 } else {
                                     $url = "#";
                                 }
+
+                                if (!empty($data['codigo_orions_g1'])) {
+                                    $urlcontrolM = "control_alimento.php?codigo_orions=" . $data['codigo_orions_g1'];
+                                } elseif (!empty($data['codigo_orions_g2'])) {
+                                    $urlcontrolM = "control_alimento.php?codigo_orions=" . $data['codigo_orions_g2'];
+                                } else {
+                                    $urlcontrolM = "#";
+                                }
+
+
+                                if (!empty($data['codigo_orions_g1'])) {
+                                    $urlmedicamentiR = "registro_medicamentos.php?codigo_orions=" . $data['codigo_orions_g1'];
+                                } elseif (!empty($data['codigo_orions_g2'])) {
+                                    $urlmedicamentiR = "registro_medicamentos.php?codigo_orions=" . $data['codigo_orions_g2'];
+                                } else {
+                                    $urlmedicamentiR = "#";
+                                }
                                 ?>
                                 <a href="<?php echo $url; ?>" title="Ir al galpon" style="display:block; width:100%; height:100%; text-decoration:none; color:inherit;">
                                     <div>
                                         <?php if (!empty($data['codigo_orions_g1'])) { ?>
+                                            <?php
+                                            // Separar Fecha y Hora para Galpón 1
+                                            $inicio_g1 = date_create($data['fecha_inicio_g1']);
+                                            $fin_g1 = date_create($data['fecha_fin_g1']);
+                                            ?>
                                             <span style="
                                                     display:inline-block;
                                                     background:#28a745;
@@ -209,41 +240,45 @@ if ($rol_user != 1 && $rol_user != 2) {
                                                     box-shadow:0px 1px 4px rgba(0,0,0,0.2);">
                                                 GALPÓN AVÍCOLA NORTE MACHOS
                                             </span>
-                                            <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
-                                                <?php echo $data['codigo_orions_g1']; ?>
-                                            </div>
-                                            <div style="
-                                                            margin-top:7px;
-                                                            background:#f0f6ff;
-                                                            border:1px solid #d0d7e1;
-                                                            border-radius:10px;
-                                                            padding:8px 10px;
-                                                            font-size:12px;
-                                                            color:#333;
-                                                            box-shadow:0 2px 5px rgba(0,0,0,0.1);
-                                                            line-height:18px;">
-
-                                                <?php
-                                                // Separar Fecha y Hora para Galpón 1
-                                                $inicio_g1 = date_create($data['fecha_inicio_g1']);
-                                                $fin_g1 = date_create($data['fecha_fin_g1']);
-                                                ?>
-
-                                                <div style="margin-bottom: 6px;">
-                                                    <b>Fecha Inicio:</b> <?php echo date_format($inicio_g1, 'Y-m-d'); ?><br>
-                                                    <b>Hora Inicio:</b> <?php echo date_format($inicio_g1, 'H:i:s'); ?>
-                                                </div>
-                                                <hr style="border: 0; border-top: 1px solid #d0d7e1; margin: 6px 0;">
-                                                <div>
-                                                    <b>Fecha Fin:</b> <?php echo date_format($fin_g1, 'Y-m-d'); ?><br>
-                                                    <b>Hora Fin:</b> <?php echo date_format($fin_g1, 'H:i:s'); ?>
-                                                </div>
-                                            </div>
+                                            <br>
+                                            <br>
+                                            <a href="<?php echo $urlcontrolM; ?>"
+                                                <?php if (!empty($data['codigo_orions_g1'])) { ?>
+                                                style="display:inline-block; background:#28a745; color:white; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:bold; box-shadow:0px 1px 4px rgba(0,0,0,0.2); text-decoration:none;">
+                                                CONTROL ALIMENTO
+                                            </a>
                                         <?php } ?>
+                                        <br>
+                                        <br>
+                                        <!-- Botón 3: Uso Medicamentos -->
+                                        <a href="<?php echo $urlmedicamentiR; ?>"
+                                            <?php if (!empty($data['codigo_orions_g1'])) { ?>
+                                            style="display:inline-block; background:#28a745; color:white; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:bold; box-shadow:0px 1px 4px rgba(0,0,0,0.2); text-decoration:none;">
+                                            USO MEDICAMENTOS
+                                        </a>
+                                    <?php } ?>
+                                    <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
+                                        <?php echo $data['codigo_orions_g1']; ?>
+                                    </div>
+                                <?php } ?>
 
+                                <?php if (!empty($data['codigo_orions_g2'])) { ?>
+                                    <span style="display:inline-block;
+                                                         background:#007bff;
+                                                         color:white;
+                                                         padding:4px 12px;
+                                                         border-radius:20px;
+                                                         font-size:12px;
+                                                         font-weight:bold;
+                                                         box-shadow:0px 1px 4px rgba(0,0,0,0.2); ">
+                                        GALPÓN AVÍCOLA SUR HEMBRAS
+                                    </span>
+                                    <br>
+                                    <br>
+                                    <!-- Botón 3: Uso Medicamentos -->
+                                    <a href="<?php echo $urlcontrolM ?>"
                                         <?php if (!empty($data['codigo_orions_g2'])) { ?>
-                                            <span style="
-                                                            display:inline-block;
+                                        style="display:inline-block;
                                                             background:#007bff;
                                                             color:white;
                                                             padding:4px 12px;
@@ -251,39 +286,33 @@ if ($rol_user != 1 && $rol_user != 2) {
                                                             font-size:12px;
                                                             font-weight:bold;
                                                             box-shadow:0px 1px 4px rgba(0,0,0,0.2); ">
-                                                GALPÓN AVÍCOLA SUR HEMBRAS
-                                            </span>
-                                            <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
-                                                <?php echo $data['codigo_orions_g2']; ?>
-                                            </div>
-                                            <div style="
-                                                        margin-top:7px;
-                                                        background:#eef5ff;
-                                                        border:1px solid #c6d4e6;
-                                                        border-radius:10px;
-                                                        padding:8px 10px;
-                                                        font-size:12px;
-                                                        color:#333;
-                                                        box-shadow:0 2px 5px rgba(0,0,0,0.1);
-                                                        line-height:18px;">
-
-                                                <?php
-                                                // Separar Fecha y Hora para Galpón 2
-                                                $inicio_g2 = date_create($data['fecha_inicio_g2']);
-                                                $fin_g2 = date_create($data['fecha_fin_g2']);
-                                                ?>
-
-                                                <div style="margin-bottom: 6px;">
-                                                    <b>Fecha Inicio:</b> <?php echo date_format($inicio_g2, 'Y-m-d'); ?><br>
-                                                    <b>Hora Inicio:</b> <?php echo date_format($inicio_g2, 'H:i:s'); ?>
-                                                </div>
-                                                <hr style="border: 0; border-top: 1px solid #c6d4e6; margin: 6px 0;">
-                                                <div>
-                                                    <b>Fecha Fin:</b> <?php echo date_format($fin_g2, 'Y-m-d'); ?><br>
-                                                    <b>Hora Fin:</b> <?php echo date_format($fin_g2, 'H:i:s'); ?>
-                                                </div>
-                                            </div>
-                                        <?php } ?>
+                                        CONTROL ALIMENTO
+                                    </a>
+                                <?php } ?>
+                                <br>
+                                <br>
+                                <a href="<?php echo $urlmedicamentiR ?>"
+                                    <?php if (!empty($data['codigo_orions_g2'])) { ?>
+                                    style="display:inline-block;
+                                                            background:#007bff;
+                                                            color:white;
+                                                            padding:4px 12px;
+                                                            border-radius:20px;
+                                                            font-size:12px;
+                                                            font-weight:bold;
+                                                            box-shadow:0px 1px 4px rgba(0,0,0,0.2); ">
+                                    USO Medicamentos
+                                </a>
+                            <?php } ?>
+                            <div style="margin-top:5px; font-size:15px; font-weight:bold; color:#007bff;">
+                                <?php echo $data['codigo_orions_g2']; ?>
+                                <?php
+                                    // Separar Fecha y Hora para Galpón 2
+                                    $inicio_g2 = date_create($data['fecha_inicio_g2']);
+                                    $fin_g2 = date_create($data['fecha_fin_g2']);
+                                ?>
+                            </div>
+                        <?php } ?>
                                     </div>
                                 </a>
                             </td>

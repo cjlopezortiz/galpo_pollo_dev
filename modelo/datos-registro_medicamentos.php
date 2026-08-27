@@ -3,16 +3,13 @@
 class misMedicamentos
 {
     // Retornar todo el registro de medicamentos
-    function viewMedicamentos($usuario_codigo, $rol_id)
+    function viewMedicamentos($usuario_codigo, $codigo_orions = null, $rol_id = null)
     {
         require_once 'conexion.php';
 
         $conexion = new Conexion();
-
-        if ($rol_id == 1) {
-
-            // ROL 1: puede ver todos los registros
-            $consulta = "SELECT 
+        // ROL 1: puede ver todos los registros
+        $consulta = "SELECT 
                         codigo,
                         codigo_orions,
                         fecha,
@@ -28,37 +25,36 @@ class misMedicamentos
                         galpon_tratado,
                         usuario_codigo
                     FROM registro_medicamentos
-                    ORDER BY fecha DESC";
+                     WHERE 1=1";
+        // Si NO es administrador, filtra por usuario
+        if ($rol_id != 1) {
+            $consulta .= " AND usuario_codigo = :usuario_codigo";
+        }
 
-            $modules = $conexion->prepare($consulta);
-        } else {
+        // Si viene codigo_orions, filtra por él
+        if (!empty($codigo_orions)) {
+            $consulta .= " AND codigo_orions = :codigo_orions";
+        }
 
-            // ROL 2: solamente puede ver sus propios registros
-            $consulta = "SELECT 
-                        codigo,
-                        codigo_orions,
-                        fecha,
-                        nombre_producto,
-                        causa,
-                        laboratorio,
-                        registro_ica,
-                        dosis,
-                        lote_producto,
-                        vencimiento,
-                        administracion,
-                        animales,
-                        galpon_tratado,
-                        usuario_codigo
-                    FROM registro_medicamentos
-                    WHERE usuario_codigo = :usuario_codigo
-                    ORDER BY fecha DESC";
+        $consulta .= " ORDER BY codigo ASC";
 
-            $modules = $conexion->prepare($consulta);
+        $modules = $conexion->prepare($consulta);
 
+        // Bind usuario para rol diferente de administrador
+        if ($rol_id != 1) {
             $modules->bindParam(
                 ':usuario_codigo',
                 $usuario_codigo,
                 PDO::PARAM_INT
+            );
+        }
+
+        // Bind codigo_orions si existe
+        if (!empty($codigo_orions)) {
+            $modules->bindParam(
+                ':codigo_orions',
+                $codigo_orions,
+                PDO::PARAM_STR
             );
         }
 

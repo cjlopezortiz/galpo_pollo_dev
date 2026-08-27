@@ -85,7 +85,7 @@ class misGalpon1
         }
         return $arreglo;
     }
-
+ 
     function viewGalpones1($codigo_orions = null, $usuario_codigo = null, $rol_id = null)
     {
         require_once 'conexion.php';
